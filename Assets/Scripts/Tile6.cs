@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -17,7 +16,7 @@ namespace Assets.Scripts
 
             var rotation1 = new Vector2Int[] { initialPosition, initialPosition + Vector2Int.right, initialPosition + Vector2Int.right + Vector2Int.right,
                 initialPosition + Vector2Int.down, initialPosition + Vector2Int.down + Vector2Int.right, initialPosition + Vector2Int.down + Vector2Int.right + Vector2Int.right };
-            var rotation2 = new Vector2Int[] { initialPosition, initialPosition + Vector2Int.down, initialPosition + Vector2Int.down + Vector2Int.down, 
+            var rotation2 = new Vector2Int[] { initialPosition, initialPosition + Vector2Int.down, initialPosition + Vector2Int.down + Vector2Int.down,
                 initialPosition + Vector2Int.right, initialPosition + Vector2Int.right + Vector2Int.down, initialPosition + Vector2Int.right + Vector2Int.down + Vector2Int.down };
             var rotation3 = new Vector2Int[] { initialPosition, initialPosition + Vector2Int.left, initialPosition + Vector2Int.left + Vector2Int.left,
                 initialPosition + Vector2Int.down, initialPosition + Vector2Int.down + Vector2Int.left, initialPosition + Vector2Int.down + Vector2Int.left + Vector2Int.left };

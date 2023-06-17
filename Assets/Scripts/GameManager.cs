@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEngine.EventSystems.EventTrigger;
 
 namespace Assets.Scripts
 {
