@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -44,7 +45,55 @@ namespace Assets.Scripts
 
         public override Vector2Int[] GetNewPossiblePositions()
         {
-            throw new System.NotImplementedException();
+            Vector2Int[] tilePositions = GetTilePositions();
+            
+            // Find the bounds of the tile
+            int minX = int.MaxValue, minY = int.MaxValue;
+            int maxX = int.MinValue, maxY = int.MinValue;
+
+            foreach (Vector2Int point in tilePositions)
+            {
+                if (point.x < minX)
+                    minX = point.x;
+                if (point.y < minY)
+                    minY = point.y;
+                if (point.x > maxX)
+                    maxX = point.x;
+                if (point.y > maxY)
+                    maxY = point.y;
+            }
+
+            Vector2Int[] newPossiblePositions = new Vector2Int[10];
+
+            // check if the tile is horizontal
+            if (maxX - minX == 2)
+            {
+                newPossiblePositions[0] = new Vector2Int(minX - 1, minY);
+                newPossiblePositions[1] = new Vector2Int(minX - 1, maxY);
+                newPossiblePositions[2] = new Vector2Int(maxX + 1, minY);
+                newPossiblePositions[3] = new Vector2Int(maxX + 1, maxY);
+                newPossiblePositions[4] = new Vector2Int(minX, minY - 1);
+                newPossiblePositions[5] = new Vector2Int(maxX, minY - 1);
+                newPossiblePositions[6] = new Vector2Int(minX, maxY + 1);
+                newPossiblePositions[7] = new Vector2Int(maxX, maxY + 1);
+                newPossiblePositions[8] = new Vector2Int(minX + 1, minY - 1);
+                newPossiblePositions[9] = new Vector2Int(minX + 1, maxY + 1);
+            }
+            else
+            {
+                newPossiblePositions[0] = new Vector2Int(minX, minY - 1);
+                newPossiblePositions[1] = new Vector2Int(maxX, minY - 1);
+                newPossiblePositions[2] = new Vector2Int(minX, maxY + 1);
+                newPossiblePositions[3] = new Vector2Int(maxX, maxY + 1);
+                newPossiblePositions[4] = new Vector2Int(minX - 1, minY);
+                newPossiblePositions[5] = new Vector2Int(minX - 1, maxY);
+                newPossiblePositions[6] = new Vector2Int(maxX + 1, minY);
+                newPossiblePositions[7] = new Vector2Int(maxX + 1, maxY);
+                newPossiblePositions[8] = new Vector2Int(minX - 1, minY + 1);
+                newPossiblePositions[9] = new Vector2Int(maxX + 1, minY + 1);
+            }
+
+            return newPossiblePositions;
         }
     }
 }
