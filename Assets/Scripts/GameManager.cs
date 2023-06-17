@@ -21,6 +21,9 @@ namespace Assets.Scripts
         [SerializeField]
         private GameObject _tilePrefab;
 
+        [SerializeField]
+        private int _maxStraightLine = 10;
+
 
         private UnitTile[] _individualTiles;
         private Tile[] _playableTiles;
@@ -29,7 +32,10 @@ namespace Assets.Scripts
 
         private List<Vector2Int> _occupiedPositions = new List<Vector2Int>();
 
-        private int _boardSize = 20;
+        private int _minX;
+        private int _maxX;
+        private int _minY;
+        private int _maxY;
 
         private float GetPositionWeight(Vector2Int position)
         {
@@ -75,11 +81,27 @@ namespace Assets.Scripts
                     }
                 }
 
+                // Check for max straight line rule
+                if (canBePlaced)
+                {
+                    if (_maxX - rotation.GetLeftMostX() > _maxStraightLine - 1)
+                        canBePlaced = false;
+                    else if (rotation.GetRightMostX() - _minX > _maxStraightLine - 1)
+                        canBePlaced = false;
+                    else if (_maxY - rotation.GetBottomMostY() > _maxStraightLine - 1)
+                        canBePlaced = false;
+                    else if (rotation.GetTopMostY() - _minY > _maxStraightLine - 1)
+                        canBePlaced = false;
+                }
+
+
                 if (canBePlaced)
                 {
                     foreach (var position in rotation)
                     {
                         _occupiedPositions.Add(position);
+
+                        UpdateBounds(position);
                     }
 
                     tile.SetTilePositions(rotation);
@@ -89,6 +111,26 @@ namespace Assets.Scripts
             }
 
             return false;
+        }
+
+        private void UpdateBounds(Vector2Int position)
+        {
+            if (position.x < _minX)
+            {
+                _minX = position.x;
+            }
+            else if (position.x > _maxX)
+            {
+                _maxX = position.x;
+            }
+            if (position.y < _minY)
+            {
+                _minY = position.y;
+            }
+            else if (position.y > _maxY)
+            {
+                _maxY = position.y;
+            }
         }
 
         private void GenerateBoard()

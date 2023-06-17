@@ -22,20 +22,8 @@ namespace Assets.Scripts
             Vector2Int[] squarePositions = GetTilePositions();
 
             // Find the bounds of the square
-            int minX = int.MaxValue, minY = int.MaxValue;
-            int maxX = int.MinValue, maxY = int.MinValue;
-
-            foreach (Vector2Int point in squarePositions)
-            {
-                if (point.x < minX)
-                    minX = point.x;
-                if (point.y < minY)
-                    minY = point.y;
-                if (point.x > maxX)
-                    maxX = point.x;
-                if (point.y > maxY)
-                    maxY = point.y;
-            }
+            int minX = GetLeftMostX(), minY = GetBottomMostY();
+            int maxX = GetRightMostX(), maxY = GetTopMostY();
 
             Vector2Int[] newPossiblePositions = new Vector2Int[8];
 

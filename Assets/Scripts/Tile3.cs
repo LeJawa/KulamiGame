@@ -35,25 +35,8 @@ namespace Assets.Scripts
                 newPossiblePositions[4] = tilePositions[2] + Vector2Int.down;
                 newPossiblePositions[5] = tilePositions[2] + Vector2Int.up;
 
-                var leftMostPosition = tilePositions[0];
-                if (tilePositions[1].x < leftMostPosition.x)
-                {
-                    leftMostPosition = tilePositions[1];
-                }
-                if (tilePositions[2].x < leftMostPosition.x)
-                {
-                    leftMostPosition = tilePositions[2];
-                }
-
-                var rightMostPosition = tilePositions[0];
-                if (tilePositions[1].x > rightMostPosition.x)
-                {
-                    rightMostPosition = tilePositions[1];
-                }
-                if (tilePositions[2].x > rightMostPosition.x)
-                {
-                    rightMostPosition = tilePositions[2];
-                }
+                var leftMostPosition = new Vector2Int(GetLeftMostX(), tilePositions[0].y);
+                var rightMostPosition = new Vector2Int(GetRightMostX(), tilePositions[0].y);
 
                 newPossiblePositions[6] = leftMostPosition + Vector2Int.left;
                 newPossiblePositions[7] = rightMostPosition + Vector2Int.right;
@@ -67,25 +50,8 @@ namespace Assets.Scripts
                 newPossiblePositions[4] = tilePositions[2] + Vector2Int.left;
                 newPossiblePositions[5] = tilePositions[2] + Vector2Int.right;
 
-                var bottomMostPosition = tilePositions[0];
-                if (tilePositions[1].y < bottomMostPosition.y)
-                {
-                    bottomMostPosition = tilePositions[1];
-                }
-                if (tilePositions[2].y < bottomMostPosition.y)
-                {
-                    bottomMostPosition = tilePositions[2];
-                }
-
-                var topMostPosition = tilePositions[0];
-                if (tilePositions[1].y > topMostPosition.y)
-                {
-                    topMostPosition = tilePositions[1];
-                }
-                if (tilePositions[2].y > topMostPosition.y)
-                {
-                    topMostPosition = tilePositions[2];
-                }
+                var bottomMostPosition = new Vector2Int(tilePositions[0].x, GetBottomMostY());
+                var topMostPosition = new Vector2Int(tilePositions[0].x, GetTopMostY());
 
                 newPossiblePositions[6] = bottomMostPosition + Vector2Int.down;
                 newPossiblePositions[7] = topMostPosition + Vector2Int.up;

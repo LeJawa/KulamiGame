@@ -43,5 +43,50 @@ namespace Assets.Scripts
             return squarePositions;
         }
 
+        public int GetLeftMostX()
+        {
+            int leftMostX = int.MaxValue;
+            foreach (Vector2Int point in GetTilePositions())
+            {
+                if (point.x < leftMostX)
+                    leftMostX = point.x;
+            }
+
+            return leftMostX;
+        }
+        public int GetRightMostX()
+        {
+            int rightMostX = int.MinValue;
+            foreach (Vector2Int point in GetTilePositions())
+            {
+                if (point.x > rightMostX)
+                    rightMostX = point.x;
+            }
+
+            return rightMostX;
+        }
+
+        public int GetTopMostY()
+        {
+            int topMostY = int.MinValue;
+            foreach (Vector2Int point in GetTilePositions())
+            {
+                if (point.y > topMostY)
+                    topMostY = point.y;
+            }
+            return topMostY;
+        }
+
+        public int GetBottomMostY()
+        {
+            int bottomMostY = int.MaxValue;
+            foreach (Vector2Int point in GetTilePositions())
+            {
+                if (point.y < bottomMostY)
+                    bottomMostY = point.y;
+            }
+            return bottomMostY;
+        }
+
     }
 }

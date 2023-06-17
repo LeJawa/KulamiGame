@@ -46,22 +46,10 @@ namespace Assets.Scripts
         public override Vector2Int[] GetNewPossiblePositions()
         {
             Vector2Int[] tilePositions = GetTilePositions();
-            
-            // Find the bounds of the tile
-            int minX = int.MaxValue, minY = int.MaxValue;
-            int maxX = int.MinValue, maxY = int.MinValue;
 
-            foreach (Vector2Int point in tilePositions)
-            {
-                if (point.x < minX)
-                    minX = point.x;
-                if (point.y < minY)
-                    minY = point.y;
-                if (point.x > maxX)
-                    maxX = point.x;
-                if (point.y > maxY)
-                    maxY = point.y;
-            }
+            // Find the bounds of the tile
+            int minX = GetLeftMostX(), minY = GetBottomMostY();
+            int maxX = GetRightMostX(), maxY = GetTopMostY();
 
             Vector2Int[] newPossiblePositions = new Vector2Int[10];
 
