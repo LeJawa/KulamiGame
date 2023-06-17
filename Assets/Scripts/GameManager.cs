@@ -133,7 +133,7 @@ namespace Assets.Scripts
             }
         }
 
-        private void GenerateBoard()
+        private bool GenerateBoard()
         {       
             int individualTilesIndex = 0;
 
@@ -141,8 +141,6 @@ namespace Assets.Scripts
 
             foreach (var tile in _playableTiles)
             {
-                //possiblePositions.Shuffle();
-
                 // Assign unit tiles to playable tiles
                 int number = tile.Number;
 
@@ -171,7 +169,10 @@ namespace Assets.Scripts
                 }
 
                 bool tilePlaced = false;
-                while (!tilePlaced)
+                int maxTries = 1000;
+                int tries = 0;
+
+                while (!tilePlaced && tries < maxTries)
                 {
                     // Randomly select a position based on the weights
                     var randomValue = UnityEngine.Random.Range(0, totalWeight);
@@ -191,6 +192,12 @@ namespace Assets.Scripts
                         tilePlaced = true;
                         break;
                     }
+                    tries++;
+                }
+
+                if (!tilePlaced)
+                {
+                    return false;
                 }
 
                 // Add new possible positions
@@ -214,8 +221,9 @@ namespace Assets.Scripts
                     // if no, take another possible position at random
                     // place all unit tiles
                     // create list of possible new positions (positions surrounding existing positions)
-
+                
             }
+            return true;
         }
 
         private void InitializePlayableTiles()

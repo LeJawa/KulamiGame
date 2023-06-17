@@ -244,10 +244,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c5f1a25f64f58d47ad0ffce680131d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _numberOf6Tiles: 0
-  _numberOf4Tiles: 1
-  _numberOf3Tiles: 0
-  _numberOf2Tiles: 0
+  _numberOfTile6: 4
+  _numberOfTile4: 4
+  _numberOfTile3: 4
+  _numberOfTile2: 4
+  _tilePrefab: {fileID: 2081733411399040099, guid: a311a97f17fbfd6449bca5e6a99af16d, type: 3}
+  _maxStraightLine: 10
 --- !u!4 &1213576239
 Transform:
   m_ObjectHideFlags: 0
