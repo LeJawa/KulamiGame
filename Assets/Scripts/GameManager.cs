@@ -6,19 +6,24 @@ namespace Assets.Scripts
     public class GameManager : MonoBehaviour
     {
         [SerializeField]
-        private int _numberOf6Tiles = 4;
+        private int _numberOfTile6 = 4;
         [SerializeField]
-        private int _numberOf4Tiles = 4;
+        private int _numberOfTile4 = 4;
         [SerializeField]
-        private int _numberOf3Tiles = 4;
+        private int _numberOfTile3 = 4;
         [SerializeField]
-        private int _numberOf2Tiles = 4;
+        private int _numberOfTile2 = 4;
+
+        [SerializeField]
+        private GameObject _tilePrefab;
 
 
         private UnitTile[] _individualTiles;
         private Tile[] _playableTiles;
 
         private Vector2Int _startingPosition = Vector2Int.zero;
+
+        private List<Vector2Int> _occupiedPositions = new List<Vector2Int>();
 
         public void Start()
         {
@@ -27,22 +32,54 @@ namespace Assets.Scripts
             InitializeIndividualTiles();
 
             GenerateBoard();
+
+            PlaceTiles();
+        }
+
+        private void PlaceTiles()
+        {
+            foreach (var item in _individualTiles)
+            {
+                Instantiate(_tilePrefab, new Vector3(item.Position.x, item.Position.y, 0), Quaternion.identity);
+            }
+        }
+
+        private bool TryToSetTileAtPosition(Tile tile, Vector2Int initialPosition)
+        {
+            var rotations = tile.GetAllRotationsBasedOnInitialPosition(initialPosition);
+            rotations.Shuffle();
+
+            foreach (var rotation in rotations)
+            {
+                bool canBePlaced = true;
+
+                foreach (var position in rotation)
+                {
+                    if (_occupiedPositions.Contains(position))
+                    {
+                        canBePlaced = false;
+                        break;
+                    }
+                }
+
+                if (canBePlaced)
+                {
+                    foreach (var position in rotation)
+                    {
+                        _occupiedPositions.Add(position);
+                    }
+
+                    tile.SetTilePositions(rotation);
+
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private void GenerateBoard()
-        {
-            // Assign unit tiles to playable tiles
-            // Try to position the playable tile
-                // Select a random orientation for the playable tile
-                // take a possible position at random (first round only 0,0 )
-                // check if playable tile can be placed here
-                    // if no, take another possible position at random
-                // place all unit tiles
-                // create list of possible new positions (positions surrounding existing positions)
-
-
-
-
+        {       
             int individualTilesIndex = 0;
 
             List<Vector2Int> possiblePositions = new List<Vector2Int> { _startingPosition };
@@ -51,6 +88,7 @@ namespace Assets.Scripts
             {
                 possiblePositions.Shuffle();
 
+                // Assign unit tiles to playable tiles
                 int number = tile.Number;
 
                 UnitTile[] unitTileArray = new UnitTile[number];
@@ -64,49 +102,89 @@ namespace Assets.Scripts
                 }
 
                 tile.InitializeTile(unitTileArray);
+
+                bool tilePlaced = false;
+
+                foreach (var position in possiblePositions)
+                {
+                    if (TryToSetTileAtPosition(tile, position))
+                    {
+                        tilePlaced = true;
+                        break;
+                    }
+                }
+
+                if (!tilePlaced)
+                {
+                    Debug.LogError("Could not place tile");
+                    continue;
+                }
+
+                // Add new possible positions
+                var newPossiblePositions = tile.GetNewPossiblePositions();
+
+                foreach (var position in newPossiblePositions)
+                {
+                    if (!possiblePositions.Contains(position))
+                    {
+                        possiblePositions.Add(position);
+                    }
+                }
+
+                // Remove overlapping positions
+                possiblePositions.RemoveAll(p => _occupiedPositions.Contains(p));
+
+                // Try to position the playable tile
+                    // Select a random orientation for the playable tile
+                    // take a possible position at random (first round only 0,0 )
+                    // check if playable tile can be placed here
+                    // if no, take another possible position at random
+                    // place all unit tiles
+                    // create list of possible new positions (positions surrounding existing positions)
+
             }
         }
 
         private void InitializePlayableTiles()
         {
             int totalNumberOfPlayableTiles =
-                              _numberOf2Tiles
-                            + _numberOf3Tiles
-                            + _numberOf4Tiles
-                            + _numberOf6Tiles;
+                              _numberOfTile2
+                            + _numberOfTile3
+                            + _numberOfTile4
+                            + _numberOfTile6;
 
             _playableTiles = new Tile[totalNumberOfPlayableTiles];
 
             int index = 0;
 
-            for (int i = 0; i < _numberOf2Tiles; i++)
+            for (int i = 0; i < _numberOfTile2; i++)
             {
-                _playableTiles[index++] = new Tile(2);
+                _playableTiles[index++] = new Tile2();
             }
 
-            for (int i = 0; i < _numberOf3Tiles; i++)
+            for (int i = 0; i < _numberOfTile3; i++)
             {
-                _playableTiles[index++] = new Tile(3);
+                _playableTiles[index++] = new Tile3();
             }
 
-            for (int i = 0; i < _numberOf4Tiles; i++)
+            for (int i = 0; i < _numberOfTile4; i++)
             {
-                _playableTiles[index++] = new Tile(4);
+                _playableTiles[index++] = new Tile4();
             }
 
-            for (int i = 0; i < _numberOf6Tiles; i++)
+            for (int i = 0; i < _numberOfTile6; i++)
             {
-                _playableTiles[index++] = new Tile(6);
+                _playableTiles[index++] = new Tile6();
             }
         }
 
         private void InitializeIndividualTiles()
         {
             int totalNumberOfUnitTiles =
-                              _numberOf2Tiles * 2
-                            + _numberOf3Tiles * 3
-                            + _numberOf4Tiles * 4
-                            + _numberOf6Tiles * 6;
+                              _numberOfTile2 * 2
+                            + _numberOfTile3 * 3
+                            + _numberOfTile4 * 4
+                            + _numberOfTile6 * 6;
 
             _individualTiles = new UnitTile[totalNumberOfUnitTiles];
         }

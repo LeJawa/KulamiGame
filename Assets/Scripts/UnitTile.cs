@@ -1,7 +1,7 @@
 using Assets.Scripts;
 using UnityEngine;
 
-public class UnitTile : MonoBehaviour
+public class UnitTile
 {
     public TileStatus Status { get; set; } = TileStatus.Empty;
 
