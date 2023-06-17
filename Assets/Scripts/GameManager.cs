@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UIElements;
+using static UnityEngine.EventSystems.EventTrigger;
 
 namespace Assets.Scripts
 {
@@ -24,6 +28,15 @@ namespace Assets.Scripts
         private Vector2Int _startingPosition = Vector2Int.zero;
 
         private List<Vector2Int> _occupiedPositions = new List<Vector2Int>();
+
+        private int _boardSize = 20;
+
+        private float GetPositionWeight(Vector2Int position)
+        {
+            float distance = (float) Math.Sqrt(Math.Pow(position.x, 4) + Math.Pow(position.y, 4));
+
+            return 1f / (distance + 1); // weight is inverse square of distance
+        }
 
         public void Start()
         {
@@ -86,7 +99,7 @@ namespace Assets.Scripts
 
             foreach (var tile in _playableTiles)
             {
-                possiblePositions.Shuffle();
+                //possiblePositions.Shuffle();
 
                 // Assign unit tiles to playable tiles
                 int number = tile.Number;
@@ -103,21 +116,39 @@ namespace Assets.Scripts
 
                 tile.InitializeTile(unitTileArray);
 
-                bool tilePlaced = false;
+                int totalPositions = possiblePositions.Count;
+                float[] weights = new float[totalPositions];
+                float totalWeight = 0;
 
-                foreach (var position in possiblePositions)
+                // Calculate the cumulative weights
+                for (int i = 0; i < totalPositions; i++)
                 {
-                    if (TryToSetTileAtPosition(tile, position))
+                    float weight = GetPositionWeight(possiblePositions[i]);
+                    totalWeight += weight;
+                    weights[i] = totalWeight;
+                }
+
+                bool tilePlaced = false;
+                while (!tilePlaced)
+                {
+                    // Randomly select a position based on the weights
+                    var randomValue = UnityEngine.Random.Range(0, totalWeight);
+                    int selectedIndex = -1;
+
+                    for (int i = 0; i < totalPositions; i++)
+                    {
+                        if (randomValue <= weights[i])
+                        {
+                            selectedIndex = i;
+                            break;
+                        }
+                    }
+
+                    if (TryToSetTileAtPosition(tile, possiblePositions[selectedIndex]))
                     {
                         tilePlaced = true;
                         break;
                     }
-                }
-
-                if (!tilePlaced)
-                {
-                    Debug.LogError("Could not place tile");
-                    continue;
                 }
 
                 // Add new possible positions

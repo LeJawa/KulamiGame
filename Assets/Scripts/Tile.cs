@@ -6,7 +6,7 @@ namespace Assets.Scripts
 {
     public abstract class Tile
     {
-        protected UnitTile[] unitTiles;
+        private UnitTile[] _unitTiles;
         public int Number { get; protected set; }
 
         public Tile()
@@ -18,7 +18,7 @@ namespace Assets.Scripts
 
         public void InitializeTile(UnitTile[] unitTiles)
         {
-            this.unitTiles = unitTiles;
+            _unitTiles = unitTiles;
         }
 
         public abstract List<Vector2Int[]> GetAllRotationsBasedOnInitialPosition(Vector2Int initialPosition);
@@ -26,9 +26,9 @@ namespace Assets.Scripts
 
         public void SetTilePositions(Vector2Int[] positions)
         {
-            for (int i = 0; i < unitTiles.Length; i++)
+            for (int i = 0; i < _unitTiles.Length; i++)
             {
-                unitTiles[i].Position = positions[i];
+                _unitTiles[i].Position = positions[i];
             }
         }
 
@@ -37,7 +37,7 @@ namespace Assets.Scripts
             Vector2Int[] squarePositions = new Vector2Int[Number];
             for (int i = 0; i < Number; i++)
             {
-                squarePositions[i] = unitTiles[i].Position;
+                squarePositions[i] = _unitTiles[i].Position;
             }
 
             return squarePositions;
