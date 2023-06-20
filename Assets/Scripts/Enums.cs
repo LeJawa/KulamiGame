@@ -3,8 +3,8 @@
     public enum TileStatus
     {
         Empty,
-        Player1,
-        Player2,
+        PlayerOne,
+        PlayerTwo,
     }
 
     public enum TileType
@@ -13,5 +13,11 @@
         FourTile,
         ThreeTile,
         TwoTile
+    }
+
+    public enum Player
+    {
+        One,
+        Two
     }
 }

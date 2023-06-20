@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
-    public static class ListExtensions
+    public static class HelpfulExtensions
     {
         private static System.Random rng = new System.Random();
 
@@ -66,6 +66,11 @@ namespace Assets.Scripts
             }
 
             return bottomMostY;
+        }
+
+        public static Vector3 ToVector3(this Vector2Int vector)
+        {
+            return new Vector3(vector.x, vector.y, 0);
         }
     }
 }

@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Assets.Scripts
 {
     public class GameManager : MonoBehaviour
     {
+        public static GameManager Instance { get; private set; }
+
         [SerializeField]
         private int _numberOfTile6 = 4;
         [SerializeField]
@@ -17,6 +20,19 @@ namespace Assets.Scripts
 
         [SerializeField]
         private GameObject _tilePrefab;
+        [SerializeField]
+        private GameObject _ballPrefab;
+
+        [SerializeField]
+        private Color _playerOneColor;
+        [SerializeField]
+        private Color _playerTwoColor;
+
+        private GameObject _playerOneBall;
+        private GameObject _playerTwoBall;
+
+        [SerializeField]
+        private Vector3 _ballOffset;
 
         [SerializeField]
         private int _maxStraightLine = 10;
@@ -34,6 +50,8 @@ namespace Assets.Scripts
         private int _minY;
         private int _maxY;
 
+        private Player _currentPlayer = Player.One;
+
         private float GetPositionWeight(Vector2Int position)
         {
             float distance = (float) Math.Sqrt(Math.Pow(position.x, 4) + Math.Pow(position.y, 4));
@@ -43,6 +61,8 @@ namespace Assets.Scripts
 
         public void Start()
         {
+            Instance = this;
+
             InitializePlayableTiles();
 
             InitializeIndividualTiles();
@@ -50,13 +70,29 @@ namespace Assets.Scripts
             GenerateBoard();
 
             PlaceTiles();
+
+            InitializeBalls();
+        }
+
+        private void InitializeBalls()
+        {
+            _playerOneBall = Instantiate(_ballPrefab);
+            _playerTwoBall = Instantiate(_ballPrefab);
+
+            _playerOneBall.GetComponentInChildren<SpriteRenderer>().color = _playerOneColor;
+            _playerTwoBall.GetComponentInChildren<SpriteRenderer>().color = _playerTwoColor;
+
+            _playerOneBall.SetActive(false);
+            _playerTwoBall.SetActive(false);
         }
 
         private void PlaceTiles()
         {
-            foreach (var item in _individualTiles)
+            foreach (var tile in _individualTiles)
             {
-                Instantiate(_tilePrefab, new Vector3(item.Position.x, item.Position.y, 0), Quaternion.identity);
+                var gameTile = Instantiate(_tilePrefab, new Vector3(tile.Position.x, tile.Position.y, 0), Quaternion.identity);
+
+                gameTile.GetComponent<GameTile>().Initialize(tile);
             }
         }
 
@@ -145,7 +181,7 @@ namespace Assets.Scripts
 
                 for (int i = 0; i < number; i++)
                 {
-                    _individualTiles[individualTilesIndex] = new UnitTile();
+                    _individualTiles[individualTilesIndex] = new UnitTile(tile);
                     unitTileArray[i] = _individualTiles[individualTilesIndex];
 
                     individualTilesIndex++;
@@ -265,6 +301,28 @@ namespace Assets.Scripts
                             + _numberOfTile6 * 6;
 
             _individualTiles = new UnitTile[totalNumberOfUnitTiles];
+        }
+
+        public void GameTileClickedEvent(UnitTile tile)
+        {
+            if (tile.Status != TileStatus.Empty)
+            {
+                return;
+            }
+
+            PlaceBall(tile);
+
+            Debug.Log("Tile clicked: " + tile.Position);
+        }
+
+        private void PlaceBall(UnitTile tile)
+        {
+            tile.Status = _currentPlayer == Player.One ? TileStatus.PlayerOne : TileStatus.PlayerTwo;
+
+            if (_currentPlayer == Player.One)
+            {
+                Instantiate(_playerOneBall, tile.Position.ToVector3(), Quaternion.identity).SetActive(true);
+            }
         }
     }
 }
