@@ -463,9 +463,11 @@ MonoBehaviour:
   _numberOfTile4: 4
   _numberOfTile3: 4
   _numberOfTile2: 4
-  _tilePrefab: {fileID: 2081733411399040099, guid: a311a97f17fbfd6449bca5e6a99af16d, type: 3}
-  _playerOneBallPrefab: {fileID: 809330682569989117, guid: cdbf82263eef144469c1d01aa302a3b1, type: 3}
-  _playerTwoBallPrefab: {fileID: 8604228383378817092, guid: 2eed14954fa88f349bfc56e854c1bb6e, type: 3}
+  _unitTilePrefab: {fileID: 2081733411399040099, guid: a311a97f17fbfd6449bca5e6a99af16d, type: 3}
+  _tilePrefab: {fileID: 2666680981105851122, guid: c29feae38d85cee4b896819ce23af830, type: 3}
+  _ballPrefab: {fileID: 809330682569989117, guid: cdbf82263eef144469c1d01aa302a3b1, type: 3}
+  _playerOneColor: {r: 0.8113208, g: 0.24875402, b: 0.24875402, a: 1}
+  _playerTwoColor: {r: 0.24705882, g: 0.27100524, b: 0.8117647, a: 1}
   _maxStraightLine: 10
 --- !u!4 &1213576239
 Transform:

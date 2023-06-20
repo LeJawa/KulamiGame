@@ -1,18 +1,20 @@
-using Assets.Scripts;
 using UnityEngine;
 
-public class UnitTile
+namespace Assets.Scripts
 {
-    public TileStatus Status { get; set; } = TileStatus.Empty;
-
-    public Vector2Int Position { get; set; }
-
-    public Tile ParentTile { get; private set; } = null;
-
-    public UnitTile(Tile parentTile)
+    public class UnitTile
     {
-        ParentTile = parentTile;
+        public TileStatus Status { get; set; } = TileStatus.Empty;
+
+        public Vector2Int Position { get; set; }
+
+        public Tile ParentTile { get; private set; } = null;
+
+        public UnitTile(Tile parentTile)
+        {
+            ParentTile = parentTile;
+        }
+
+
     }
-
-
 }

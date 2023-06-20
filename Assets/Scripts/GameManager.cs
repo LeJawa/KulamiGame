@@ -19,6 +19,8 @@ namespace Assets.Scripts
         private int _numberOfTile2 = 4;
 
         [SerializeField]
+        private GameObject _unitTilePrefab;
+        [SerializeField]
         private GameObject _tilePrefab;
         [SerializeField]
         private GameObject _ballPrefab;
@@ -30,9 +32,6 @@ namespace Assets.Scripts
 
         private GameObject _playerOneBall;
         private GameObject _playerTwoBall;
-
-        [SerializeField]
-        private Vector3 _ballOffset;
 
         [SerializeField]
         private int _maxStraightLine = 10;
@@ -90,9 +89,9 @@ namespace Assets.Scripts
         {
             foreach (var tile in _individualTiles)
             {
-                var gameTile = Instantiate(_tilePrefab, new Vector3(tile.Position.x, tile.Position.y, 0), Quaternion.identity);
+                var gameTile = Instantiate(_unitTilePrefab, new Vector3(tile.Position.x, tile.Position.y, 0), Quaternion.identity);
 
-                gameTile.GetComponent<GameTile>().Initialize(tile);
+                gameTile.GetComponent<UnitTileGO>().Initialize(tile);
             }
         }
 
@@ -223,6 +222,7 @@ namespace Assets.Scripts
                     if (TryToSetTileAtPosition(tile, possiblePositions[selectedIndex]))
                     {
                         tilePlaced = true;
+                        Instantiate(_tilePrefab).GetComponent<TileGO>().Initialize(tile);
                         break;
                     }
                     tries++;
@@ -322,6 +322,10 @@ namespace Assets.Scripts
             if (_currentPlayer == Player.One)
             {
                 Instantiate(_playerOneBall, tile.Position.ToVector3(), Quaternion.identity).SetActive(true);
+            }
+            else
+            {
+                Instantiate(_playerTwoBall, tile.Position.ToVector3(), Quaternion.identity).SetActive(true);
             }
         }
     }
