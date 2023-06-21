@@ -10,6 +10,9 @@ namespace Assets.Scripts
         public static GameManager Instance { get; private set; }
 
         [SerializeField]
+        private GameDrawer _gameDrawer;
+
+        [SerializeField]
         private int _numberOfTile6 = 4;
         [SerializeField]
         private int _numberOfTile4 = 4;
@@ -17,21 +20,6 @@ namespace Assets.Scripts
         private int _numberOfTile3 = 4;
         [SerializeField]
         private int _numberOfTile2 = 4;
-
-        [SerializeField]
-        private GameObject _unitTilePrefab;
-        [SerializeField]
-        private GameObject _tilePrefab;
-        [SerializeField]
-        private GameObject _ballPrefab;
-
-        [SerializeField]
-        private Color _playerOneColor;
-        [SerializeField]
-        private Color _playerTwoColor;
-
-        private GameObject _playerOneBall;
-        private GameObject _playerTwoBall;
 
         [SerializeField]
         private int _maxStraightLine = 10;
@@ -58,41 +46,28 @@ namespace Assets.Scripts
             return 1f / (distance + 1); // weight is inverse square of distance
         }
 
-        public void Start()
+        public void Awake()
         {
             Instance = this;
+        }
 
+        public void Start()
+        {
             InitializePlayableTiles();
 
             InitializeIndividualTiles();
 
             GenerateBoard();
 
-            PlaceTiles();
+            DrawTiles();
 
-            InitializeBalls();
         }
 
-        private void InitializeBalls()
+        
+
+        private void DrawTiles()
         {
-            _playerOneBall = Instantiate(_ballPrefab);
-            _playerTwoBall = Instantiate(_ballPrefab);
-
-            _playerOneBall.GetComponentInChildren<SpriteRenderer>().color = _playerOneColor;
-            _playerTwoBall.GetComponentInChildren<SpriteRenderer>().color = _playerTwoColor;
-
-            _playerOneBall.SetActive(false);
-            _playerTwoBall.SetActive(false);
-        }
-
-        private void PlaceTiles()
-        {
-            foreach (var tile in _individualTiles)
-            {
-                var gameTile = Instantiate(_unitTilePrefab, new Vector3(tile.Position.x, tile.Position.y, 0), Quaternion.identity);
-
-                gameTile.GetComponent<UnitTileGO>().Initialize(tile);
-            }
+            _gameDrawer.DrawUnitTiles(_individualTiles);
         }
 
         private bool TryToSetTileAtPosition(Tile tile, Vector2Int initialPosition)
@@ -222,7 +197,7 @@ namespace Assets.Scripts
                     if (TryToSetTileAtPosition(tile, possiblePositions[selectedIndex]))
                     {
                         tilePlaced = true;
-                        Instantiate(_tilePrefab).GetComponent<TileGO>().Initialize(tile);
+                        _gameDrawer.DrawGameTile(tile);
                         break;
                     }
                     tries++;
@@ -319,14 +294,7 @@ namespace Assets.Scripts
         {
             tile.Status = _currentPlayer == Player.One ? TileStatus.PlayerOne : TileStatus.PlayerTwo;
 
-            if (_currentPlayer == Player.One)
-            {
-                Instantiate(_playerOneBall, tile.Position.ToVector3(), Quaternion.identity).SetActive(true);
-            }
-            else
-            {
-                Instantiate(_playerTwoBall, tile.Position.ToVector3(), Quaternion.identity).SetActive(true);
-            }
+            _gameDrawer.DrawBall(_currentPlayer, tile.Position);
         }
     }
 }
