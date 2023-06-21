@@ -295,6 +295,8 @@ namespace Assets.Scripts
             tile.Status = _currentPlayer == Player.One ? TileStatus.PlayerOne : TileStatus.PlayerTwo;
 
             _gameDrawer.DrawBall(_currentPlayer, tile.Position);
+
+            _currentPlayer = _currentPlayer.Switch();
         }
     }
 }

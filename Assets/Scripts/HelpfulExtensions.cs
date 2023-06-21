@@ -72,5 +72,13 @@ namespace Assets.Scripts
         {
             return new Vector3(vector.x, vector.y, 0);
         }
+
+        public static Player Switch(this Player player)
+        {
+            if (player == Player.One)
+                return Player.Two;
+            else
+                return Player.One;
+        }
     }
 }
