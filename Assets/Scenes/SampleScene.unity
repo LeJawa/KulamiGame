@@ -189,7 +189,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519420028
 GameObject:
@@ -281,7 +281,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &733962005
 GameObject:
@@ -378,7 +378,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -428,7 +428,7 @@ Transform:
   m_Children:
   - {fileID: 1466723324}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1213576237
 GameObject:
@@ -459,15 +459,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c5f1a25f64f58d47ad0ffce680131d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gameDrawer: {fileID: 1525530344}
   _numberOfTile6: 4
   _numberOfTile4: 4
   _numberOfTile3: 4
   _numberOfTile2: 4
-  _unitTilePrefab: {fileID: 2081733411399040099, guid: a311a97f17fbfd6449bca5e6a99af16d, type: 3}
-  _tilePrefab: {fileID: 2666680981105851122, guid: c29feae38d85cee4b896819ce23af830, type: 3}
-  _ballPrefab: {fileID: 809330682569989117, guid: cdbf82263eef144469c1d01aa302a3b1, type: 3}
-  _playerOneColor: {r: 0.8113208, g: 0.24875402, b: 0.24875402, a: 1}
-  _playerTwoColor: {r: 0.24705882, g: 0.27100524, b: 0.8117647, a: 1}
   _maxStraightLine: 10
 --- !u!4 &1213576239
 Transform:
@@ -482,7 +478,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1466723321
 GameObject:
@@ -567,4 +563,54 @@ Transform:
   m_Children: []
   m_Father: {fileID: 871326505}
   m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1525530343
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1525530345}
+  - component: {fileID: 1525530344}
+  m_Layer: 0
+  m_Name: GameDrawer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1525530344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1525530343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef24c7b58dcfe2f4b8afb2bcb7ca77e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _unitTilePrefab: {fileID: 2081733411399040099, guid: a311a97f17fbfd6449bca5e6a99af16d, type: 3}
+  _tilePrefab: {fileID: 2666680981105851122, guid: c29feae38d85cee4b896819ce23af830, type: 3}
+  _ballPrefab: {fileID: 809330682569989117, guid: cdbf82263eef144469c1d01aa302a3b1, type: 3}
+  _playerOneColor: {r: 0.24705882, g: 0.27100524, b: 0.8117647, a: 1}
+  _playerTwoColor: {r: 0.8113208, g: 0.24875402, b: 0.24875402, a: 1}
+  _camera: {fileID: 519420031}
+--- !u!4 &1525530345
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1525530343}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
