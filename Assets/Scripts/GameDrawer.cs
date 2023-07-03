@@ -36,6 +36,41 @@ public class GameDrawer : MonoBehaviour
     public void Start()
     {
         InitializeBalls();
+        SubscribeToEvents();
+    }
+
+    private void SubscribeToEvents()
+    {
+        GameEvents.Instance.OnMouseEnterSocket += OnMouseEnterSocket;
+        GameEvents.Instance.OnMouseExitSocket += OnMouseExitSocket;
+    }
+
+    private void OnMouseExitSocket(SocketGO socketGO)
+    {
+        throw new NotImplementedException();
+    }
+
+    private void OnMouseEnterSocket(SocketGO socketGO)
+    {
+        var currentPlayer = GameManager.Instance.CurrentPlayer;
+        var socketOwner = socketGO.Owner;
+
+        SocketStatus status = SocketStatus.Empty;
+
+        if (socketOwner == null)
+        {
+            status = currentPlayer == Player.One ? SocketStatus.EmptyHoverPlayerOne : SocketStatus.EmptyHoverPlayerTwo;
+        }
+        else if (socketOwner == Player.One)
+        {
+            status = currentPlayer == Player.One ? SocketStatus.OwnedByPlayerOneHoverPlayerOne : SocketStatus.OwnedByPlayerOneHoverPlayerTwo;
+        }
+        else
+        {
+            status = currentPlayer == Player.One ? SocketStatus.OwnedByPlayerTwoHoverPlayerOne : SocketStatus.OwnedByPlayerTwoHoverPlayerTwo;
+        }
+
+        socketGO.SetStatus(status);
     }
 
     private void InitializeBalls()
@@ -50,25 +85,25 @@ public class GameDrawer : MonoBehaviour
         _playerTwoBall.SetActive(false);
     }
 
-    public void DrawUnitTiles(UnitTile[] tiles)
+    public void DrawUnitTiles(Socket[] sockets)
     {
-        var result = new GameObject[tiles.Length];
+        var result = new GameObject[sockets.Length];
 
         var minX = int.MaxValue;
         var maxX = int.MinValue;
         var minY = int.MaxValue;
         var maxY = int.MinValue;
 
-        foreach (UnitTile tile in tiles)
+        foreach (Socket socket in sockets)
         {
             // Instantiate and Initialize in one line
             // Smells dirty but will reformat later
-            Instantiate(_unitTilePrefab, tile.Position.ToVector3(), Quaternion.identity).GetComponent<UnitTileGO>().Initialize(tile);
+            Instantiate(_unitTilePrefab, socket.Position.ToVector3(), Quaternion.identity).GetComponent<SocketGO>().Initialize(socket);
 
-            if (minX > tile.Position.x) minX = tile.Position.x;
-            if (maxX < tile.Position.x) maxX = tile.Position.x;
-            if (minY > tile.Position.y) minY = tile.Position.y;
-            if (maxY < tile.Position.y) maxY = tile.Position.y;
+            if (minX > socket.Position.x) minX = socket.Position.x;
+            if (maxX < socket.Position.x) maxX = socket.Position.x;
+            if (minY > socket.Position.y) minY = socket.Position.y;
+            if (maxY < socket.Position.y) maxY = socket.Position.y;
         }
 
         // We add maxX and minX together because minX is always negative

@@ -28,7 +28,7 @@ namespace Assets.Scripts
         private const int BOARD_SIZE = 20;
 
 
-        private UnitTile[] _individualTiles;
+        private Socket[] _individualTiles;
         private Tile[] _playableTiles;
 
         private Vector2Int _startingPosition = Vector2Int.zero;
@@ -40,7 +40,7 @@ namespace Assets.Scripts
         private int _minY;
         private int _maxY;
 
-        private Player _currentPlayer = Player.One;
+        public Player CurrentPlayer { get; private set; } = Player.One;
 
         public struct WeightedPosition
         {
@@ -169,11 +169,11 @@ namespace Assets.Scripts
                 // Assign unit tiles to playable tiles
                 int number = tile.Number;
 
-                UnitTile[] unitTileArray = new UnitTile[number];
+                Socket[] unitTileArray = new Socket[number];
 
                 for (int i = 0; i < number; i++)
                 {
-                    _individualTiles[individualTilesIndex] = new UnitTile(tile);
+                    _individualTiles[individualTilesIndex] = new Socket(tile);
                     unitTileArray[i] = _individualTiles[individualTilesIndex];
 
                     individualTilesIndex++;
@@ -365,11 +365,11 @@ namespace Assets.Scripts
                 // Assign unit tiles to playable tiles
                 int number = tile.Number;
 
-                UnitTile[] unitTileArray = new UnitTile[number];
+                Socket[] unitTileArray = new Socket[number];
 
                 for (int i = 0; i < number; i++)
                 {
-                    _individualTiles[individualTilesIndex] = new UnitTile(tile);
+                    _individualTiles[individualTilesIndex] = new Socket(tile);
                     unitTileArray[i] = _individualTiles[individualTilesIndex];
 
                     individualTilesIndex++;
@@ -389,12 +389,12 @@ namespace Assets.Scripts
                             + _numberOfTile4 * 4
                             + _numberOfTile6 * 6;
 
-            _individualTiles = new UnitTile[totalNumberOfUnitTiles];
+            _individualTiles = new Socket[totalNumberOfUnitTiles];
         }
 
-        public void GameTileClickedEvent(UnitTile tile)
+        public void GameTileClickedEvent(Socket tile)
         {
-            if (tile.Status != TileStatus.Empty)
+            if (tile.Owner != null)
             {
                 return;
             }
@@ -404,13 +404,13 @@ namespace Assets.Scripts
             Debug.Log("Tile clicked: " + tile.Position);
         }
 
-        private void PlaceBall(UnitTile tile)
+        private void PlaceBall(Socket tile)
         {
-            tile.Status = _currentPlayer == Player.One ? TileStatus.PlayerOne : TileStatus.PlayerTwo;
+            tile.Owner = CurrentPlayer;
 
-            _gameDrawer.DrawBall(_currentPlayer, tile.Position);
+            _gameDrawer.DrawBall(CurrentPlayer, tile.Position);
 
-            _currentPlayer = _currentPlayer.Switch();
+            CurrentPlayer = CurrentPlayer.Switch();
         }
     }
 }

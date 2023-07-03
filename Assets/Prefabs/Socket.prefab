@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4744145738821915535}
   - component: {fileID: 2323174004019860389}
   m_Layer: 0
-  m_Name: UnitTile
+  m_Name: Socket
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

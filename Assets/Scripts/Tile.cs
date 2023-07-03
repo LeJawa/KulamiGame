@@ -5,7 +5,7 @@ namespace Assets.Scripts
 {
     public abstract class Tile
     {
-        private UnitTile[] _unitTiles;
+        private Socket[] _unitTiles;
         public int Number { get; protected set; }
 
         public Tile()
@@ -15,7 +15,7 @@ namespace Assets.Scripts
 
         protected abstract void SetNumber();
 
-        public void InitializeTile(UnitTile[] unitTiles)
+        public void InitializeTile(Socket[] unitTiles)
         {
             _unitTiles = unitTiles;
         }

@@ -1,10 +1,18 @@
 ﻿namespace Assets.Scripts
 {
-    public enum TileStatus
+    public enum SocketStatus
     {
         Empty,
-        PlayerOne,
-        PlayerTwo,
+        OwnedByPlayerOne,
+        OwnedByPlayerTwo,
+        OwnedByPlayerOneHoverPlayerOne,
+        OwnedByPlayerOneHoverPlayerTwo,
+        OwnedByPlayerTwoHoverPlayerOne,
+        OwnedByPlayerTwoHoverPlayerTwo,
+        PossibleMoveByPlayerOne,
+        PossibleMoveByPlayerTwo,
+        EmptyHoverPlayerOne,
+        EmptyHoverPlayerTwo
     }
 
     public enum TileType

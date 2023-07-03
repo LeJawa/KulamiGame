@@ -2,15 +2,15 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
-    public class UnitTile
+    public class Socket
     {
-        public TileStatus Status { get; set; } = TileStatus.Empty;
+        public Player? Owner { get; set; } = null;
 
         public Vector2Int Position { get; set; }
 
         public Tile ParentTile { get; private set; } = null;
 
-        public UnitTile(Tile parentTile)
+        public Socket(Tile parentTile)
         {
             ParentTile = parentTile;
         }
