@@ -172,11 +172,12 @@ namespace Assets.Scripts
 
                 if (!TryToSetTileAtPosition(tile, position))
                 {
+                    // If the tile could not be placed, try the next tile
                     if (nextPlayableTileIndex < _playableTiles.Length - 1)
                     {
                         nextPlayableTileIndex++;
                     }
-                    else
+                    else // If all tiles have been tried, try the next position
                     {
                         positionIndex++;
                     }
