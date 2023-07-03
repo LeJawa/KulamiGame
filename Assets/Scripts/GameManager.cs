@@ -71,8 +71,7 @@ namespace Assets.Scripts
             InitializeIndividualTiles();
             InitializePlayableTiles();
 
-            //GenerateBoard();
-            NewGenBoard();
+            GenerateBoard();
 
             DrawTiles();
 
@@ -159,101 +158,6 @@ namespace Assets.Scripts
         }
 
         private bool GenerateBoard()
-        {       
-            int individualTilesIndex = 0;
-
-            List<Vector2Int> possiblePositions = new List<Vector2Int> { _startingPosition };
-
-            foreach (var tile in _playableTiles)
-            {
-                // Assign unit tiles to playable tiles
-                int number = tile.Number;
-
-                Socket[] unitTileArray = new Socket[number];
-
-                for (int i = 0; i < number; i++)
-                {
-                    _individualTiles[individualTilesIndex] = new Socket(tile);
-                    unitTileArray[i] = _individualTiles[individualTilesIndex];
-
-                    individualTilesIndex++;
-                }
-
-                tile.InitializeTile(unitTileArray);
-
-                int totalPositions = possiblePositions.Count;
-                float[] weights = new float[totalPositions];
-                float totalWeight = 0;
-
-                // Calculate the cumulative weights
-                for (int i = 0; i < totalPositions; i++)
-                {
-                    float weight = GetPositionWeight(possiblePositions[i]);
-                    totalWeight += weight;
-                    weights[i] = totalWeight;
-                }
-
-                bool tilePlaced = false;
-                int maxTries = 1000;
-                int tries = 0;
-
-                while (!tilePlaced && tries < maxTries)
-                {
-                    // Randomly select a position based on the weights
-                    var randomValue = UnityEngine.Random.Range(0, totalWeight);
-                    int selectedIndex = -1;
-
-                    for (int i = 0; i < totalPositions; i++)
-                    {
-                        if (randomValue <= weights[i])
-                        {
-                            selectedIndex = i;
-                            break;
-                        }
-                    }
-
-                    if (TryToSetTileAtPosition(tile, possiblePositions[selectedIndex]))
-                    {
-                        tilePlaced = true;
-                        _gameDrawer.DrawGameTile(tile);
-                        break;
-                    }
-                    tries++;
-                }
-
-                if (!tilePlaced)
-                {
-                    return false;
-                }
-
-                // Add new possible positions
-                var newPossiblePositions = tile.GetNewPossiblePositions();
-
-                foreach (var position in newPossiblePositions)
-                {
-                    if (!possiblePositions.Contains(position))
-                    {
-                        possiblePositions.Add(position);
-                    }
-                }
-
-                // Remove overlapping positions
-                possiblePositions.RemoveAll(p => _occupiedPositions.Contains(p));
-
-                // Try to position the playable tile
-                    // Select a random orientation for the playable tile
-                    // take a possible position at random (first round only 0,0 )
-                    // check if playable tile can be placed here
-                    // if no, take another possible position at random
-                    // place all unit tiles
-                    // create list of possible new positions (positions surrounding existing positions)
-                
-            }
-            return true;
-        }
-
-
-        private bool NewGenBoard()
         {
             List<WeightedPosition> orderedPositions = GetOrderedListOfWeightedPositions();
             
