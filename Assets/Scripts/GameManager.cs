@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -24,6 +25,8 @@ namespace Assets.Scripts
         [SerializeField]
         private int _maxStraightLine = 10;
 
+        private const int BOARD_SIZE = 20;
+
 
         private UnitTile[] _individualTiles;
         private Tile[] _playableTiles;
@@ -39,6 +42,18 @@ namespace Assets.Scripts
 
         private Player _currentPlayer = Player.One;
 
+        public struct WeightedPosition
+        {
+            public Vector2Int Position { get; private set; }
+            public float Weight { get; private set; }
+
+            public WeightedPosition(Vector2Int position, float weight)
+            {
+                Position = position;
+                Weight = weight;
+            }
+        }
+
         private float GetPositionWeight(Vector2Int position)
         {
             float distance = (float) Math.Sqrt(Math.Pow(position.x, 4) + Math.Pow(position.y, 4));
@@ -53,20 +68,23 @@ namespace Assets.Scripts
 
         public void Start()
         {
+            InitializeIndividualTiles();
             InitializePlayableTiles();
 
-            InitializeIndividualTiles();
-
-            GenerateBoard();
+            //GenerateBoard();
+            NewGenBoard();
 
             DrawTiles();
 
         }
 
-        
-
         private void DrawTiles()
         {
+            foreach (var tile in _playableTiles)
+            {
+                _gameDrawer.DrawGameTile(tile);
+            }
+
             _gameDrawer.DrawUnitTiles(_individualTiles);
         }
 
@@ -234,6 +252,80 @@ namespace Assets.Scripts
             return true;
         }
 
+
+        private bool NewGenBoard()
+        {
+            List<WeightedPosition> orderedPositions = GetOrderedListOfWeightedPositions();
+            
+            int nextPlayableTileIndex = 0;
+            var placedTilesIndices = new List<int>();
+            int positionIndex = 0;
+
+            while (placedTilesIndices.Count < _playableTiles.Length && positionIndex < orderedPositions.Count)
+            {
+                var tile = _playableTiles[nextPlayableTileIndex];
+                var position = orderedPositions[positionIndex].Position;
+
+                if (!TryToSetTileAtPosition(tile, position))
+                {
+                    if (nextPlayableTileIndex < _playableTiles.Length - 1)
+                    {
+                        nextPlayableTileIndex++;
+                    }
+                    else
+                    {
+                        positionIndex++;
+                    }
+                    continue;
+                }
+
+                // This is only reached if the tile was placed
+                placedTilesIndices.Add(nextPlayableTileIndex);
+
+                // nextPlayableTileIndex becomes the lowest index that is not in placedTilesIndices
+                nextPlayableTileIndex = 0;
+                while (placedTilesIndices.Contains(nextPlayableTileIndex))
+                {
+                    nextPlayableTileIndex++;
+                }
+
+                // Remove all positions that are now occupied
+                var newlyOccupiedPositions = tile.GetTilePositions();
+                orderedPositions.RemoveAll(p => newlyOccupiedPositions.Contains(p.Position));
+
+                // Reset positionIndex
+                positionIndex = 0;
+            }
+
+            if (placedTilesIndices.Count < _playableTiles.Length)
+            {
+                return false;
+            }
+
+            return true;
+
+        }
+
+        private List<WeightedPosition> GetOrderedListOfWeightedPositions()
+        {
+            List<WeightedPosition> weightedPositions = new List<WeightedPosition>();
+
+            for (int i = -_maxStraightLine; i < _maxStraightLine; i++)
+            {
+                for (int j = -_maxStraightLine; j < _maxStraightLine; j++)
+                {
+                    var position = new Vector2Int(i, j);
+                    var weight = GetPositionWeight(position);
+
+                    weightedPositions.Add(new WeightedPosition(position, weight));
+                }
+            }
+
+            var orderedPositions = weightedPositions.OrderByDescending(p => p.Weight).ToList();
+
+            return orderedPositions;
+        }
+
         private void InitializePlayableTiles()
         {
             int totalNumberOfPlayableTiles =
@@ -265,6 +357,28 @@ namespace Assets.Scripts
             {
                 _playableTiles[index++] = new Tile6();
             }
+
+            int individualTilesIndex = 0;
+
+            foreach (var tile in _playableTiles)
+            {
+                // Assign unit tiles to playable tiles
+                int number = tile.Number;
+
+                UnitTile[] unitTileArray = new UnitTile[number];
+
+                for (int i = 0; i < number; i++)
+                {
+                    _individualTiles[individualTilesIndex] = new UnitTile(tile);
+                    unitTileArray[i] = _individualTiles[individualTilesIndex];
+
+                    individualTilesIndex++;
+                }
+
+                tile.InitializeTile(unitTileArray);
+            }
+
+            _playableTiles.Shuffle();
         }
 
         private void InitializeIndividualTiles()
