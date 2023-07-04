@@ -18,9 +18,9 @@ public class GameDrawer : MonoBehaviour
     private GameObject _ballPrefab;
 
     [SerializeField]
-    private Color _playerOneColor;
+    public Color PlayerOneColor;
     [SerializeField]
-    private Color _playerTwoColor;
+    public Color PlayerTwoColor;
 
     private GameObject _playerOneBall;
     private GameObject _playerTwoBall;
@@ -47,7 +47,16 @@ public class GameDrawer : MonoBehaviour
 
     private void OnMouseExitSocket(SocketGO socketGO)
     {
-        throw new NotImplementedException();
+        var socketOwner = socketGO.Owner;
+
+        SocketStatus status = SocketStatus.Empty;
+
+        if (socketOwner != null)
+        {
+            status = socketOwner == Player.One ? SocketStatus.OwnedByPlayerOne : SocketStatus.OwnedByPlayerTwo;
+        }
+
+        socketGO.SetStatus(status);
     }
 
     private void OnMouseEnterSocket(SocketGO socketGO)
@@ -78,8 +87,8 @@ public class GameDrawer : MonoBehaviour
         _playerOneBall = Instantiate(_ballPrefab);
         _playerTwoBall = Instantiate(_ballPrefab);
 
-        _playerOneBall.GetComponentInChildren<SpriteRenderer>().color = _playerOneColor;
-        _playerTwoBall.GetComponentInChildren<SpriteRenderer>().color = _playerTwoColor;
+        _playerOneBall.GetComponentInChildren<SpriteRenderer>().color = PlayerOneColor;
+        _playerTwoBall.GetComponentInChildren<SpriteRenderer>().color = PlayerTwoColor;
 
         _playerOneBall.SetActive(false);
         _playerTwoBall.SetActive(false);
