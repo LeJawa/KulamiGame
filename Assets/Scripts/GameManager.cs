@@ -42,7 +42,7 @@ namespace Assets.Scripts
 
         public Player CurrentPlayer { get; private set; } = Player.One;
 
-        public struct WeightedPosition
+        private struct WeightedPosition
         {
             public Vector2Int Position { get; private set; }
             public float Weight { get; private set; }
@@ -51,6 +51,23 @@ namespace Assets.Scripts
             {
                 Position = position;
                 Weight = weight;
+            }
+        }
+
+        private struct TilePositionResult
+        {
+            public bool CanBePlaced { get; private set; }
+            public Vector2Int[] Positions { get; private set; }
+
+            public TilePositionResult(bool canBePlaced, Vector2Int[] positions = null)
+            {
+                CanBePlaced = canBePlaced;
+                Positions = positions;
+
+                if (canBePlaced && positions == null)
+                {
+                    throw new ArgumentException("Positions must be provided if the tile can be placed");
+                }
             }
         }
 
@@ -87,7 +104,7 @@ namespace Assets.Scripts
             _gameDrawer.DrawUnitTiles(_individualTiles);
         }
 
-        private bool TryToSetTileAtPosition(Tile tile, Vector2Int initialPosition)
+        private TilePositionResult TryToPlaceTileAtPosition(Tile tile, Vector2Int initialPosition)
         {
             var rotations = tile.GetAllRotationsBasedOnInitialPosition(initialPosition);
             rotations.Shuffle();
@@ -118,23 +135,25 @@ namespace Assets.Scripts
                         canBePlaced = false;
                 }
 
-
                 if (canBePlaced)
                 {
-                    foreach (var position in rotation)
-                    {
-                        _occupiedPositions.Add(position);
-
-                        UpdateBounds(position);
-                    }
-
-                    tile.SetTilePositions(rotation);
-
-                    return true;
+                    return new TilePositionResult(true, rotation);
                 }
             }
 
-            return false;
+            return new TilePositionResult(false);
+        }
+
+        private void PlaceTileAtPosition(Tile tile, Vector2Int[] positions)
+        {
+            foreach (var position in positions)
+            {
+                _occupiedPositions.Add(position);
+
+                UpdateBounds(position);
+            }
+
+            tile.SetTilePositions(positions);
         }
 
         private void UpdateBounds(Vector2Int position)
@@ -155,7 +174,7 @@ namespace Assets.Scripts
             {
                 _maxY = position.y;
             }
-        }
+        }        
 
         private bool GenerateBoard()
         {
@@ -170,7 +189,9 @@ namespace Assets.Scripts
                 var tile = _playableTiles[nextPlayableTileIndex];
                 var position = orderedPositions[positionIndex].Position;
 
-                if (!TryToSetTileAtPosition(tile, position))
+                var result = TryToPlaceTileAtPosition(tile, position);
+
+                if (!result.CanBePlaced)
                 {
                     // If the tile could not be placed, try the next tile
                     if (nextPlayableTileIndex < _playableTiles.Length - 1)
@@ -184,7 +205,9 @@ namespace Assets.Scripts
                     continue;
                 }
 
-                // This is only reached if the tile was placed
+                // This is only reached if the tile can be placed
+                PlaceTileAtPosition(tile, result.Positions);
+
                 placedTilesIndices.Add(nextPlayableTileIndex);
 
                 // nextPlayableTileIndex becomes the lowest index that is not in placedTilesIndices
@@ -208,7 +231,6 @@ namespace Assets.Scripts
             }
 
             return true;
-
         }
 
         private List<WeightedPosition> GetOrderedListOfWeightedPositions()
