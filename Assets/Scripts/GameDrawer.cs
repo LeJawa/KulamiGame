@@ -21,6 +21,8 @@ public class GameDrawer : MonoBehaviour
     public Color PlayerOneColor;
     [SerializeField]
     public Color PlayerTwoColor;
+    [SerializeField]
+    public Color NeutralColor;
 
     private GameObject _playerOneMarble;
     private GameObject _playerTwoMarble;

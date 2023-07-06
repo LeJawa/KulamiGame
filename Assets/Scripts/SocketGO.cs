@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -9,10 +11,49 @@ namespace Assets.Scripts
         private SpriteRenderer _marbleSpriteRenderer;
         private SpriteRenderer _previewSpriteRenderer;
 
+        public Player? Owner => _socketReference.Owner;
+
+        public Vector2Int Position => _socketReference.Position;
+
+        private bool _showingPossibleMove = false;
+
         private void Awake()
         {
             _marbleSpriteRenderer = transform.Find("Marble").GetComponentInChildren<SpriteRenderer>();
             _previewSpriteRenderer = transform.Find("MarblePreview").GetComponentInChildren<SpriteRenderer>();
+        }
+
+        private void Start()
+        {
+            GameEvents.Instance.PossibleMovesBroadcast += OnPossibleMovesBroadcast;
+            GameEvents.Instance.ClearPossibleMoves += OnClearPossibleMoves;
+        }
+
+        private void OnClearPossibleMoves()
+        {
+            if (_showingPossibleMove)
+            {
+                _showingPossibleMove = false;
+                HidePreview();
+            }
+        }
+
+        private void OnPossibleMovesBroadcast(List<Vector2Int> list)
+        {
+            foreach(var move in list)
+            {
+                if (move == Position)
+                {
+                    ShowPossibleMove();
+                    return;
+                }
+            }
+        }
+
+        private void ShowPossibleMove()
+        {
+            ShowPreview(GameDrawer.Instance.NeutralColor);
+            _showingPossibleMove = true;
         }
 
         public void Initialize(Socket tile)
@@ -51,12 +92,15 @@ namespace Assets.Scripts
 
         private void HidePreview()
         {
-              _previewSpriteRenderer.enabled = false;
+            if (_showingPossibleMove)
+                ShowPossibleMove();
+            else
+                _previewSpriteRenderer.enabled = false;
         }
 
         public void OnMouseUpAsButton()
         {
-            GameManager.Instance.GameTileClickedEvent(_socketReference);
+            GameEvents.Instance.TriggerSocketClickedEvent(_socketReference);
         }
 
         public void OnMouseEnter()
@@ -69,14 +113,15 @@ namespace Assets.Scripts
             GameEvents.Instance.TriggerMouseExitSocketEvent(this);
         }
 
-        public Player? Owner => _socketReference.Owner;
-
         public void SetStatus(SocketStatus status)
         {
             switch (status)
             {
                 case SocketStatus.Empty:
-                    ShowEmptySocket();
+                    if (_showingPossibleMove)
+                        ShowPossibleMove();
+                    else
+                        ShowEmptySocket();
                     break;
                 case SocketStatus.OwnedByPlayerOne:
                     ShowMarble(GameDrawer.Instance.PlayerOneColor);

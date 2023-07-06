@@ -28,17 +28,21 @@ namespace Assets.Scripts
         private const int BOARD_SIZE = 20;
 
 
-        private Socket[] _individualTiles;
-        private Tile[] _playableTiles;
+        private Socket[] _sockets;
+        private Tile[] _tiles;
 
         private Vector2Int _startingPosition = Vector2Int.zero;
 
         private List<Vector2Int> _occupiedPositions = new List<Vector2Int>();
 
+        private Tile _lastPlacedTile = null;
+
         private int _minX;
         private int _maxX;
         private int _minY;
         private int _maxY;
+
+        private List<Vector2Int> _possibleMoves;
 
         public Player CurrentPlayer { get; private set; } = Player.One;
 
@@ -92,16 +96,22 @@ namespace Assets.Scripts
 
             DrawTiles();
 
+            SubscribeToEvents();
+        }
+
+        private void SubscribeToEvents()
+        {
+            GameEvents.Instance.OnSocketClicked += OnSocketClicked;
         }
 
         private void DrawTiles()
         {
-            foreach (var tile in _playableTiles)
+            foreach (var tile in _tiles)
             {
                 _gameDrawer.DrawGameTile(tile);
             }
 
-            _gameDrawer.DrawUnitTiles(_individualTiles);
+            _gameDrawer.DrawUnitTiles(_sockets);
         }
 
         private TilePositionResult TryToPlaceTileAtPosition(Tile tile, Vector2Int initialPosition)
@@ -184,9 +194,9 @@ namespace Assets.Scripts
             var placedTilesIndices = new List<int>();
             int positionIndex = 0;
 
-            while (placedTilesIndices.Count < _playableTiles.Length && positionIndex < orderedPositions.Count)
+            while (placedTilesIndices.Count < _tiles.Length && positionIndex < orderedPositions.Count)
             {
-                var tile = _playableTiles[nextPlayableTileIndex];
+                var tile = _tiles[nextPlayableTileIndex];
                 var position = orderedPositions[positionIndex].Position;
 
                 var result = TryToPlaceTileAtPosition(tile, position);
@@ -194,7 +204,7 @@ namespace Assets.Scripts
                 if (!result.CanBePlaced)
                 {
                     // If the tile could not be placed, try the next tile
-                    if (nextPlayableTileIndex < _playableTiles.Length - 1)
+                    if (nextPlayableTileIndex < _tiles.Length - 1)
                     {
                         nextPlayableTileIndex++;
                     }
@@ -225,10 +235,13 @@ namespace Assets.Scripts
                 positionIndex = 0;
             }
 
-            if (placedTilesIndices.Count < _playableTiles.Length)
+            if (placedTilesIndices.Count < _tiles.Length)
             {
                 return false;
             }
+
+
+            _possibleMoves = _occupiedPositions.ToList();
 
             return true;
         }
@@ -261,33 +274,33 @@ namespace Assets.Scripts
                             + _numberOfTile4
                             + _numberOfTile6;
 
-            _playableTiles = new Tile[totalNumberOfPlayableTiles];
+            _tiles = new Tile[totalNumberOfPlayableTiles];
 
             int index = 0;
 
             for (int i = 0; i < _numberOfTile2; i++)
             {
-                _playableTiles[index++] = new Tile2();
+                _tiles[index++] = new Tile2();
             }
 
             for (int i = 0; i < _numberOfTile3; i++)
             {
-                _playableTiles[index++] = new Tile3();
+                _tiles[index++] = new Tile3();
             }
 
             for (int i = 0; i < _numberOfTile4; i++)
             {
-                _playableTiles[index++] = new Tile4();
+                _tiles[index++] = new Tile4();
             }
 
             for (int i = 0; i < _numberOfTile6; i++)
             {
-                _playableTiles[index++] = new Tile6();
+                _tiles[index++] = new Tile6();
             }
 
             int individualTilesIndex = 0;
 
-            foreach (var tile in _playableTiles)
+            foreach (var tile in _tiles)
             {
                 // Assign unit tiles to playable tiles
                 int number = tile.Number;
@@ -296,8 +309,8 @@ namespace Assets.Scripts
 
                 for (int i = 0; i < number; i++)
                 {
-                    _individualTiles[individualTilesIndex] = new Socket(tile);
-                    unitTileArray[i] = _individualTiles[individualTilesIndex];
+                    _sockets[individualTilesIndex] = new Socket(tile);
+                    unitTileArray[i] = _sockets[individualTilesIndex];
 
                     individualTilesIndex++;
                 }
@@ -305,7 +318,7 @@ namespace Assets.Scripts
                 tile.InitializeTile(unitTileArray);
             }
 
-            _playableTiles.Shuffle();
+            _tiles.Shuffle();
         }
 
         private void InitializeIndividualTiles()
@@ -316,28 +329,60 @@ namespace Assets.Scripts
                             + _numberOfTile4 * 4
                             + _numberOfTile6 * 6;
 
-            _individualTiles = new Socket[totalNumberOfUnitTiles];
+            _sockets = new Socket[totalNumberOfUnitTiles];
         }
 
-        public void GameTileClickedEvent(Socket tile)
+        public void OnSocketClicked(Socket clickedSocket)
         {
-            if (tile.Owner != null)
+            Debug.Log("Tile clicked: " + clickedSocket.Position);
+
+            if (clickedSocket.Owner != null)
             {
                 return;
             }
 
-            PlaceMarble(tile);
+            if (!_possibleMoves.Contains(clickedSocket.Position))
+            {
+                return;
+            }
 
-            Debug.Log("Tile clicked: " + tile.Position);
+            PlaceMarble(clickedSocket);
+
+            // Calculate next possible moves
+            _possibleMoves = new List<Vector2Int>();
+
+            foreach(var socket in _sockets)
+            {
+                if (socket.Owner != null)
+                {
+                    continue;
+                }
+
+                if (socket.ParentTile == clickedSocket.ParentTile || socket.ParentTile == _lastPlacedTile)
+                {
+                    continue;
+                }
+
+                if (socket.Position.x == clickedSocket.Position.x || socket.Position.y == clickedSocket.Position.y)
+                {
+                    _possibleMoves.Add(socket.Position);
+                }
+            }
+
+            // Clear previous possible moves
+            GameEvents.Instance.TriggerClearPossibleMovesEvent();
+
+            // Show possible moves
+            GameEvents.Instance.TriggerPossibleMovesBroadcastEvent(_possibleMoves);
+
+            _lastPlacedTile = clickedSocket.ParentTile;
+            CurrentPlayer = CurrentPlayer.Switch();
         }
 
         private void PlaceMarble(Socket tile)
         {
             tile.Owner = CurrentPlayer;
-
             _gameDrawer.DrawMarble(CurrentPlayer, tile.Position);
-
-            CurrentPlayer = CurrentPlayer.Switch();
         }
     }
 }
