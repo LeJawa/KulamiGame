@@ -276,7 +276,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 809330682569989117, guid: 6d9bed4be25f4714b95f236f80f7c357, type: 3}
       propertyPath: m_Name
-      value: BallPreview
+      value: MarblePreview
       objectReference: {fileID: 0}
     - target: {fileID: 809330682569989117, guid: 6d9bed4be25f4714b95f236f80f7c357, type: 3}
       propertyPath: m_IsActive
@@ -350,7 +350,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 809330682569989117, guid: cdbf82263eef144469c1d01aa302a3b1, type: 3}
       propertyPath: m_Name
-      value: Ball
+      value: Marble
       objectReference: {fileID: 0}
     - target: {fileID: 809330682569989117, guid: cdbf82263eef144469c1d01aa302a3b1, type: 3}
       propertyPath: m_IsActive

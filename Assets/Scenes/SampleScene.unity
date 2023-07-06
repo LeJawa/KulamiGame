@@ -595,7 +595,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _unitTilePrefab: {fileID: 2081733411399040099, guid: a311a97f17fbfd6449bca5e6a99af16d, type: 3}
   _tilePrefab: {fileID: 2666680981105851122, guid: c29feae38d85cee4b896819ce23af830, type: 3}
-  _ballPrefab: {fileID: 809330682569989117, guid: cdbf82263eef144469c1d01aa302a3b1, type: 3}
+  _marblePrefab: {fileID: 809330682569989117, guid: cdbf82263eef144469c1d01aa302a3b1, type: 3}
   PlayerOneColor: {r: 0.8113208, g: 0.24875402, b: 0.24875402, a: 1}
   PlayerTwoColor: {r: 0.24705882, g: 0.27100524, b: 0.8117647, a: 1}
   _camera: {fileID: 519420031}

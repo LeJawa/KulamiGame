@@ -15,15 +15,15 @@ public class GameDrawer : MonoBehaviour
     private GameObject _tilePrefab;
 
     [SerializeField]
-    private GameObject _ballPrefab;
+    private GameObject _marblePrefab;
 
     [SerializeField]
     public Color PlayerOneColor;
     [SerializeField]
     public Color PlayerTwoColor;
 
-    private GameObject _playerOneBall;
-    private GameObject _playerTwoBall;
+    private GameObject _playerOneMarble;
+    private GameObject _playerTwoMarble;
 
     [SerializeField]
     private Camera _camera;
@@ -35,7 +35,7 @@ public class GameDrawer : MonoBehaviour
 
     public void Start()
     {
-        InitializeBalls();
+        InitializeMarbles();
         SubscribeToEvents();
     }
 
@@ -82,16 +82,16 @@ public class GameDrawer : MonoBehaviour
         socketGO.SetStatus(status);
     }
 
-    private void InitializeBalls()
+    private void InitializeMarbles()
     {
-        _playerOneBall = Instantiate(_ballPrefab);
-        _playerTwoBall = Instantiate(_ballPrefab);
+        _playerOneMarble = Instantiate(_marblePrefab);
+        _playerTwoMarble = Instantiate(_marblePrefab);
 
-        _playerOneBall.GetComponentInChildren<SpriteRenderer>().color = PlayerOneColor;
-        _playerTwoBall.GetComponentInChildren<SpriteRenderer>().color = PlayerTwoColor;
+        _playerOneMarble.GetComponentInChildren<SpriteRenderer>().color = PlayerOneColor;
+        _playerTwoMarble.GetComponentInChildren<SpriteRenderer>().color = PlayerTwoColor;
 
-        _playerOneBall.SetActive(false);
-        _playerTwoBall.SetActive(false);
+        _playerOneMarble.SetActive(false);
+        _playerTwoMarble.SetActive(false);
     }
 
     public void DrawUnitTiles(Socket[] sockets)
@@ -132,15 +132,15 @@ public class GameDrawer : MonoBehaviour
         Instantiate(_tilePrefab).GetComponent<TileGO>().Initialize(tile);
     }
 
-    public void DrawBall(Player player, Vector2Int position)
+    public void DrawMarble(Player player, Vector2Int position)
     {
         if (player == Player.One)
         {
-            Instantiate(_playerOneBall, position.ToVector3(), Quaternion.identity).SetActive(true);
+            Instantiate(_playerOneMarble, position.ToVector3(), Quaternion.identity).SetActive(true);
         }
         else
         {
-            Instantiate(_playerTwoBall, position.ToVector3(), Quaternion.identity).SetActive(true);
+            Instantiate(_playerTwoMarble, position.ToVector3(), Quaternion.identity).SetActive(true);
         }
     }
 }

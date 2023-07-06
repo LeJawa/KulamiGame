@@ -326,16 +326,16 @@ namespace Assets.Scripts
                 return;
             }
 
-            PlaceBall(tile);
+            PlaceMarble(tile);
 
             Debug.Log("Tile clicked: " + tile.Position);
         }
 
-        private void PlaceBall(Socket tile)
+        private void PlaceMarble(Socket tile)
         {
             tile.Owner = CurrentPlayer;
 
-            _gameDrawer.DrawBall(CurrentPlayer, tile.Position);
+            _gameDrawer.DrawMarble(CurrentPlayer, tile.Position);
 
             CurrentPlayer = CurrentPlayer.Switch();
         }

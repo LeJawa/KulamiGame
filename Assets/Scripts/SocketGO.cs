@@ -6,13 +6,13 @@ namespace Assets.Scripts
     {
         private Socket _socketReference;
 
-        private SpriteRenderer _ballSpriteRenderer;
+        private SpriteRenderer _marbleSpriteRenderer;
         private SpriteRenderer _previewSpriteRenderer;
 
         private void Awake()
         {
-            _ballSpriteRenderer = transform.Find("Ball").GetComponentInChildren<SpriteRenderer>();
-            _previewSpriteRenderer = transform.Find("BallPreview").GetComponentInChildren<SpriteRenderer>();
+            _marbleSpriteRenderer = transform.Find("Marble").GetComponentInChildren<SpriteRenderer>();
+            _previewSpriteRenderer = transform.Find("MarblePreview").GetComponentInChildren<SpriteRenderer>();
         }
 
         public void Initialize(Socket tile)
@@ -24,21 +24,21 @@ namespace Assets.Scripts
 
         private void ShowEmptySocket()
         {
-            _ballSpriteRenderer.enabled = false;
+            _marbleSpriteRenderer.enabled = false;
             _previewSpriteRenderer.enabled = false;
         }
 
-        private void ShowBall(Color color)
+        private void ShowMarble(Color color)
         {
-            _ballSpriteRenderer.enabled = true;
-            _ballSpriteRenderer.color = color;
+            _marbleSpriteRenderer.enabled = true;
+            _marbleSpriteRenderer.color = color;
 
             HidePreview();
         }
 
-        private void HideBall()
+        private void HideMarble()
         {
-            _ballSpriteRenderer.enabled = false;
+            _marbleSpriteRenderer.enabled = false;
         }
 
         private void ShowPreview(Color color)
@@ -46,7 +46,7 @@ namespace Assets.Scripts
             _previewSpriteRenderer.enabled = true;
             _previewSpriteRenderer.color = color;
 
-            HideBall();
+            HideMarble();
         }
 
         private void HidePreview()
@@ -79,22 +79,22 @@ namespace Assets.Scripts
                     ShowEmptySocket();
                     break;
                 case SocketStatus.OwnedByPlayerOne:
-                    ShowBall(GameDrawer.Instance.PlayerOneColor);
+                    ShowMarble(GameDrawer.Instance.PlayerOneColor);
                     break;
                 case SocketStatus.OwnedByPlayerTwo:
-                    ShowBall(GameDrawer.Instance.PlayerTwoColor);
+                    ShowMarble(GameDrawer.Instance.PlayerTwoColor);
                     break;
                 case SocketStatus.OwnedByPlayerOneHoverPlayerOne:
-                    ShowBall(GameDrawer.Instance.PlayerOneColor);
+                    ShowMarble(GameDrawer.Instance.PlayerOneColor);
                     break;
                 case SocketStatus.OwnedByPlayerOneHoverPlayerTwo:
-                    ShowBall(GameDrawer.Instance.PlayerOneColor);
+                    ShowMarble(GameDrawer.Instance.PlayerOneColor);
                     break;
                 case SocketStatus.OwnedByPlayerTwoHoverPlayerOne:
-                    ShowBall(GameDrawer.Instance.PlayerTwoColor);
+                    ShowMarble(GameDrawer.Instance.PlayerTwoColor);
                     break;
                 case SocketStatus.OwnedByPlayerTwoHoverPlayerTwo:
-                    ShowBall(GameDrawer.Instance.PlayerTwoColor);
+                    ShowMarble(GameDrawer.Instance.PlayerTwoColor);
                     break;
                 case SocketStatus.PossibleMoveByPlayerOne:
                     ShowPreview(GameDrawer.Instance.PlayerOneColor);
