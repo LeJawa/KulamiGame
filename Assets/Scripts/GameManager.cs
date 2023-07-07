@@ -189,23 +189,42 @@ namespace Assets.Scripts
 
             while (placedTilesIndices.Count < _tiles.Length && positionIndex < orderedPositions.Count)
             {
+                // if cannot place all tiles in one go, end method. If try to continue, might run into a wrong position.
+                if (nextPlayableTileIndex != placedTilesIndices.Count) 
+                {
+                    //Debug.Log($"Failed to generate board.");
+                    return false;
+                }
+
                 var tile = _tiles[nextPlayableTileIndex];
+
                 var position = orderedPositions[positionIndex].Position;
+
+                //Debug.Log($"Trying tile {tile.Number} ({nextPlayableTileIndex}) at position {position}");
 
                 var result = TryToPlaceTileAtPosition(tile, position);
 
                 if (!result.CanBePlaced)
                 {
+                    //Debug.Log($"Tile {tile.Number} could not be placed at position {position}");
+
+                    // If the tiles are not placed in one go, the following code yields an error
+                    // ERROR STARTS HERE
+
                     // If the tile could not be placed, try the next tile
                     if (nextPlayableTileIndex < _tiles.Length - 1)
                     {
                         nextPlayableTileIndex++;
+                        //Debug.Log($"Trying next tile: {nextPlayableTileIndex}");
                     }
                     else // If all tiles have been tried, try the next position
                     {
                         positionIndex++;
+                        //Debug.Log($"Trying next position: {orderedPositions[positionIndex].Position}");
                     }
                     continue;
+
+                    // ERROR ENDS HERE
                 }
 
                 // This is only reached if the tile can be placed
@@ -214,11 +233,7 @@ namespace Assets.Scripts
                 placedTilesIndices.Add(nextPlayableTileIndex);
 
                 // nextPlayableTileIndex becomes the lowest index that is not in placedTilesIndices
-                nextPlayableTileIndex = 0;
-                while (placedTilesIndices.Contains(nextPlayableTileIndex))
-                {
-                    nextPlayableTileIndex++;
-                }
+                nextPlayableTileIndex = GetNextPlayableTileIndex(placedTilesIndices);
 
                 // Remove all positions that are now occupied
                 var newlyOccupiedPositions = tile.GetTilePositions();
@@ -237,6 +252,17 @@ namespace Assets.Scripts
             _possibleMoves = _occupiedPositions.ToList();
 
             return true;
+        }
+
+        private static int GetNextPlayableTileIndex(List<int> placedTilesIndices)
+        {
+            int nextPlayableTileIndex = 0;
+            while (placedTilesIndices.Contains(nextPlayableTileIndex))
+            {
+                nextPlayableTileIndex++;
+            }
+
+            return nextPlayableTileIndex;
         }
 
         private List<WeightedPosition> GetOrderedListOfWeightedPositions()
@@ -327,7 +353,7 @@ namespace Assets.Scripts
 
         public void OnSocketClicked(Socket clickedSocket)
         {
-            Debug.Log("Tile clicked: " + clickedSocket.Position);
+            //Debug.Log("Tile clicked: " + clickedSocket.Position);
 
             if (ClickedSocketIsNotAllowed(clickedSocket))
                 return;
@@ -474,11 +500,15 @@ namespace Assets.Scripts
         {
             _gameDrawer.Initialize();
             
-            InitializeVariables();
-            InitializeSockets();
-            InitializePlayableTiles();
-            
-            GenerateBoard();
+            bool isBoardGenerated = false;
+
+            while (!isBoardGenerated)
+            {
+                InitializeVariables();
+                InitializeSockets();
+                InitializePlayableTiles();
+                isBoardGenerated = GenerateBoard();
+            }
 
             DrawTiles();
 

@@ -7,10 +7,14 @@ namespace Assets.Scripts
         private Tile _tileReference;
         private LineRenderer _line;
 
+        [SerializeField] public int TileNumber = 0;
+
         public void Initialize(Tile tile)
         {
             _tileReference = tile;
             DrawOutline();
+
+            TileNumber = tile.Number;
         }
 
         private void DrawOutline()
