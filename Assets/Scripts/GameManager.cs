@@ -28,6 +28,8 @@ namespace Assets.Scripts
         [SerializeField]
         private int _numberOfMarbles = 28;
 
+        private int _round = 0;
+
         private Socket[] _sockets;
         private Tile[] _tiles;
 
@@ -334,24 +336,51 @@ namespace Assets.Scripts
         {
             Debug.Log("Tile clicked: " + clickedSocket.Position);
 
-            if (clickedSocket.Owner != null)
-            {
+            if (ClickedSocketIsNotAllowed(clickedSocket))
                 return;
-            }
 
-            if (!_possibleMoves.Contains(clickedSocket.Position))
-            {
-                return;
-            }
+            HandleAllowedClickedSocket(clickedSocket);
+        }
 
+        private void HandleAllowedClickedSocket(Socket clickedSocket)
+        {
             PlaceMarble(clickedSocket);
 
-            GameEvents.Instance.TriggerSetPlayerLastMoveEvent(CurrentPlayer, clickedSocket.Position);
+            CalculateNextPossibleMoves(clickedSocket);
 
-            // Calculate next possible moves
+            TriggerDrawingEvents(clickedSocket);
+
+            EndRound(clickedSocket);
+        }
+
+        private void EndRound(Socket clickedSocket)
+        {
+            _lastPlacedTile = clickedSocket.ParentTile;
+            CurrentPlayer = CurrentPlayer.Switch();
+
+            _round++;
+
+            if(IsGameEnded())
+            {
+                EndGame();
+            }
+        }
+
+        private bool IsGameEnded()
+        {
+            return _round >= _numberOfMarbles * 2 || _possibleMoves.Count == 0;
+        }
+
+        private void EndGame()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void CalculateNextPossibleMoves(Socket clickedSocket)
+        {
             _possibleMoves = new List<Vector2Int>();
 
-            foreach(var socket in _sockets)
+            foreach (var socket in _sockets)
             {
                 if (socket.Owner != null)
                 {
@@ -368,15 +397,32 @@ namespace Assets.Scripts
                     _possibleMoves.Add(socket.Position);
                 }
             }
+        }
+
+        private void TriggerDrawingEvents(Socket clickedSocket)
+        {
+            GameEvents.Instance.TriggerSetPlayerLastMoveEvent(CurrentPlayer, clickedSocket.Position);
 
             // Clear previous possible moves
             GameEvents.Instance.TriggerClearPossibleMovesEvent();
 
             // Show possible moves
             GameEvents.Instance.TriggerPossibleMovesBroadcastEvent(_possibleMoves);
+        }
 
-            _lastPlacedTile = clickedSocket.ParentTile;
-            CurrentPlayer = CurrentPlayer.Switch();
+        private bool ClickedSocketIsNotAllowed(Socket clickedSocket)
+        {
+            if (clickedSocket.Owner != null)
+            {
+                return true;
+            }
+
+            if (!_possibleMoves.Contains(clickedSocket.Position))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private void PlaceMarble(Socket tile)
