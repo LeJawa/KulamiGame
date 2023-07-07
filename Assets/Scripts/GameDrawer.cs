@@ -60,14 +60,17 @@ public class GameDrawer : MonoBehaviour
         InitializeLastMoves();
 
         InitializeMarblePreview();
+
+        StartShowingPreviews();
     }
 
     private void InitializeMarblePreview()
     {
         _marblePreviewPlayerOne = Instantiate(_possibleMovePrefab);
         _marblePreviewPlayerOne.GetComponentInChildren<SpriteRenderer>().color = PlayerOneColor;
+        _marblePreviewPlayerOne.GetComponentInChildren<SpriteRenderer>().sortingOrder = 21;
 
-        _marblePreviewPlayerTwo = Instantiate(_possibleMovePrefab);
+        _marblePreviewPlayerTwo = Instantiate(_marblePreviewPlayerOne);
         _marblePreviewPlayerTwo.GetComponentInChildren<SpriteRenderer>().color = PlayerTwoColor;
 
         HideMarblePreviews();

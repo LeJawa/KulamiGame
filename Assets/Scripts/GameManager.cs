@@ -381,6 +381,7 @@ namespace Assets.Scripts
         private void HandleAllowedClickedSocket(Socket clickedSocket)
         {
             PlaceMarble(clickedSocket);
+            CountPoints();
 
             CalculateNextPossibleMoves(clickedSocket);
 
@@ -409,9 +410,8 @@ namespace Assets.Scripts
 
         private void EndGame()
         {
-            CountPoints();
-
             ShowGameOverScreen();
+            StopShowingPossibleMovesOrPreviews();
         }
 
         bool _onGameOverScreen = false;
@@ -571,17 +571,17 @@ namespace Assets.Scripts
               Application.Quit();
         }
 
-        public void HandleSpaceBarPressed()
+        private void HandleSpaceBarPressed()
         {
             _gameDrawer.HideGameOverScreen();
         }
 
-        public void HandleSpaceBarReleased()
+        private void HandleSpaceBarReleased()
         {
             _gameDrawer.ShowGameOverScreen();
         }
 
-        public void StopShowingPossibleMovesOrPreviews()
+        private void StopShowingPossibleMovesOrPreviews()
         {
             GameEvents.Instance.TriggerClearPossibleMovesEvent();
             _gameDrawer.StopShowingPreviews();
