@@ -92,6 +92,23 @@ namespace Assets.Scripts
             SubscribeToEvents();
         }
 
+        private void Update()
+        {
+            if (_onGameOverScreen)
+            {
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    HandleSpaceBarPressed();
+                }
+
+                if (Input.GetKeyUp(KeyCode.Space))
+                {
+                    HandleSpaceBarReleased();
+                }
+            }
+            
+        }
+
         private void SubscribeToEvents()
         {
             GameEvents.Instance.OnSocketClicked += OnSocketClicked;
@@ -104,7 +121,7 @@ namespace Assets.Scripts
                 _gameDrawer.DrawGameTile(tile);
             }
 
-            _gameDrawer.DrawUnitTiles(_sockets);
+            _gameDrawer.DrawSockets(_sockets);
         }
 
         private TilePositionResult TryToPlaceTileAtPosition(Tile tile, Vector2Int initialPosition)
@@ -397,9 +414,12 @@ namespace Assets.Scripts
             ShowGameOverScreen();
         }
 
+        bool _onGameOverScreen = false;
+
         private void ShowGameOverScreen()
         {
             _gameDrawer.ShowGameOverScreen(Winner, _playerOnePoints, _playerTwoPoints);
+            _onGameOverScreen = true;
         }
 
         private int _playerOnePoints = 0;
@@ -526,6 +546,7 @@ namespace Assets.Scripts
 
         public void BackToStartMenu()
         {
+            _onGameOverScreen = false;
             ClearBoard();
             ShowStartMenu();
         }
@@ -548,6 +569,22 @@ namespace Assets.Scripts
         public void ExitGame()
         {
               Application.Quit();
+        }
+
+        public void HandleSpaceBarPressed()
+        {
+            _gameDrawer.HideGameOverScreen();
+        }
+
+        public void HandleSpaceBarReleased()
+        {
+            _gameDrawer.ShowGameOverScreen();
+        }
+
+        public void StopShowingPossibleMovesOrPreviews()
+        {
+            GameEvents.Instance.TriggerClearPossibleMovesEvent();
+            _gameDrawer.StopShowingPreviews();
         }
     }
 }

@@ -943,7 +943,7 @@ MonoBehaviour:
   _numberOfTile3: 4
   _numberOfTile2: 4
   _maxStraightLine: 10
-  _numberOfMarbles: 28
+  _numberOfMarbles: 1
 --- !u!4 &1213576239
 Transform:
   m_ObjectHideFlags: 0
@@ -1125,9 +1125,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef24c7b58dcfe2f4b8afb2bcb7ca77e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _unitTilePrefab: {fileID: 2081733411399040099, guid: a311a97f17fbfd6449bca5e6a99af16d, type: 3}
+  _socketPrefab: {fileID: 2081733411399040099, guid: a311a97f17fbfd6449bca5e6a99af16d, type: 3}
   _tilePrefab: {fileID: 3713498715935950818, guid: c29feae38d85cee4b896819ce23af830, type: 3}
-  _marblePrefab: {fileID: 5762313497081774486, guid: cdbf82263eef144469c1d01aa302a3b1, type: 3}
+  _marblePrefab: {fileID: 4881025074622116079, guid: cdbf82263eef144469c1d01aa302a3b1, type: 3}
   _possibleMovePrefab: {fileID: 5396206152189675840, guid: 6d9bed4be25f4714b95f236f80f7c357, type: 3}
   _lastMovePrefab: {fileID: 1148382869265400831, guid: e27214fda35da8d449a1fe0dbc89f706, type: 3}
   PlayerOneColor: {r: 0.8113208, g: 0.24875402, b: 0.24875402, a: 1}

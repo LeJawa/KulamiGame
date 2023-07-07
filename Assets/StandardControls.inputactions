@@ -1,0 +1,34 @@
+{
+    "name": "StandardControls",
+    "maps": [
+        {
+            "name": "HideGameOverScreen",
+            "id": "77e3fdf4-6810-4a46-996c-76163cdb1c83",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "e9fa09f7-a6c9-4795-913c-bf5263f7dff1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press,Press(behavior=1)",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "38f3bbff-374d-44aa-bfb3-27d25ab29334",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

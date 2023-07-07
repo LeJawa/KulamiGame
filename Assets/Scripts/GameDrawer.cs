@@ -9,7 +9,7 @@ public class GameDrawer : MonoBehaviour
     public static GameDrawer Instance { get; private set; }
 
     [SerializeField]
-    private GameObject _unitTilePrefab;
+    private GameObject _socketPrefab;
 
     [SerializeField]
     private GameObject _tilePrefab;
@@ -19,6 +19,9 @@ public class GameDrawer : MonoBehaviour
 
     [SerializeField]
     private GameObject _possibleMovePrefab;
+
+    private GameObject _marblePreviewPlayerOne;
+    private GameObject _marblePreviewPlayerTwo;
 
     [SerializeField]
     private GameObject _lastMovePrefab;
@@ -55,6 +58,19 @@ public class GameDrawer : MonoBehaviour
     {
         InitializeMarbles();
         InitializeLastMoves();
+
+        InitializeMarblePreview();
+    }
+
+    private void InitializeMarblePreview()
+    {
+        _marblePreviewPlayerOne = Instantiate(_possibleMovePrefab);
+        _marblePreviewPlayerOne.GetComponentInChildren<SpriteRenderer>().color = PlayerOneColor;
+
+        _marblePreviewPlayerTwo = Instantiate(_possibleMovePrefab);
+        _marblePreviewPlayerTwo.GetComponentInChildren<SpriteRenderer>().color = PlayerTwoColor;
+
+        HideMarblePreviews();
     }
 
     private void InitializeLastMoves()
@@ -65,8 +81,8 @@ public class GameDrawer : MonoBehaviour
         _playerOneLastMove.GetComponentInChildren<SpriteRenderer>().color = PlayerOneColor;
         _playerTwoLastMove.GetComponentInChildren<SpriteRenderer>().color = PlayerTwoColor;
 
-        _playerOneLastMove.SetActive(false);
-        _playerTwoLastMove.SetActive(false);
+        _playerOneLastMove.transform.position = new Vector3(-100, -100, -100);
+        _playerTwoLastMove.transform.position = new Vector3(-100, -100, -100);
     }
 
     private void SubscribeToEvents()
@@ -113,39 +129,39 @@ public class GameDrawer : MonoBehaviour
 
     private void OnMouseExitSocket(SocketGO socketGO)
     {
-        var socketOwner = socketGO.Owner;
-
-        SocketStatus status = SocketStatus.Empty;
-
-        if (socketOwner != null)
-        {
-            status = socketOwner == Player.One ? SocketStatus.OwnedByPlayerOne : SocketStatus.OwnedByPlayerTwo;
-        }
-
-        socketGO.SetStatus(status);
+        HideMarblePreviews();
     }
 
     private void OnMouseEnterSocket(SocketGO socketGO)
     {
+        if (!_showingPreviews) return;
+
         var currentPlayer = GameManager.Instance.CurrentPlayer;
         var socketOwner = socketGO.Owner;
 
-        SocketStatus status = SocketStatus.Empty;
+        if (socketOwner != null)
+            return;
 
-        if (socketOwner == null)
+        ShowMarblePreview(currentPlayer, socketGO.Position);
+    }
+
+    private void ShowMarblePreview(Player currentPlayer, Vector2Int position)
+    {
+
+        if (currentPlayer == Player.One)
         {
-            status = currentPlayer == Player.One ? SocketStatus.EmptyHoverPlayerOne : SocketStatus.EmptyHoverPlayerTwo;
-        }
-        else if (socketOwner == Player.One)
-        {
-            status = currentPlayer == Player.One ? SocketStatus.OwnedByPlayerOneHoverPlayerOne : SocketStatus.OwnedByPlayerOneHoverPlayerTwo;
+            _marblePreviewPlayerOne.transform.position = position.ToVector3();
         }
         else
         {
-            status = currentPlayer == Player.One ? SocketStatus.OwnedByPlayerTwoHoverPlayerOne : SocketStatus.OwnedByPlayerTwoHoverPlayerTwo;
+            _marblePreviewPlayerTwo.transform.position = position.ToVector3();
         }
+    }
 
-        socketGO.SetStatus(status);
+    private void HideMarblePreviews()
+    {
+        _marblePreviewPlayerOne.transform.position = new Vector3(-100, -100, -100);
+        _marblePreviewPlayerTwo.transform.position = new Vector3(-100, -100, -100);
     }
 
     private void InitializeMarbles()
@@ -156,11 +172,11 @@ public class GameDrawer : MonoBehaviour
         _playerOneMarble.GetComponentInChildren<SpriteRenderer>().color = PlayerOneColor;
         _playerTwoMarble.GetComponentInChildren<SpriteRenderer>().color = PlayerTwoColor;
 
-        _playerOneMarble.SetActive(false);
-        _playerTwoMarble.SetActive(false);
+        _playerOneMarble.transform.position = new Vector3(-100, -100, -100);
+        _playerTwoMarble.transform.position = new Vector3(-100, -100, -100);
     }
 
-    public void DrawUnitTiles(Socket[] sockets)
+    public void DrawSockets(Socket[] sockets)
     {
         var result = new GameObject[sockets.Length];
 
@@ -173,7 +189,7 @@ public class GameDrawer : MonoBehaviour
         {
             // Instantiate and Initialize in one line
             // Smells dirty but will reformat later
-            Instantiate(_unitTilePrefab, socket.Position.ToVector3(), Quaternion.identity).GetComponent<SocketGO>().Initialize(socket);
+            Instantiate(_socketPrefab, socket.Position.ToVector3(), Quaternion.identity).GetComponent<SocketGO>().Initialize(socket);
 
             if (minX > socket.Position.x) minX = socket.Position.x;
             if (maxX < socket.Position.x) maxX = socket.Position.x;
@@ -250,5 +266,27 @@ public class GameDrawer : MonoBehaviour
         }
 
         _gameOverScreen.Show(winnerText, playerOnePoints, playerTwoPoints);
+    }
+
+    public void HideGameOverScreen()
+    {
+        _gameOverScreen.gameObject.SetActive(false);
+    }
+
+    public void ShowGameOverScreen()
+    {
+        _gameOverScreen.gameObject.SetActive(true);
+    }
+
+    private bool _showingPreviews = true;
+
+    public void StopShowingPreviews()
+    {
+        _showingPreviews = false;
+    }
+
+    public void StartShowingPreviews()
+    {
+        _showingPreviews = true;
     }
 }
