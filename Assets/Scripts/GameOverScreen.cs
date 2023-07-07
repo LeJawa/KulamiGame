@@ -1,29 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
-public class GameOverScreen : MonoBehaviour
+namespace Assets.Scripts
 {
-    [SerializeField] private TMPro.TextMeshProUGUI _winnerText;
-    [SerializeField] private TMPro.TextMeshProUGUI _playerOnePointsText;
-    [SerializeField] private TMPro.TextMeshProUGUI _playerTwoPointsText;
-
-    void Start()
+    public class GameOverScreen : MonoBehaviour
     {
-        gameObject.SetActive(false);
-    }
+        [SerializeField] private TextMeshProUGUI _winnerText;
+        [SerializeField] private TextMeshProUGUI _playerOnePointsText;
+        [SerializeField] private TextMeshProUGUI _playerTwoPointsText;
 
-    public void Show(string winnerText, int playerOnePoints, int playerTwoPoints)
-    {
-        gameObject.SetActive(true);
-        _winnerText.text = winnerText;
-        _playerOnePointsText.text = $"{playerOnePoints}";
-        _playerTwoPointsText.text = $"{playerTwoPoints}";
-    }
+        void Start()
+        {
+            gameObject.SetActive(false);
+        }
 
-    public void Hide()
-    {
-        gameObject.SetActive(false);
-    }
+        public void Show(string winnerText, int playerOnePoints, int playerTwoPoints)
+        {
+            gameObject.SetActive(true);
+            _winnerText.text = winnerText;
+            _playerOnePointsText.text = $"{playerOnePoints}";
+            _playerTwoPointsText.text = $"{playerTwoPoints}";
+        }
 
+        public void Hide()
+        {
+            gameObject.SetActive(false);
+        }
+
+    }
 }
