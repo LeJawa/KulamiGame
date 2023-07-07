@@ -5,7 +5,7 @@ namespace Assets.Scripts
 {
     public abstract class Tile
     {
-        private Socket[] _unitTiles;
+        private Socket[] _sockets;
         public int Number { get; protected set; }
 
         public Tile()
@@ -15,31 +15,31 @@ namespace Assets.Scripts
 
         protected abstract void SetNumber();
 
-        public void InitializeTile(Socket[] unitTiles)
+        public void InitializeTile(Socket[] sockets)
         {
-            _unitTiles = unitTiles;
+            _sockets = sockets;
         }
 
         public abstract List<Vector2Int[]> GetAllRotationsBasedOnInitialPosition(Vector2Int initialPosition);
         public abstract Vector2Int[] GetNewPossiblePositions();
 
-        public void SetTilePositions(Vector2Int[] positions)
+        public void SetSocketPositions(Vector2Int[] positions)
         {
-            for (int i = 0; i < _unitTiles.Length; i++)
+            for (int i = 0; i < _sockets.Length; i++)
             {
-                _unitTiles[i].Position = positions[i];
+                _sockets[i].Position = positions[i];
             }
         }
 
         public Vector2Int[] GetTilePositions()
         {
-            Vector2Int[] squarePositions = new Vector2Int[Number];
+            Vector2Int[] positions = new Vector2Int[Number];
             for (int i = 0; i < Number; i++)
             {
-                squarePositions[i] = _unitTiles[i].Position;
+                positions[i] = _sockets[i].Position;
             }
 
-            return squarePositions;
+            return positions;
         }
 
         public int GetLeftMostX()
@@ -85,6 +85,26 @@ namespace Assets.Scripts
                     bottomMostY = point.y;
             }
             return bottomMostY;
+        }
+
+        public Player? GetOwner()
+        {
+            int owner = 0; // <0 = player 1, >0 = player 2, 0 = no owner
+
+            foreach (var socket in _sockets)
+            {
+                if (socket.Owner == Player.One)
+                    owner--;
+                else if (socket.Owner == Player.Two)
+                    owner++;
+            }
+
+            if (owner == 0)
+                return null;
+            else if (owner < 0)
+                return Player.One;
+            else
+                return Player.Two;
         }
 
     }

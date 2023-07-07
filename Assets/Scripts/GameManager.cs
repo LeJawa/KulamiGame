@@ -163,7 +163,7 @@ namespace Assets.Scripts
                 UpdateBounds(position);
             }
 
-            tile.SetTilePositions(positions);
+            tile.SetSocketPositions(positions);
         }
 
         private void UpdateBounds(Vector2Int position)
@@ -373,7 +373,36 @@ namespace Assets.Scripts
 
         private void EndGame()
         {
+            CountPoints();
+
+            ResetBoard();
+        }
+
+        private void ResetBoard()
+        {
             throw new NotImplementedException();
+        }
+
+        private int _playerOnePoints = 0;
+        private int _playerTwoPoints = 0;
+
+        private void CountPoints()
+        {
+            foreach(var tile in _tiles)
+            {
+                var owner = tile.GetOwner();
+
+                if (owner == null)
+                    continue;
+
+                if (owner == Player.One)
+                    _playerOnePoints += tile.Number;
+                else
+                    _playerTwoPoints += tile.Number;
+            }
+
+            Debug.Log("Player one points: " + _playerOnePoints);
+            Debug.Log("Player two points: " + _playerTwoPoints);
         }
 
         private void CalculateNextPossibleMoves(Socket clickedSocket)
