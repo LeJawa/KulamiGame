@@ -89,13 +89,6 @@ namespace Assets.Scripts
 
         public void Start()
         {
-            InitializeIndividualTiles();
-            InitializePlayableTiles();
-
-            GenerateBoard();
-
-            DrawTiles();
-
             SubscribeToEvents();
         }
 
@@ -321,7 +314,7 @@ namespace Assets.Scripts
             _tiles.Shuffle();
         }
 
-        private void InitializeIndividualTiles()
+        private void InitializeSockets()
         {
             int totalNumberOfUnitTiles =
                               _numberOfTile2 * 2
@@ -375,10 +368,10 @@ namespace Assets.Scripts
         {
             CountPoints();
 
-            ResetBoard();
+            ShowGameOverScreen();
         }
 
-        private void ResetBoard()
+        private void ShowGameOverScreen()
         {
             throw new NotImplementedException();
         }
@@ -388,7 +381,10 @@ namespace Assets.Scripts
 
         private void CountPoints()
         {
-            foreach(var tile in _tiles)
+            _playerOnePoints = 0;
+            _playerTwoPoints = 0;
+
+            foreach (var tile in _tiles)
             {
                 var owner = tile.GetOwner();
 
@@ -458,6 +454,56 @@ namespace Assets.Scripts
         {
             tile.Owner = CurrentPlayer;
             _gameDrawer.DrawMarble(CurrentPlayer, tile.Position);
+        }
+
+        public void NewGame()
+        {
+            _gameDrawer.Initialize();
+
+            InitializeVariables();
+            InitializeSockets();
+            InitializePlayableTiles();
+
+            GenerateBoard();
+
+            DrawTiles();
+
+            HideStartMenu();
+        }
+
+        private void InitializeVariables()
+        {
+            _round = 0;
+            CurrentPlayer = Player.One;
+            _lastPlacedTile = null;
+            
+            _occupiedPositions = new List<Vector2Int>();
+        }
+
+        public void BackToStartMenu()
+        {
+            ClearBoard();
+            ShowStartMenu();
+        }
+
+        private void ClearBoard()
+        {
+            _gameDrawer.ClearAllGameComponents();
+        }
+
+        private void HideStartMenu()
+        {
+            _gameDrawer.HideStartMenu();
+        }
+
+        private void ShowStartMenu()
+        {
+            _gameDrawer.ShowStartMenu();
+        }
+
+        public void ExitGame()
+        {
+              Application.Quit();
         }
     }
 }

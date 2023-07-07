@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2323174004019860389}
   m_Layer: 0
   m_Name: Socket
-  m_TagString: Untagged
+  m_TagString: GameComponent
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -32,8 +32,8 @@ Transform:
   m_Children:
   - {fileID: 7903485262299709196}
   - {fileID: 197375145959608606}
-  - {fileID: 842259326908449453}
-  - {fileID: 4458901113826825355}
+  - {fileID: 4930902727486712334}
+  - {fileID: 8510628052362030136}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -331,9 +331,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d9bed4be25f4714b95f236f80f7c357, type: 3}
---- !u!4 &4458901113826825355 stripped
+--- !u!4 &8510628052362030136 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 2359096291682326695, guid: 6d9bed4be25f4714b95f236f80f7c357, type: 3}
+  m_CorrespondingSourceObject: {fileID: 7730376512340500500, guid: 6d9bed4be25f4714b95f236f80f7c357, type: 3}
   m_PrefabInstance: {fileID: 2115569654508768300}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3102276392424430090
@@ -405,8 +405,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cdbf82263eef144469c1d01aa302a3b1, type: 3}
---- !u!4 &842259326908449453 stripped
+--- !u!4 &4930902727486712334 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 2359096291682326695, guid: cdbf82263eef144469c1d01aa302a3b1, type: 3}
+  m_CorrespondingSourceObject: {fileID: 8026375607523766276, guid: cdbf82263eef144469c1d01aa302a3b1, type: 3}
   m_PrefabInstance: {fileID: 3102276392424430090}
   m_PrefabAsset: {fileID: 0}

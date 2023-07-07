@@ -48,10 +48,13 @@ public class GameDrawer : MonoBehaviour
 
     public void Start()
     {
+        SubscribeToEvents();
+    }
+
+    public void Initialize()
+    {
         InitializeMarbles();
         InitializeLastMoves();
-
-        SubscribeToEvents();
     }
 
     private void InitializeLastMoves()
@@ -204,6 +207,27 @@ public class GameDrawer : MonoBehaviour
         else
         {
             Instantiate(_playerTwoMarble, position.ToVector3(), Quaternion.identity).SetActive(true);
+        }
+    }
+
+    [SerializeField]
+    private GameObject _startMenu;
+
+    public void HideStartMenu()
+    {
+        _startMenu.SetActive(false);
+    }
+
+    public void ShowStartMenu()
+    {
+        _startMenu.SetActive(true);
+    }
+
+    public void ClearAllGameComponents()
+    {
+        foreach (var gameObject in GameObject.FindGameObjectsWithTag("GameComponent"))
+        {
+            Destroy(gameObject);
         }
     }
 }
