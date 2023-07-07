@@ -1,6 +1,4 @@
 using Assets.Scripts;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -68,7 +66,7 @@ public class GameDrawer : MonoBehaviour
     {
         _marblePreviewPlayerOne = Instantiate(_possibleMovePrefab);
         _marblePreviewPlayerOne.GetComponentInChildren<SpriteRenderer>().color = PlayerOneColor;
-        _marblePreviewPlayerOne.GetComponentInChildren<SpriteRenderer>().sortingOrder = 21;
+        _marblePreviewPlayerOne.GetComponentInChildren<SpriteRenderer>().sortingOrder = 21; // To be drawn on top of the possible moves
 
         _marblePreviewPlayerTwo = Instantiate(_marblePreviewPlayerOne);
         _marblePreviewPlayerTwo.GetComponentInChildren<SpriteRenderer>().color = PlayerTwoColor;
@@ -124,7 +122,7 @@ public class GameDrawer : MonoBehaviour
     private void OnPossibleMovesBroadcast(List<Vector2Int> positionList)
     {
         foreach (var position in positionList)
-        {            
+        {
             var possibleMove = Instantiate(_possibleMovePrefab, position.ToVector3(), Quaternion.identity);
             _possibleMoveGameObjects.Add(possibleMove);
         }
@@ -259,6 +257,7 @@ public class GameDrawer : MonoBehaviour
     public void ShowGameOverScreen(Player? winner, int playerOnePoints, int playerTwoPoints)
     {
         var winnerText = "";
+
         if (winner == null)
         {
             winnerText = "It's a tie!";
