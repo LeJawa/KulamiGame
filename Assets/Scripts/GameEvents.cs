@@ -44,6 +44,12 @@ namespace Assets.Scripts
         public void TriggerClearPossibleMovesEvent() => ClearPossibleMoves?.Invoke();
         #endregion
 
+        #region Action SetPlayerLastMove
+        public event Action<Player, Vector2Int> SetPlayerLastMove;
+
+        public void TriggerSetPlayerLastMoveEvent(Player player, Vector2Int position) => SetPlayerLastMove?.Invoke(player, position);
+        #endregion
+
 
     }
 }

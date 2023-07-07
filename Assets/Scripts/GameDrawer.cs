@@ -18,6 +18,12 @@ public class GameDrawer : MonoBehaviour
     private GameObject _marblePrefab;
 
     [SerializeField]
+    private GameObject _possibleMovePrefab;
+
+    [SerializeField]
+    private GameObject _lastMovePrefab;
+
+    [SerializeField]
     public Color PlayerOneColor;
     [SerializeField]
     public Color PlayerTwoColor;
@@ -27,8 +33,13 @@ public class GameDrawer : MonoBehaviour
     private GameObject _playerOneMarble;
     private GameObject _playerTwoMarble;
 
+    private GameObject _playerOneLastMove;
+    private GameObject _playerTwoLastMove;
+
     [SerializeField]
     private Camera _camera;
+
+    private List<GameObject> _possibleMoveGameObjects = new List<GameObject>();
 
     public void Awake()
     {
@@ -38,13 +49,63 @@ public class GameDrawer : MonoBehaviour
     public void Start()
     {
         InitializeMarbles();
+        InitializeLastMoves();
+
         SubscribeToEvents();
+    }
+
+    private void InitializeLastMoves()
+    {
+        _playerOneLastMove = Instantiate(_lastMovePrefab);
+        _playerTwoLastMove = Instantiate(_lastMovePrefab);
+
+        _playerOneLastMove.GetComponentInChildren<SpriteRenderer>().color = PlayerOneColor;
+        _playerTwoLastMove.GetComponentInChildren<SpriteRenderer>().color = PlayerTwoColor;
+
+        _playerOneLastMove.SetActive(false);
+        _playerTwoLastMove.SetActive(false);
     }
 
     private void SubscribeToEvents()
     {
         GameEvents.Instance.OnMouseEnterSocket += OnMouseEnterSocket;
         GameEvents.Instance.OnMouseExitSocket += OnMouseExitSocket;
+
+        GameEvents.Instance.PossibleMovesBroadcast += OnPossibleMovesBroadcast;
+        GameEvents.Instance.ClearPossibleMoves += OnClearPossibleMoves;
+
+        GameEvents.Instance.SetPlayerLastMove += OnSetPlayerLastMove;
+    }
+
+    private void OnSetPlayerLastMove(Player player, Vector2Int position)
+    {
+        if (player == Player.One)
+        {
+            _playerOneLastMove.transform.position = position.ToVector3();
+            _playerOneLastMove.SetActive(true);
+        }
+        else
+        {
+            _playerTwoLastMove.transform.position = position.ToVector3();
+            _playerTwoLastMove.SetActive(true);
+        }
+    }
+
+    private void OnClearPossibleMoves()
+    {
+        foreach (var possibleMove in _possibleMoveGameObjects)
+        {
+            Destroy(possibleMove);
+        }
+    }
+
+    private void OnPossibleMovesBroadcast(List<Vector2Int> positionList)
+    {
+        foreach (var position in positionList)
+        {            
+            var possibleMove = Instantiate(_possibleMovePrefab, position.ToVector3(), Quaternion.identity);
+            _possibleMoveGameObjects.Add(possibleMove);
+        }
     }
 
     private void OnMouseExitSocket(SocketGO socketGO)

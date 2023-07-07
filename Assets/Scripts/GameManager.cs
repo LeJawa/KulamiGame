@@ -16,7 +16,7 @@ namespace Assets.Scripts
         [SerializeField]
         private int _numberOfTile6 = 4;
         [SerializeField]
-        private int _numberOfTile4 = 4;
+        private int _numberOfTile4 = 5;
         [SerializeField]
         private int _numberOfTile3 = 4;
         [SerializeField]
@@ -25,13 +25,11 @@ namespace Assets.Scripts
         [SerializeField]
         private int _maxStraightLine = 10;
 
-        private const int BOARD_SIZE = 20;
-
+        [SerializeField]
+        private int _numberOfMarbles = 28;
 
         private Socket[] _sockets;
         private Tile[] _tiles;
-
-        private Vector2Int _startingPosition = Vector2Int.zero;
 
         private List<Vector2Int> _occupiedPositions = new List<Vector2Int>();
 
@@ -347,6 +345,8 @@ namespace Assets.Scripts
             }
 
             PlaceMarble(clickedSocket);
+
+            GameEvents.Instance.TriggerSetPlayerLastMoveEvent(CurrentPlayer, clickedSocket.Position);
 
             // Calculate next possible moves
             _possibleMoves = new List<Vector2Int>();
