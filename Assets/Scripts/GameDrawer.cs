@@ -213,6 +213,11 @@ public class GameDrawer : MonoBehaviour
     [SerializeField]
     private GameObject _startMenu;
 
+    [SerializeField]
+    private GameOverScreen _gameOverScreen;
+
+
+
     public void HideStartMenu()
     {
         _startMenu.SetActive(false);
@@ -220,6 +225,7 @@ public class GameDrawer : MonoBehaviour
 
     public void ShowStartMenu()
     {
+        _gameOverScreen.Hide();
         _startMenu.SetActive(true);
     }
 
@@ -229,5 +235,20 @@ public class GameDrawer : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    public void ShowGameOverScreen(Player? winner, int playerOnePoints, int playerTwoPoints)
+    {
+        var winnerText = "";
+        if (winner == null)
+        {
+            winnerText = "It's a tie!";
+        }
+        else
+        {
+            winnerText = winner == Player.One ? "Player One Wins!" : "Player Two Wins!";
+        }
+
+        _gameOverScreen.Show(winnerText, playerOnePoints, playerTwoPoints);
     }
 }

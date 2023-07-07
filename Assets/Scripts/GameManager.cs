@@ -77,7 +77,7 @@ namespace Assets.Scripts
 
         private float GetPositionWeight(Vector2Int position)
         {
-            float distance = (float) Math.Sqrt(Math.Pow(position.x, 4) + Math.Pow(position.y, 4));
+            float distance = (float)Math.Sqrt(Math.Pow(position.x, 4) + Math.Pow(position.y, 4));
 
             return 1f / (distance + 1); // weight is inverse square of distance
         }
@@ -177,12 +177,12 @@ namespace Assets.Scripts
             {
                 _maxY = position.y;
             }
-        }        
+        }
 
         private bool GenerateBoard()
         {
             List<WeightedPosition> orderedPositions = GetOrderedListOfWeightedPositions();
-            
+
             int nextPlayableTileIndex = 0;
             var placedTilesIndices = new List<int>();
             int positionIndex = 0;
@@ -353,7 +353,7 @@ namespace Assets.Scripts
 
             _round++;
 
-            if(IsGameEnded())
+            if (IsGameEnded())
             {
                 EndGame();
             }
@@ -373,11 +373,25 @@ namespace Assets.Scripts
 
         private void ShowGameOverScreen()
         {
-            throw new NotImplementedException();
+            _gameDrawer.ShowGameOverScreen(Winner, _playerOnePoints, _playerTwoPoints);
         }
 
         private int _playerOnePoints = 0;
         private int _playerTwoPoints = 0;
+
+        private Player? Winner
+        {
+            get
+            {
+                if (_playerOnePoints > _playerTwoPoints)
+                    return Player.One;
+                else if (_playerOnePoints < _playerTwoPoints)
+                    return Player.Two;
+                else
+                    return null;
+
+            }
+        }
 
         private void CountPoints()
         {
