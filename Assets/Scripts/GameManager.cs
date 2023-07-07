@@ -291,24 +291,24 @@ namespace Assets.Scripts
                 _tiles[index++] = new Tile6();
             }
 
-            int individualTilesIndex = 0;
+            int socketIndex = 0;
 
             foreach (var tile in _tiles)
             {
                 // Assign unit tiles to playable tiles
                 int number = tile.Number;
 
-                Socket[] unitTileArray = new Socket[number];
+                Socket[] socketArray = new Socket[number];
 
                 for (int i = 0; i < number; i++)
                 {
-                    _sockets[individualTilesIndex] = new Socket(tile);
-                    unitTileArray[i] = _sockets[individualTilesIndex];
+                    _sockets[socketIndex] = new Socket(tile);
+                    socketArray[i] = _sockets[socketIndex];
 
-                    individualTilesIndex++;
+                    socketIndex++;
                 }
 
-                tile.InitializeTile(unitTileArray);
+                tile.InitializeTile(socketArray);
             }
 
             _tiles.Shuffle();
@@ -473,11 +473,11 @@ namespace Assets.Scripts
         public void NewGame()
         {
             _gameDrawer.Initialize();
-
+            
             InitializeVariables();
             InitializeSockets();
             InitializePlayableTiles();
-
+            
             GenerateBoard();
 
             DrawTiles();
