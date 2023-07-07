@@ -73,3 +73,6 @@ crashlytics-build.properties
 
 # Draw.io backup files
 *.drawio.bkp
+
+# Photoshop files
+*.psd
