@@ -63,11 +63,9 @@ namespace Kulami
         private Socket[] _sockets;
         private Tile[] _tiles;
 
-        private List<Vector2Int> _occupiedPositions = new List<Vector2Int>();
-
         private Tile _lastPlacedTile = null;
 
-        private List<Vector2Int> _possibleMoves;
+        private List<Vector2Int> _possibleMoves = new List<Vector2Int>();
 
         public Player CurrentPlayer { get; private set; } = Player.One;
 
@@ -182,7 +180,7 @@ namespace Kulami
 
         private bool GenerateBoard()
         {
-            return new BoardGenerator().GenerateBoard(ref _tiles, ref _occupiedPositions);
+            return _boardGenerator.GenerateBoard(ref _tiles, ref _possibleMoves);
         }
 
         
@@ -413,8 +411,6 @@ namespace Kulami
                 isBoardGenerated = GenerateBoard();
             }
 
-            _possibleMoves = _occupiedPositions;
-
             DrawTiles();
 
             HideStartMenu();
@@ -431,7 +427,7 @@ namespace Kulami
             CurrentPlayer = Player.One;
             _lastPlacedTile = null;
 
-            _occupiedPositions = new List<Vector2Int>();
+            _possibleMoves = new List<Vector2Int>();
         }
 
         // Triggered via button in GameOverScreen
