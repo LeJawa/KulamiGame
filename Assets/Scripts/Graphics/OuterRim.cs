@@ -17,7 +17,13 @@ namespace Kulami.Graphics
 
         public void SetPlayer(Player player)
         {
+            _imageRenderer.enabled = true;
             _imageRenderer.sprite = player == Player.One ? _p1Sprite : _p2Sprite;
+        }
+
+        public void Hide()
+        {
+              _imageRenderer.enabled = false;
         }
 
     }

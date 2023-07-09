@@ -1,47 +1,13 @@
-﻿using Kulami.Graphics;
+﻿using Kulami.Data;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Kulami
 {
     public class GameManager : MonoBehaviour
     {
-        enum GameState
-        {
-            MainMenu,
-            GeneratingBoard,
-            PlacingMarbleP1,
-            BetweenTurns,
-            PlacingMarbleP2,
-            GameOver
-        }
-
-        struct GameStateInfo
-        {
-            public GameState State { get; }
-            public int Round { get; }
-            public int Player1Score { get; }
-            public int Player2Score { get; }
-            public Player? Winner { get; }
-
-            public GameStateInfo(GameState state, int round, int player1Score, int player2Score, Player? winner)
-            {
-                State = state;
-                Round = round;
-                Player1Score = player1Score;
-                Player2Score = player2Score;
-                Winner = winner;
-            }
-        }
-
-
         public static GameManager Instance { get; private set; }
-
-        [SerializeField]
-        private GameDrawer _gameDrawer;
 
         [SerializeField]
         private int _numberOfTile6 = 4;
@@ -74,10 +40,29 @@ namespace Kulami
 
         private BoardGenerator _boardGenerator = new BoardGenerator();
 
-        private GameState State
+        private int _playerOneScore = 0;
+        private int _playerTwoScore = 0;
+
+        private Player? Winner
+        {
+            get
+            {
+                if (_playerOneScore > _playerTwoScore)
+                    return Player.One;
+                else if (_playerOneScore < _playerTwoScore)
+                    return Player.Two;
+                else
+                    return null;
+            }
+        }
+
+        public GameStateInfo StateInfo 
+            => new GameStateInfo(State, _round, _playerOneScore, _playerTwoScore, Winner);
+
+        public GameState State
         {
             get => _state;
-            set
+            private set
             {
                 _state = value;
                 _stateChanged = true;
@@ -117,73 +102,84 @@ namespace Kulami
                     case GameState.PlacingMarbleP2:
                         HandlePlacingMarbleP2State();
                         break;
-                    case GameState.GameOver:
+                    case GameState.GameOverScreen:
                         HandleGameOverState();
+                        break;
+                    case GameState.GameOverShowingBoard:
                         break;
                     default:
                         throw new NotImplementedException();
                 }
-            }   
+                GameEvents.Instance.TriggerStateChangedEvent(StateInfo);
+            }
 
-            if (State == GameState.GameOver)
+            if (State == GameState.GameOverScreen || State == GameState.GameOverShowingBoard)
             {
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
-                    HandleSpaceBarPressed();
+                    State = GameState.GameOverShowingBoard;
                 }
 
                 if (Input.GetKeyUp(KeyCode.Space))
                 {
-                    HandleSpaceBarReleased();
+                    State = GameState.GameOverScreen;
                 }
             }
         }
 
-        private void HandlePlacingMarbleP2State()
-        {
-            // TODO: Implement
-            throw new NotImplementedException();
-        }
-
         private void HandleBetweenTurnsState()
         {
-            // TODO: Implement
-            throw new NotImplementedException();
+            // Do nothing
         }
 
         private void HandlePlacingMarbleP1State()
         {
             // TODO: Implement
-            throw new NotImplementedException();
+            CurrentPlayer = Player.One;
+        }
+
+        private void HandlePlacingMarbleP2State()
+        {
+            // TODO: Implement
+            CurrentPlayer = Player.Two;
         }
 
         private void HandleGeneratingBoardState()
         {
-            // TODO: Implement
-            throw new NotImplementedException();
+            // Do nothing
+        }
+
+        private void HandleMainMenuState()
+        {
+            // Do nothing
+        }
+
+        private void HandleGameOverState()
+        {
+            // Do nothing
         }
 
         private void SubscribeToEvents()
         {
+            GameEvents.Instance.BoardDrawn += OnBoardDrawn;
+
             GameEvents.Instance.OnSocketClicked += OnSocketClicked;
         }
 
-        private void DrawTiles()
+        private void OnBoardDrawn()
         {
-            foreach (var tile in _tiles)
-            {
-                _gameDrawer.DrawGameTile(tile);
-            }
+            State = GameState.PlacingMarbleP1;
+        }
 
-            _gameDrawer.DrawSockets(_sockets);
+        private void DrawBoard()
+        {
+            GameEvents.Instance.TriggerDrawBoardEvent(new BoardGenerationInfo(_tiles, _sockets));
         }
 
         private bool GenerateBoard()
         {
             return _boardGenerator.GenerateBoard(ref _tiles, ref _possibleMoves);
         }
-
-        
 
         private void InitializePlayableTiles()
         {
@@ -263,6 +259,7 @@ namespace Kulami
 
         private void HandleAllowedClickedSocket(Socket clickedSocket)
         {
+            State = GameState.BetweenTurns;
             PlaceMarble(clickedSocket);
             CountScore();
 
@@ -282,40 +279,17 @@ namespace Kulami
 
             if (IsGameEnded())
             {
-                State = GameState.GameOver;
+                State = GameState.GameOverScreen;
+            }
+            else
+            {
+                State = CurrentPlayer == Player.One ? GameState.PlacingMarbleP1 : GameState.PlacingMarbleP2;
             }
         }
 
         private bool IsGameEnded()
         {
             return _round >= _numberOfMarbles * 2 || _possibleMoves.Count == 0;
-        }
-
-        private void HandleGameOverState()
-        {            
-            ShowGameOverScreen();
-            StopShowingPossibleMovesOrPreviews();
-        }
-
-        private void ShowGameOverScreen()
-        {
-            _gameDrawer.ShowGameOverScreen(Winner, _playerOneScore, _playerTwoScore);
-        }
-
-        private int _playerOneScore = 0;
-        private int _playerTwoScore = 0;
-
-        private Player? Winner
-        {
-            get
-            {
-                if (_playerOneScore > _playerTwoScore)
-                    return Player.One;
-                else if (_playerOneScore < _playerTwoScore)
-                    return Player.Two;
-                else
-                    return null;
-            }
         }
 
         private void CountScore()
@@ -365,7 +339,7 @@ namespace Kulami
 
         private void TriggerDrawingEvents(Socket clickedSocket)
         {
-            GameEvents.Instance.TriggerSetPlayerLastMoveEvent(CurrentPlayer, clickedSocket.Position);
+            GameEvents.Instance.TriggerDrawLastPlacedMarbleEvent(CurrentPlayer, clickedSocket.Position);
 
             // Clear previous possible moves
             GameEvents.Instance.TriggerClearPossibleMovesEvent();
@@ -376,6 +350,11 @@ namespace Kulami
 
         private bool ClickedSocketIsNotAllowed(Socket clickedSocket)
         {
+            if (State != GameState.PlacingMarbleP1 && State != GameState.PlacingMarbleP2)
+            {
+                return true;
+            }
+
             if (clickedSocket.Owner != null)
             {
                 return true;
@@ -392,12 +371,12 @@ namespace Kulami
         private void PlaceMarble(Socket tile)
         {
             tile.Owner = CurrentPlayer;
-            _gameDrawer.DrawMarble(CurrentPlayer, tile.Position);
         }
 
+        // Triggered via button in StartMenu
         public void NewGame()
         {
-            _gameDrawer.Initialize();
+            State = GameState.GeneratingBoard;
 
             InitializeBoardGenerator();
 
@@ -411,9 +390,7 @@ namespace Kulami
                 isBoardGenerated = GenerateBoard();
             }
 
-            DrawTiles();
-
-            HideStartMenu();
+            DrawBoard();
         }
 
         private void InitializeBoardGenerator()
@@ -436,46 +413,10 @@ namespace Kulami
             State = GameState.MainMenu;
         }
 
-        private void HandleMainMenuState()
-        {
-            ClearBoard();
-            ShowStartMenu();
-        }
-
-        private void ClearBoard()
-        {
-            _gameDrawer.ClearAllGameComponents();
-        }
-
-        private void HideStartMenu()
-        {
-            _gameDrawer.HideStartMenu();
-        }
-
-        private void ShowStartMenu()
-        {
-            _gameDrawer.ShowStartMenu();
-        }
-
+        // Triggered via button in StartMenu
         public void ExitGame()
         {
             Application.Quit();
-        }
-
-        private void HandleSpaceBarPressed()
-        {
-            _gameDrawer.HideGameOverScreen();
-        }
-
-        private void HandleSpaceBarReleased()
-        {
-            _gameDrawer.ShowGameOverScreen();
-        }
-
-        private void StopShowingPossibleMovesOrPreviews()
-        {
-            GameEvents.Instance.TriggerClearPossibleMovesEvent();
-            _gameDrawer.StopShowingPreviews();
         }
     }
 }

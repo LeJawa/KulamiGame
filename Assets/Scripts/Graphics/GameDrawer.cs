@@ -1,3 +1,5 @@
+using Kulami.Data;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -43,6 +45,9 @@ namespace Kulami.Graphics
 
         private List<GameObject> _possibleMoveGameObjects = new List<GameObject>();
 
+        [SerializeField]
+        private OuterRim _outerRim;
+
         public void Awake()
         {
             Instance = this;
@@ -55,12 +60,12 @@ namespace Kulami.Graphics
 
         public void Initialize()
         {
+            ClearAllGameComponents();
+
             InitializeMarbles();
             InitializeLastMoves();
 
             InitializeMarblePreview();
-
-            StartShowingPreviews();
         }
 
         private void InitializeMarblePreview()
@@ -95,18 +100,82 @@ namespace Kulami.Graphics
             GameEvents.Instance.PossibleMovesBroadcast += OnPossibleMovesBroadcast;
             GameEvents.Instance.ClearPossibleMoves += OnClearPossibleMoves;
 
-            GameEvents.Instance.SetPlayerLastMove += OnSetPlayerLastMove;
+            GameEvents.Instance.DrawLastPlacedMarble += OnDrawLastPlacedMarble;
+
+            GameEvents.Instance.DrawBoard += OnDrawBoard;
+
+            GameEvents.Instance.StateChanged += OnGameStateChanged;
         }
 
-        private void OnSetPlayerLastMove(Player player, Vector2Int position)
+        private void OnGameStateChanged(GameStateInfo info)
+        {
+            switch (info.State)
+            {
+                case GameState.MainMenu:
+                    ShowStartMenu();
+                    HideGameOverScreen();
+                    _outerRim.Hide();
+                    break;
+                case GameState.GeneratingBoard:
+                    HideStartMenu();
+                    HideGameOverScreen();
+                    _outerRim.Hide();
+                    break;
+                case GameState.PlacingMarbleP1:
+                    HideStartMenu();
+                    HideGameOverScreen();
+                    _outerRim.SetPlayer(Player.One);
+                    break;
+                case GameState.BetweenTurns:
+                    HideStartMenu();
+                    HideGameOverScreen();
+                    _outerRim.Hide();
+                    break;
+                case GameState.PlacingMarbleP2:
+                    HideStartMenu();
+                    HideGameOverScreen();
+                    _outerRim.SetPlayer(Player.Two);
+                    break;
+                case GameState.GameOverScreen:
+                    HideStartMenu();
+                    ShowGameOverScreen(info.Winner, info.Player1Score, info.Player2Score);
+                    _outerRim.Hide();
+                    break;
+                case GameState.GameOverShowingBoard:
+                    HideStartMenu();
+                    HideGameOverScreen();
+                    _outerRim.Hide();
+                    break;
+                default:
+                    throw new Exception("Unknown game state");
+            }
+        }
+
+        private void OnDrawBoard(BoardGenerationInfo info)
+        {
+            Initialize();
+
+            foreach (var tile in info.Tiles)
+            {
+                DrawGameTile(tile);
+            }
+
+            DrawSockets(info.Sockets);
+
+            GameEvents.Instance.TriggerBoardDrawnEvent();
+        }
+
+        private void OnDrawLastPlacedMarble(Player player, Vector2Int position)
         {
             if (player == Player.One)
             {
+                Instantiate(_playerOneMarble, position.ToVector3(), Quaternion.identity).SetActive(true);
                 _playerOneLastMove.transform.position = position.ToVector3();
                 _playerOneLastMove.SetActive(true);
             }
             else
             {
+                Instantiate(_playerTwoMarble, position.ToVector3(), Quaternion.identity).SetActive(true);
                 _playerTwoLastMove.transform.position = position.ToVector3();
                 _playerTwoLastMove.SetActive(true);
             }
@@ -136,7 +205,7 @@ namespace Kulami.Graphics
 
         private void OnMouseEnterSocket(SocketGO socketGO)
         {
-            if (!_showingPreviews) return;
+            if (GameManager.Instance.State != GameState.PlacingMarbleP1 && GameManager.Instance.State != GameState.PlacingMarbleP2) return;
 
             var currentPlayer = GameManager.Instance.CurrentPlayer;
             var socketOwner = socketGO.Owner;
@@ -147,8 +216,12 @@ namespace Kulami.Graphics
             ShowMarblePreview(currentPlayer, socketGO.Position);
         }
 
-        private void ShowMarblePreview(Player currentPlayer, Vector2Int position)
+        private void ShowMarblePreview(Player? currentPlayer, Vector2Int position)
         {
+            if(currentPlayer == null)
+            {
+                return;
+            }
 
             if (currentPlayer == Player.One)
             {
@@ -216,18 +289,6 @@ namespace Kulami.Graphics
             Instantiate(_tilePrefab).GetComponent<TileGO>().Initialize(tile);
         }
 
-        public void DrawMarble(Player player, Vector2Int position)
-        {
-            if (player == Player.One)
-            {
-                Instantiate(_playerOneMarble, position.ToVector3(), Quaternion.identity).SetActive(true);
-            }
-            else
-            {
-                Instantiate(_playerTwoMarble, position.ToVector3(), Quaternion.identity).SetActive(true);
-            }
-        }
-
         [SerializeField]
         private GameObject _startMenu;
 
@@ -279,18 +340,6 @@ namespace Kulami.Graphics
         public void ShowGameOverScreen()
         {
             _gameOverScreen.gameObject.SetActive(true);
-        }
-
-        private bool _showingPreviews = true;
-
-        public void StopShowingPreviews()
-        {
-            _showingPreviews = false;
-        }
-
-        public void StartShowingPreviews()
-        {
-            _showingPreviews = true;
         }
     }
 }

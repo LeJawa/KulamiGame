@@ -78,7 +78,7 @@ namespace Kulami
             if (player == Player.One)
                 return Player.Two;
             else
-                return Player.One;
+                return Player.One;;
         }
     }
 }
