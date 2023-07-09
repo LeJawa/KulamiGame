@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 
-namespace Assets.Scripts
+namespace Kulami.Graphics
 {
     public class GameOverScreen : MonoBehaviour
     {

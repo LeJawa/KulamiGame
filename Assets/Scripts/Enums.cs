@@ -1,4 +1,4 @@
-﻿namespace Assets.Scripts
+﻿namespace Kulami
 {
     public enum SocketStatus
     {

@@ -1,8 +1,6 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets.Scripts
+namespace Kulami.Graphics
 {
     public class SocketGO : MonoBehaviour
     {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Assets.Scripts
+namespace Kulami.Graphics
 {
     public class TileGO : MonoBehaviour
     {

@@ -1,13 +1,42 @@
-﻿using System;
+﻿using Kulami.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
-namespace Assets.Scripts
+namespace Kulami
 {
     public class GameManager : MonoBehaviour
     {
+        enum State
+        {
+            MainMenu,
+            GeneratingBoard,
+            PlacingMarbleP1,
+            PlacingMarbleP2,
+            GameOver
+        }
+
+        struct GameState
+        {
+            public State State { get; private set; }
+            public int Round { get; private set; }
+            public int Player1Score { get; }
+            public int Player2Score { get; }
+            public Player CurrentPlayer { get; }
+
+            public GameState(State state, int round, int player1Score, int player2Score, Player currentPlayer)
+            {
+                State = state;
+                Round = round;
+                Player1Score = player1Score;
+                Player2Score = player2Score;
+                CurrentPlayer = currentPlayer;
+            }
+        }
+
+
         public static GameManager Instance { get; private set; }
 
         [SerializeField]
@@ -106,7 +135,7 @@ namespace Assets.Scripts
                     HandleSpaceBarReleased();
                 }
             }
-            
+
         }
 
         private void SubscribeToEvents()
@@ -207,7 +236,7 @@ namespace Assets.Scripts
             while (placedTilesIndices.Count < _tiles.Length && positionIndex < orderedPositions.Count)
             {
                 // if cannot place all tiles in one go, end method. If try to continue, might run into a wrong position.
-                if (nextPlayableTileIndex != placedTilesIndices.Count) 
+                if (nextPlayableTileIndex != placedTilesIndices.Count)
                 {
                     //Debug.Log($"Failed to generate board.");
                     return false;
@@ -519,7 +548,7 @@ namespace Assets.Scripts
         public void NewGame()
         {
             _gameDrawer.Initialize();
-            
+
             bool isBoardGenerated = false;
 
             while (!isBoardGenerated)
@@ -540,7 +569,7 @@ namespace Assets.Scripts
             _round = 0;
             CurrentPlayer = Player.One;
             _lastPlacedTile = null;
-            
+
             _occupiedPositions = new List<Vector2Int>();
         }
 
@@ -568,7 +597,7 @@ namespace Assets.Scripts
 
         public void ExitGame()
         {
-              Application.Quit();
+            Application.Quit();
         }
 
         private void HandleSpaceBarPressed()
