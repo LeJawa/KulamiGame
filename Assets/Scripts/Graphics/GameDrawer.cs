@@ -52,7 +52,7 @@ namespace Kulami.Graphics
         private GameOverScreen _gameOverScreen;
 
         [SerializeField]
-        private OuterRim _outerRim;
+        private GameUI _gameUI;
 
         public void Awake()
         {
@@ -115,46 +115,54 @@ namespace Kulami.Graphics
 
         private void OnGameStateChanged(GameStateInfo info)
         {
+            UpdateScores(info.Player1Score, info.Player2Score);
+
             switch (info.State)
             {
                 case GameState.MainMenu:
                     ShowStartMenu();
                     HideGameOverScreen();
-                    _outerRim.Hide();
+                    _gameUI.Hide();
                     break;
                 case GameState.GeneratingBoard:
                     HideStartMenu();
                     HideGameOverScreen();
-                    _outerRim.Hide();
+                    _gameUI.Hide();
                     break;
                 case GameState.PlacingMarbleP1:
                     HideStartMenu();
                     HideGameOverScreen();
-                    _outerRim.SetPlayer(Player.One);
+                    _gameUI.CurrentPlayer = Player.One;
                     break;
                 case GameState.BetweenTurns:
                     HideStartMenu();
                     HideGameOverScreen();
-                    _outerRim.Hide();
+                    _gameUI.Hide();
                     break;
                 case GameState.PlacingMarbleP2:
                     HideStartMenu();
                     HideGameOverScreen();
-                    _outerRim.SetPlayer(Player.Two);
+                    _gameUI.CurrentPlayer = Player.Two;
                     break;
                 case GameState.GameOverScreen:
                     HideStartMenu();
                     ShowGameOverScreen(info.Winner, info.Player1Score, info.Player2Score);
-                    _outerRim.Hide();
+                    _gameUI.Hide();
                     break;
                 case GameState.GameOverShowingBoard:
                     HideStartMenu();
                     HideGameOverScreen();
-                    _outerRim.Hide();
+                    _gameUI.Hide();
                     break;
                 default:
                     throw new Exception("Unknown game state");
             }
+        }
+
+        private void UpdateScores(int player1Score, int player2Score)
+        {
+            _gameUI.PlayerOneScore = player1Score;
+            _gameUI.PlayerTwoScore = player2Score;
         }
 
         private void OnDrawBoard(BoardGenerationInfo info)

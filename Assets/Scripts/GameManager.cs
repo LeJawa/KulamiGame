@@ -281,9 +281,6 @@ namespace Kulami
                 else
                     _playerTwoScore += tile.Number;
             }
-
-            Debug.Log("Player one score: " + _playerOneScore);
-            Debug.Log("Player two score: " + _playerTwoScore);
         }
 
         private void CalculateNextPossibleMoves(Socket clickedSocket)
