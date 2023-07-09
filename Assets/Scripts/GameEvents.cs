@@ -66,5 +66,11 @@ namespace Kulami
 
         public void TriggerStateChangedEvent(GameStateInfo gameStateInfo) => StateChanged?.Invoke(gameStateInfo);
         #endregion
+
+        #region Action<Vector3> DrawMarbleShadow
+        public event Action<Vector3> DrawMarbleShadow;
+
+        public void TriggerDrawMarbleShadowEvent(Vector3 position) => DrawMarbleShadow?.Invoke(position);
+        #endregion
     }
 }

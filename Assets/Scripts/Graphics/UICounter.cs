@@ -13,25 +13,16 @@ namespace Kulami.Graphics
         [SerializeField]
         private Sprite[] _digits;
 
-        Vector2 _rightDigitPosition;
-
-        private void Start()
-        {
-            _rightDigitPosition = _rightDigit.rectTransform.anchoredPosition;
-        }
-
         public void SetScore(int score)
         {
             if (score / 10 == 0)
             {
                 _leftDigit.gameObject.SetActive(false);
-                _rightDigit.rectTransform.anchoredPosition = Vector2.zero;
             }
 
             else
             {
                 _leftDigit.gameObject.SetActive(true);
-                _rightDigit.rectTransform.anchoredPosition = _rightDigitPosition;
             }
 
             _leftDigit.sprite = GetSprite(score / 10);

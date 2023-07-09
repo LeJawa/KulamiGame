@@ -16,7 +16,10 @@ namespace Kulami.Graphics
         private GameObject _tilePrefab;
 
         [SerializeField]
-        private GameObject _marblePrefab;
+        private GameObject _playerOneMarblePrefab;
+        [SerializeField]
+        private GameObject _playerTwoMarblePrefab;
+
 
         [SerializeField]
         private GameObject _possibleMovePrefab;
@@ -33,9 +36,6 @@ namespace Kulami.Graphics
         public Color PlayerTwoColor;
         [SerializeField]
         public Color NeutralColor;
-
-        private GameObject _playerOneMarble;
-        private GameObject _playerTwoMarble;
 
         private GameObject _playerOneLastMove;
         private GameObject _playerTwoLastMove;
@@ -67,8 +67,6 @@ namespace Kulami.Graphics
         public void Initialize()
         {
             ClearAllGameComponents();
-
-            InitializeMarbles();
             InitializeLastMoves();
 
             InitializeMarblePreview();
@@ -183,16 +181,16 @@ namespace Kulami.Graphics
         {
             if (player == Player.One)
             {
-                Instantiate(_playerOneMarble, position.ToVector3(), Quaternion.identity).SetActive(true);
+                Instantiate(_playerOneMarblePrefab, position.ToVector3(), Quaternion.identity);
                 _playerOneLastMove.transform.position = position.ToVector3();
-                _playerOneLastMove.SetActive(true);
             }
             else
             {
-                Instantiate(_playerTwoMarble, position.ToVector3(), Quaternion.identity).SetActive(true);
+                Instantiate(_playerTwoMarblePrefab, position.ToVector3(), Quaternion.identity);
                 _playerTwoLastMove.transform.position = position.ToVector3();
-                _playerTwoLastMove.SetActive(true);
             }
+
+            GameEvents.Instance.TriggerDrawMarbleShadowEvent(position.ToVector3());
         }
 
         private void OnClearPossibleMoves()
@@ -251,18 +249,6 @@ namespace Kulami.Graphics
         {
             _marblePreviewPlayerOne.transform.position = new Vector3(-100, -100, -100);
             _marblePreviewPlayerTwo.transform.position = new Vector3(-100, -100, -100);
-        }
-
-        private void InitializeMarbles()
-        {
-            _playerOneMarble = Instantiate(_marblePrefab);
-            _playerTwoMarble = Instantiate(_marblePrefab);
-
-            _playerOneMarble.GetComponentInChildren<SpriteRenderer>().color = PlayerOneColor;
-            _playerTwoMarble.GetComponentInChildren<SpriteRenderer>().color = PlayerTwoColor;
-
-            _playerOneMarble.transform.position = new Vector3(-100, -100, -100);
-            _playerTwoMarble.transform.position = new Vector3(-100, -100, -100);
         }
 
         public void DrawSockets(Socket[] sockets)
