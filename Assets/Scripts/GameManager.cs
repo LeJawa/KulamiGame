@@ -31,14 +31,14 @@ namespace Kulami
 
         private Tile _lastPlacedTile = null;
 
-        private List<Vector2Int> _possibleMoves = new List<Vector2Int>();
+        private List<Vector2Int> _possibleMoves = new();
 
         public Player CurrentPlayer { get; private set; } = Player.One;
 
         private GameState _state = GameState.MainMenu;
         private bool _stateChanged = false;
 
-        private BoardGenerator _boardGenerator = new BoardGenerator();
+        private readonly BoardGenerator _boardGenerator = new BoardGenerator();
 
         private int _playerOneScore = 0;
         private int _playerTwoScore = 0;
@@ -56,8 +56,7 @@ namespace Kulami
             }
         }
 
-        public GameStateInfo StateInfo 
-            => new GameStateInfo(State, _round, _playerOneScore, _playerTwoScore, Winner);
+        public GameStateInfo StateInfo => new(State, _round, _playerOneScore, _playerTwoScore, Winner);
 
         public GameState State
         {
@@ -81,38 +80,12 @@ namespace Kulami
 
         private void Update()
         {
-            if (_stateChanged)
-            {
-                _stateChanged = false;
+            HandleStateChanged();
+            HandleGameOverScreenBehaviour();
+        }
 
-                switch (State)
-                {
-                    case GameState.MainMenu:
-                        HandleMainMenuState();
-                        break;
-                    case GameState.GeneratingBoard:
-                        HandleGeneratingBoardState();
-                        break;
-                    case GameState.PlacingMarbleP1:
-                        HandlePlacingMarbleP1State();
-                        break;
-                    case GameState.BetweenTurns:
-                        HandleBetweenTurnsState();
-                        break;
-                    case GameState.PlacingMarbleP2:
-                        HandlePlacingMarbleP2State();
-                        break;
-                    case GameState.GameOverScreen:
-                        HandleGameOverState();
-                        break;
-                    case GameState.GameOverShowingBoard:
-                        break;
-                    default:
-                        throw new NotImplementedException();
-                }
-                GameEvents.Instance.TriggerStateChangedEvent(StateInfo);
-            }
-
+        private void HandleGameOverScreenBehaviour()
+        {
             if (State == GameState.GameOverScreen || State == GameState.GameOverShowingBoard)
             {
                 if (Input.GetKeyDown(KeyCode.Space))
@@ -127,36 +100,35 @@ namespace Kulami
             }
         }
 
-        private void HandleBetweenTurnsState()
+        private void HandleStateChanged()
         {
-            // Do nothing
-        }
+            if (_stateChanged)
+            {
+                _stateChanged = false;
 
-        private void HandlePlacingMarbleP1State()
-        {
-            // TODO: Implement
-            CurrentPlayer = Player.One;
-        }
-
-        private void HandlePlacingMarbleP2State()
-        {
-            // TODO: Implement
-            CurrentPlayer = Player.Two;
-        }
-
-        private void HandleGeneratingBoardState()
-        {
-            // Do nothing
-        }
-
-        private void HandleMainMenuState()
-        {
-            // Do nothing
-        }
-
-        private void HandleGameOverState()
-        {
-            // Do nothing
+                switch (State)
+                {
+                    case GameState.MainMenu:
+                        break;
+                    case GameState.GeneratingBoard:
+                        break;
+                    case GameState.PlacingMarbleP1:
+                        CurrentPlayer = Player.One;
+                        break;
+                    case GameState.BetweenTurns:
+                        break;
+                    case GameState.PlacingMarbleP2:
+                        CurrentPlayer = Player.Two;
+                        break;
+                    case GameState.GameOverScreen:
+                        break;
+                    case GameState.GameOverShowingBoard:
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
+                GameEvents.Instance.TriggerStateChangedEvent(StateInfo);
+            }
         }
 
         private void SubscribeToEvents()

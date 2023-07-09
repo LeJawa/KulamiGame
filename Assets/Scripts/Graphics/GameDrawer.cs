@@ -46,6 +46,12 @@ namespace Kulami.Graphics
         private List<GameObject> _possibleMoveGameObjects = new List<GameObject>();
 
         [SerializeField]
+        private GameObject _startMenu;
+
+        [SerializeField]
+        private GameOverScreen _gameOverScreen;
+
+        [SerializeField]
         private OuterRim _outerRim;
 
         public void Awake()
@@ -289,14 +295,6 @@ namespace Kulami.Graphics
             Instantiate(_tilePrefab).GetComponent<TileGO>().Initialize(tile);
         }
 
-        [SerializeField]
-        private GameObject _startMenu;
-
-        [SerializeField]
-        private GameOverScreen _gameOverScreen;
-
-
-
         public void HideStartMenu()
         {
             _startMenu.SetActive(false);
@@ -335,11 +333,6 @@ namespace Kulami.Graphics
         public void HideGameOverScreen()
         {
             _gameOverScreen.gameObject.SetActive(false);
-        }
-
-        public void ShowGameOverScreen()
-        {
-            _gameOverScreen.gameObject.SetActive(true);
         }
     }
 }
