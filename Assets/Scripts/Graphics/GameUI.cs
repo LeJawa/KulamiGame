@@ -14,6 +14,8 @@ namespace Kulami.Graphics
         [SerializeField]
         private UICounter _playerTwoScore;
 
+        [SerializeField] bool _disableOuterRim = true;
+
         public Player CurrentPlayer 
         { 
             set
@@ -41,6 +43,11 @@ namespace Kulami.Graphics
         private void Start()
         {
             Hide();
+
+            if (_disableOuterRim)
+            {
+                _outerRim.Disable();
+            }
         }
 
         public void Hide()

@@ -20,5 +20,10 @@ namespace Kulami.Graphics
             _imageRenderer.sprite = player == Player.One ? _p1Sprite : _p2Sprite;
         }
 
+        public void Disable()
+        {
+            gameObject.SetActive(false);
+        }
+
     }
 }
