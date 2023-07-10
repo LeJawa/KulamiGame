@@ -904,6 +904,7 @@ MonoBehaviour:
   _outerRim: {fileID: 2076126787}
   _playerOneScore: {fileID: 1678082846425793183}
   _playerTwoScore: {fileID: 1186428054}
+  _disableOuterRim: 1
 --- !u!1 &1010120622
 GameObject:
   m_ObjectHideFlags: 0
