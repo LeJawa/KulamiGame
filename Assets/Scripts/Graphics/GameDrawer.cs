@@ -16,8 +16,8 @@ namespace Kulami.Graphics
         private GameObject _tilePrefab;
 
         [SerializeField]
+        private GameObject _marblePrefab;
         private GameObject _playerOneMarblePrefab;
-        [SerializeField]
         private GameObject _playerTwoMarblePrefab;
 
 
@@ -67,9 +67,23 @@ namespace Kulami.Graphics
         public void Initialize()
         {
             ClearAllGameComponents();
+
+            InitializeMarblePrefabs();
+
             InitializeLastMoves();
 
             InitializeMarblePreview();
+        }
+
+        private void InitializeMarblePrefabs()
+        {
+            _playerOneMarblePrefab = Instantiate(_marblePrefab);
+            _playerOneMarblePrefab.GetComponentInChildren<MarbleGO>().SetPlayer(Player.One);
+            _playerOneMarblePrefab.transform.position = new Vector3(-100, -100, -100);
+
+            _playerTwoMarblePrefab = Instantiate(_marblePrefab);
+            _playerTwoMarblePrefab.GetComponentInChildren<MarbleGO>().SetPlayer(Player.Two);
+            _playerTwoMarblePrefab.transform.position = new Vector3(-100, -100, -100);
         }
 
         private void InitializeMarblePreview()

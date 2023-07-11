@@ -10,13 +10,28 @@ namespace Kulami.Graphics
 
         private Vector3 _circleScale;
 
-        [SerializeField] private ParticleSystem _spawnParticles;
+        [SerializeField] private SpawnEffect _spawnEffect;
+
+        [SerializeField] private Sprite _P1Sprite;
+        [SerializeField] private Sprite _P2Sprite;
 
         // Start is called before the first frame update
         void Start()
         {
             InitializeVariables();
             AnimateAppearance();
+        }
+
+        public void SetPlayer(Player player)
+        {
+            if (player == Player.One)
+            {
+                _circle.GetComponent<SpriteRenderer>().sprite = _P1Sprite;
+            }
+            else 
+            {
+                _circle.GetComponent<SpriteRenderer>().sprite = _P2Sprite;
+            }
         }
 
         private void InitializeVariables()
@@ -30,7 +45,7 @@ namespace Kulami.Graphics
             LeanTween.scale(_circle.gameObject, _circleScale, 0.8f).setEaseOutElastic();
 
             // particle system is disabled at the moment
-            //_spawnParticles.Play();
+            _spawnEffect.Play();
         }
     }
 }

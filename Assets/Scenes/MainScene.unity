@@ -1353,8 +1353,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _socketPrefab: {fileID: 7363040374996964610, guid: a311a97f17fbfd6449bca5e6a99af16d, type: 3}
   _tilePrefab: {fileID: 3713498715935950818, guid: c29feae38d85cee4b896819ce23af830, type: 3}
-  _playerOneMarblePrefab: {fileID: 835007405229299698, guid: cdbf82263eef144469c1d01aa302a3b1, type: 3}
-  _playerTwoMarblePrefab: {fileID: 5228075387536636457, guid: 1544c0359668f674e88ab40e25e4a930, type: 3}
+  _marblePrefab: {fileID: 835007405229299698, guid: cdbf82263eef144469c1d01aa302a3b1, type: 3}
   _possibleMovePrefab: {fileID: 5396206152189675840, guid: 6d9bed4be25f4714b95f236f80f7c357, type: 3}
   _lastMovePrefab: {fileID: 1148382869265400831, guid: e27214fda35da8d449a1fe0dbc89f706, type: 3}
   PlayerOneColor: {r: 0.62, g: 0.043399997, b: 0.06261998, a: 1}
