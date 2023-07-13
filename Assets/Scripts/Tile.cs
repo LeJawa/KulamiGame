@@ -7,6 +7,8 @@ namespace Kulami
     public abstract class Tile
     {
         private Socket[] _sockets;
+        public Socket[] Sockets => _sockets;
+
         public int Number { get; protected set; }
 
         public Player? Owner => _ownershipPoints > 0 ? Player.One : _ownershipPoints < 0 ? Player.Two : null;

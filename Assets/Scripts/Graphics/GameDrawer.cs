@@ -54,6 +54,8 @@ namespace Kulami.Graphics
         [SerializeField]
         private GameUI _gameUI;
 
+        private List<TileGO> _tileGOs;
+
         public void Awake()
         {
             Instance = this;
@@ -181,14 +183,48 @@ namespace Kulami.Graphics
         {
             Initialize();
 
+            _tileGOs = new();
+
             foreach (var tile in info.Tiles)
             {
-                DrawGameTile(tile);
+                var tileGO = DrawGameTile(tile);
+                DrawSockets(tile.Sockets, tileGO);
+                _tileGOs.Add(tileGO);
             }
 
-            DrawSockets(info.Sockets);
+            SetCamera(info.Sockets);
+
+            AnimateBoardGeneration();
 
             GameEvents.Instance.TriggerBoardDrawnEvent();
+        }
+
+        public TileGO DrawGameTile(Tile tile)
+        {
+            var tileGO = Instantiate(_tilePrefab).GetComponent<TileGO>();
+            tileGO.Initialize(tile);
+            return tileGO;
+        }
+
+        public void DrawSockets(Socket[] sockets, TileGO parentTile)
+        {
+
+            foreach (Socket socket in sockets)
+            {
+                // Instantiate and Initialize in one line
+                // Smells dirty but will reformat later
+                var socketGO = Instantiate(_socketPrefab, socket.Position.ToVector3(), Quaternion.identity).GetComponent<SocketGO>();
+                socketGO.transform.SetParent(parentTile.transform);
+                socketGO.Initialize(socket);
+            }
+        }
+
+        private void AnimateBoardGeneration()
+        {
+            foreach (var tile in _tileGOs)
+            {
+                // TODO: Make this animation
+            }
         }
 
         private void OnDrawLastPlacedMarble(Player player, Vector2Int position)
@@ -266,10 +302,8 @@ namespace Kulami.Graphics
             _marblePreviewPlayerTwo.transform.position = new Vector3(-100, -100, -100);
         }
 
-        public void DrawSockets(Socket[] sockets)
+        private void SetCamera(Socket[] sockets)
         {
-            var result = new GameObject[sockets.Length];
-
             var minX = int.MaxValue;
             var maxX = int.MinValue;
             var minY = int.MaxValue;
@@ -277,10 +311,6 @@ namespace Kulami.Graphics
 
             foreach (Socket socket in sockets)
             {
-                // Instantiate and Initialize in one line
-                // Smells dirty but will reformat later
-                Instantiate(_socketPrefab, socket.Position.ToVector3(), Quaternion.identity).GetComponent<SocketGO>().Initialize(socket);
-
                 if (minX > socket.Position.x) minX = socket.Position.x;
                 if (maxX < socket.Position.x) maxX = socket.Position.x;
                 if (minY > socket.Position.y) minY = socket.Position.y;
@@ -291,17 +321,7 @@ namespace Kulami.Graphics
             float meanX = (maxX + 1 + minX) / 2f;
             float meanY = (maxY + 1 + minY) / 2f;
 
-            SetCamera(meanX, meanY);
-        }
-
-        private void SetCamera(float centerX, float centerY)
-        {
-            _camera.transform.position = new Vector3(centerX, centerY, _camera.transform.position.z);
-        }
-
-        public void DrawGameTile(Tile tile)
-        {
-            Instantiate(_tilePrefab).GetComponent<TileGO>().Initialize(tile);
+            _camera.transform.position = new Vector3(meanX, meanY, _camera.transform.position.z);
         }
 
         public void HideStartMenu()
