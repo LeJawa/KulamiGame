@@ -7,20 +7,25 @@ namespace Kulami.Graphics
         private Tile _tileReference;
         private LineRenderer _line;
 
-        [SerializeField] public int TileNumber = 0;
+        public int TileNumber => _tileReference.Number;
+
+        [SerializeField] private Texture _lineTexture;
+
+        private void Start()
+        {
+            _line = GetComponentInChildren<LineRenderer>();
+            _line.material.mainTexture = _lineTexture;
+        }
 
         public void Initialize(Tile tile)
         {
             _tileReference = tile;
             DrawOutline();
-
-            TileNumber = tile.Number;
         }
 
         private void DrawOutline()
         {
             _line = GetComponentInChildren<LineRenderer>();
-
             var xmin = _tileReference.GetLeftMostX();
             var xmax = _tileReference.GetRightMostX() + 1;
             var ymin = _tileReference.GetBottomMostY();
