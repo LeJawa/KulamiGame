@@ -31,7 +31,7 @@ namespace Kulami.Graphics
                 return;
 
             HandleCameraZoom();
-            HandleCameraPanning();
+            //HandleCameraPanning();
         }
 
         private void HandleCameraPanning()
