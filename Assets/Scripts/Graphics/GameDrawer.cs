@@ -1,6 +1,8 @@
 using Kulami.Data;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Kulami.Graphics
@@ -195,8 +197,6 @@ namespace Kulami.Graphics
             SetCamera(info.Sockets);
 
             AnimateBoardGeneration();
-
-            GameEvents.Instance.TriggerBoardDrawnEvent();
         }
 
         public TileGO DrawGameTile(Tile tile)
@@ -219,13 +219,45 @@ namespace Kulami.Graphics
             }
         }
 
+        [SerializeField] private float _offCameraDistance = 15f;
+        [SerializeField] private float _delayBetweenTiles = 1f;
+        [SerializeField] private float _tileMoveTime = 0.5f;
+        [SerializeField] private float _delayReductionPercentage = 0.7f;
+        [SerializeField] private float _minDelayBetweenTiles = 0.05f;
+        [SerializeField] private float _timeBeforeBoardDrawnEvent = 1f;
+
         private void AnimateBoardGeneration()
         {
+            // Initialize the tiles to be off screen
+            var tilePosition = Vector3.right * _offCameraDistance;
+            var rotationAmount = 360f / _tileGOs.Count;
+
             foreach (var tile in _tileGOs)
             {
-                // TODO: Make this animation
+                tile.transform.position = tilePosition;
+                tilePosition = Quaternion.Euler(0, 0, rotationAmount) * tilePosition;
             }
+
+            StartCoroutine(AnimateBoardGenerationCoroutine());
         }
+
+        private IEnumerator AnimateBoardGenerationCoroutine()
+        {
+            var delay = _delayBetweenTiles;
+
+            foreach (var tile in _tileGOs)
+            {
+                LeanTween.move(tile.gameObject, Vector3.zero, _tileMoveTime).setEaseOutBack();
+
+                yield return new WaitForSeconds(delay);
+                //tile.transform.position = Vector3.zero;
+                delay *= _delayReductionPercentage;
+            }
+
+            yield return new WaitForSeconds(_timeBeforeBoardDrawnEvent);
+            GameEvents.Instance.TriggerBoardDrawnEvent();
+        }
+
 
         private void OnDrawLastPlacedMarble(Player player, Vector2Int position)
         {

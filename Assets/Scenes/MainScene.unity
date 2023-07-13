@@ -1664,6 +1664,12 @@ MonoBehaviour:
   _startMenu: {fileID: 518840155}
   _gameOverScreen: {fileID: 5601261308320857794}
   _gameUI: {fileID: 867468236}
+  _offCameraDistance: 30
+  _delayBetweenTiles: 0.5
+  _tileMoveTime: 0.5
+  _delayReductionPercentage: 0.8
+  _minDelayBetweenTiles: 0.05
+  _timeBeforeBoardDrawnEvent: 0.6
 --- !u!4 &1525530345
 Transform:
   m_ObjectHideFlags: 0
