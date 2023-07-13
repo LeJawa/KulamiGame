@@ -77,6 +77,8 @@ namespace Kulami.Graphics
             InitializeLastMoves();
 
             InitializeMarblePreview();
+
+            _gameUI.Initialize();
         }
 
         private void InitializeMarblePrefabs()
@@ -153,7 +155,6 @@ namespace Kulami.Graphics
                 case GameState.BetweenTurns:
                     HideStartMenu();
                     HideGameOverScreen();
-                    _gameUI.Hide();
                     break;
                 case GameState.PlacingMarbleP2:
                     HideStartMenu();
@@ -162,8 +163,8 @@ namespace Kulami.Graphics
                     break;
                 case GameState.GameOverScreen:
                     HideStartMenu();
-                    ShowGameOverScreen(info.Winner, info.Player1Score, info.Player2Score);
-                    _gameUI.Hide();
+                    ShowGameOverScreen(info.Winner);
+                    _gameUI.Show();
                     break;
                 case GameState.GameOverShowingBoard:
                     HideStartMenu();
@@ -211,8 +212,6 @@ namespace Kulami.Graphics
 
             foreach (Socket socket in sockets)
             {
-                // Instantiate and Initialize in one line
-                // Smells dirty but will reformat later
                 var socketGO = Instantiate(_socketPrefab, socket.Position.ToVector3(), Quaternion.identity).GetComponent<SocketGO>();
                 socketGO.transform.SetParent(parentTile.transform);
                 socketGO.Initialize(socket);
@@ -223,7 +222,6 @@ namespace Kulami.Graphics
         [SerializeField] private float _delayBetweenTiles = 1f;
         [SerializeField] private float _tileMoveTime = 0.5f;
         [SerializeField] private float _delayReductionPercentage = 0.7f;
-        [SerializeField] private float _minDelayBetweenTiles = 0.05f;
         [SerializeField] private float _timeBeforeBoardDrawnEvent = 1f;
 
         private void AnimateBoardGeneration()
@@ -250,7 +248,6 @@ namespace Kulami.Graphics
                 LeanTween.move(tile.gameObject, Vector3.zero, _tileMoveTime).setEaseOutBack();
 
                 yield return new WaitForSeconds(delay);
-                //tile.transform.position = Vector3.zero;
                 delay *= _delayReductionPercentage;
             }
 
@@ -375,9 +372,10 @@ namespace Kulami.Graphics
             }
         }
 
-        public void ShowGameOverScreen(Player? winner, int playerOnePoints, int playerTwoPoints)
+        public void ShowGameOverScreen(Player? winner)
         {
             var winnerText = "";
+            var winnerTextColor = NeutralColor;
 
             if (winner == null)
             {
@@ -386,9 +384,12 @@ namespace Kulami.Graphics
             else
             {
                 winnerText = winner == Player.One ? "Player One Wins!" : "Player Two Wins!";
+                winnerTextColor = winner == Player.One ? PlayerOneColor : PlayerTwoColor;
             }
 
-            _gameOverScreen.Show(winnerText, playerOnePoints, playerTwoPoints);
+            _gameOverScreen.Show(winnerText, winnerTextColor);
+            _gameUI.MoveScoresToGameOverPosition();
+
         }
 
         public void HideGameOverScreen()

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,9 @@ namespace Kulami.Graphics
         private UICounter _playerOneScore;
         [SerializeField]
         private UICounter _playerTwoScore;
+
+        private RectTransform _playerOneScoreRectTransform;
+        private RectTransform _playerTwoScoreRectTransform;
 
         [SerializeField] bool _disableOuterRim = true;
 
@@ -42,6 +46,9 @@ namespace Kulami.Graphics
 
         private void Start()
         {
+            _playerOneScoreRectTransform = _playerOneScore.transform.parent.GetComponent<RectTransform>();
+            _playerTwoScoreRectTransform = _playerTwoScore.transform.parent.GetComponent<RectTransform>();
+
             Hide();
 
             if (_disableOuterRim)
@@ -58,6 +65,31 @@ namespace Kulami.Graphics
         public void Show()
         {
             gameObject.SetActive(true);
+        }
+
+        [SerializeField] private Vector3 _playerOneScorePosition = new Vector3(25, -25, 0);
+        [SerializeField] private Vector3 _playerTwoScorePosition = new Vector3(-25, -25, 0);
+
+        [SerializeField] private Vector3 _playerOneScoreGameOverPosition = new Vector3(483, -606, 0);
+        [SerializeField] private Vector3 _playerTwoScoreGameOverPosition = new Vector3(-483, -606, 0);
+
+        [SerializeField] private float _scoreMoveDuration = 0.5f;
+
+        public void MoveScoresToGameOverPosition()
+        {
+            LeanTween.move(_playerOneScoreRectTransform, _playerOneScoreGameOverPosition, _scoreMoveDuration).setEaseInOutQuad();
+            LeanTween.move(_playerTwoScoreRectTransform, _playerTwoScoreGameOverPosition, _scoreMoveDuration).setEaseInOutQuad();
+        }
+
+        private void MoveScoresToInitialPosition()
+        {
+            _playerOneScoreRectTransform.anchoredPosition3D = _playerOneScorePosition;
+            _playerTwoScoreRectTransform.anchoredPosition3D = _playerTwoScorePosition;
+        }
+
+        public void Initialize()
+        {
+            MoveScoresToInitialPosition();
         }
     }
 }

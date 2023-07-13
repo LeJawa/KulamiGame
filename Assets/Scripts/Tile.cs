@@ -13,7 +13,7 @@ namespace Kulami
 
         public Player? Owner => _ownershipPoints > 0 ? Player.One : _ownershipPoints < 0 ? Player.Two : null;
 
-        private int _ownershipPoints = 0;
+        private int _ownershipPoints = 0; // >0 = player 1, <0 = player 2, 0 = no owner
 
         public Tile()
         {

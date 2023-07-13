@@ -82,7 +82,7 @@ namespace Kulami.Graphics
                     {
                         targetPosition = new Vector3(0, 0, _camera.transform.position.z);
 
-                        float remainingZoomDistance = zoomMax - initialZoom - 1; // - 1 to get to 0,0 before zooming out
+                        float remainingZoomDistance = zoomMax - initialZoom - 1; // - 1 in order to get to 0,0 before zooming out
                         float zoomDistanceMoved = zoom - initialZoom;
                         lerpAmount = zoomDistanceMoved / remainingZoomDistance;
 
