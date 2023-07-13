@@ -336,9 +336,9 @@ namespace Kulami
             return false;
         }
 
-        private void PlaceMarble(Socket tile)
+        private void PlaceMarble(Socket socket)
         {
-            tile.Owner = CurrentPlayer;
+            socket.Owner = CurrentPlayer;
         }
 
         // Triggered via button in StartMenu

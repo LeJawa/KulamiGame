@@ -1652,7 +1652,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef24c7b58dcfe2f4b8afb2bcb7ca77e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _socketPrefab: {fileID: 7363040374996964610, guid: a311a97f17fbfd6449bca5e6a99af16d, type: 3}
+  _socketPrefab: {fileID: 9088068924544064639, guid: a311a97f17fbfd6449bca5e6a99af16d, type: 3}
   _tilePrefab: {fileID: 2373273119100133655, guid: c29feae38d85cee4b896819ce23af830, type: 3}
   _marblePrefab: {fileID: 835007405229299698, guid: cdbf82263eef144469c1d01aa302a3b1, type: 3}
   _possibleMovePrefab: {fileID: 5396206152189675840, guid: 6d9bed4be25f4714b95f236f80f7c357, type: 3}

@@ -72,5 +72,11 @@ namespace Kulami
 
         public void TriggerDrawMarbleShadowEvent(Vector3 position) => DrawMarbleShadow?.Invoke(position);
         #endregion
+
+        #region Action TileOwnershipUpdated
+        public event Action TileOwnershipUpdated;
+
+        public void TriggerTileOwnershipUpdatedEvent() => TileOwnershipUpdated?.Invoke();
+        #endregion
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Kulami
@@ -7,6 +8,10 @@ namespace Kulami
     {
         private Socket[] _sockets;
         public int Number { get; protected set; }
+
+        public Player? Owner => _ownershipPoints > 0 ? Player.One : _ownershipPoints < 0 ? Player.Two : null;
+
+        private int _ownershipPoints = 0;
 
         public Tile()
         {
@@ -18,6 +23,14 @@ namespace Kulami
         public void InitializeTile(Socket[] sockets)
         {
             _sockets = sockets;
+        }
+        
+        public void UpdateOwnership(Player? owner)
+        {
+            if (owner == Player.One)
+                _ownershipPoints += 1;
+            else if (owner == Player.Two)
+                _ownershipPoints -= 1;
         }
 
         public abstract List<Vector2Int[]> GetAllRotationsBasedOnInitialPosition(Vector2Int initialPosition);
@@ -106,6 +119,5 @@ namespace Kulami
             else
                 return Player.Two;
         }
-
     }
 }
