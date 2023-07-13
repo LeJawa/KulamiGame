@@ -43,6 +43,8 @@ namespace Kulami
         private int _playerOneScore = 0;
         private int _playerTwoScore = 0;
 
+        public bool IsPlaying => State == GameState.PlacingMarbleP1 || State == GameState.PlacingMarbleP2 || State == GameState.BetweenTurns;
+
         private Player? Winner
         {
             get
@@ -249,7 +251,7 @@ namespace Kulami
 
             _round++;
 
-            if (IsGameEnded())
+            if (IsGameEnded)
             {
                 State = GameState.GameOverScreen;
             }
@@ -259,10 +261,7 @@ namespace Kulami
             }
         }
 
-        private bool IsGameEnded()
-        {
-            return _round >= _numberOfMarbles * 2 || _possibleMoves.Count == 0;
-        }
+        private bool IsGameEnded => _round >= _numberOfMarbles * 2 || _possibleMoves.Count == 0;
 
         private void CountScore()
         {

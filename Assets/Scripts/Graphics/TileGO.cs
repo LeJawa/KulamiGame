@@ -9,12 +9,12 @@ namespace Kulami.Graphics
 
         public int TileNumber => _tileReference.Number;
 
-        [SerializeField] private Texture _lineTexture;
+        [SerializeField] private float lineWidth = 0.3f;
 
         private void Start()
         {
             _line = GetComponentInChildren<LineRenderer>();
-            _line.material.mainTexture = _lineTexture;
+            _line.startWidth = lineWidth;
         }
 
         public void Initialize(Tile tile)
