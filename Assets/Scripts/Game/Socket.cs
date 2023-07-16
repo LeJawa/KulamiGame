@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Kulami
+namespace Kulami.Game
 {
     public class Socket
     {

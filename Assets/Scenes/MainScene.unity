@@ -1822,6 +1822,7 @@ MonoBehaviour:
   _startMenu: {fileID: 518840155}
   _gameOverScreen: {fileID: 5601261308320857794}
   _gameUI: {fileID: 867468236}
+  _sceneTransition: {fileID: 1612708353}
   _offCameraDistance: 30
   _delayBetweenTiles: 0.5
   _tileMoveTime: 0.5
@@ -1875,7 +1876,8 @@ MonoBehaviour:
   _firstFrameImage: {fileID: 1442644382}
   _preTransitionTime: 0.2
   _transitionTime: 1
-  _propertyName: _Progress
+  _progressName: _Progress
+  _partAName: _PartA
 --- !u!224 &1612708354
 RectTransform:
   m_ObjectHideFlags: 0

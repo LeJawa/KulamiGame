@@ -1,6 +1,4 @@
-﻿using Kulami;
-
-namespace Kulami.Data
+﻿namespace Kulami.Data
 {
     public struct GameStateInfo
     {

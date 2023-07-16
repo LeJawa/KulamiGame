@@ -1,4 +1,6 @@
 using Kulami.Data;
+using Kulami.Game;
+using Kulami.Helpers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -57,6 +59,8 @@ namespace Kulami.Graphics
         private GameUI _gameUI;
 
         private List<TileGO> _tileGOs;
+
+        [SerializeField] SceneTransition _sceneTransition;
 
         public void Awake()
         {
@@ -241,6 +245,10 @@ namespace Kulami.Graphics
 
         private IEnumerator AnimateBoardGenerationCoroutine()
         {
+            _sceneTransition.Play();
+
+            yield return new WaitForSeconds(_sceneTransition.Duration);
+
             var delay = _delayBetweenTiles;
 
             foreach (var tile in _tileGOs)

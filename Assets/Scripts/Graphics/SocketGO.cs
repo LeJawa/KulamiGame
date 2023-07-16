@@ -1,3 +1,4 @@
+using Kulami.Game;
 using UnityEngine;
 
 namespace Kulami.Graphics

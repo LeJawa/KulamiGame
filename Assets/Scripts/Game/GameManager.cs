@@ -1,9 +1,10 @@
 ﻿using Kulami.Data;
+using Kulami.Helpers;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Kulami
+namespace Kulami.Game
 {
     public class GameManager : MonoBehaviour
     {

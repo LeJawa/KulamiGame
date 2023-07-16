@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Kulami
-{
+namespace Kulami.Game
+{   
     public class Tile6 : Tile
     {
         protected override void SetNumber()

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Kulami
+namespace Kulami.Game
 {
     public abstract class Tile
     {

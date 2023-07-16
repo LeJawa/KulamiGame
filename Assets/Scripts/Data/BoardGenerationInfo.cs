@@ -1,4 +1,6 @@
-﻿namespace Kulami.Data
+﻿using Kulami.Game;
+
+namespace Kulami.Data
 {
     public struct BoardGenerationInfo
     {
