@@ -15,6 +15,7 @@ namespace Kulami
         }
 
         private AppState _state = AppState.MainMenu;
+        private AppState _previousState = AppState.MainMenu;
         private bool _stateChanged = false;
 
         private AppState State
@@ -22,6 +23,7 @@ namespace Kulami
             get => _state;
             set
             {
+                _previousState = _state;
                 _state = value;
                 _stateChanged = true;
             }

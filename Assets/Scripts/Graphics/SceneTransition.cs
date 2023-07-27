@@ -1,8 +1,5 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Kulami.Graphics
@@ -20,33 +17,26 @@ namespace Kulami.Graphics
 
         public float Duration => _preTransitionTime * 2 + _transitionTime * 2;
 
-        private bool _partA = false;
+        private Coroutine _currentTransition;
 
         private void Start()
         {
             _firstFrameImage.enabled = true;
 
-            StartCoroutine(TransitionBCoroutine());
+            _currentTransition = StartCoroutine(TransitionBCoroutine());
         }
 
         private IEnumerator TransitionBCoroutine()
         {
-            _partA = false;
-
             _firstFrameImage.enabled = true;
             yield return new WaitForSeconds(_preTransitionTime);
             _firstFrameImage.enabled = false;
 
-            yield return MainBodyTransitionCoroutine();
-        }
-
-        private IEnumerator MainBodyTransitionCoroutine()
-        {
             float currentTime = 0f;
             while (currentTime < _transitionTime)
             {
                 currentTime += Time.deltaTime;
-                _screenTransitionMaterial.SetInt(_partAName, _partA ? 1 : 0);
+                _screenTransitionMaterial.SetInt(_partAName, 0);
                 _screenTransitionMaterial.SetFloat(_progressName, Mathf.Clamp01(currentTime / _transitionTime));
                 yield return null;
             }
@@ -54,8 +44,14 @@ namespace Kulami.Graphics
 
         private IEnumerator TransitionACoroutine()
         {
-            _partA = true;
-            yield return MainBodyTransitionCoroutine();
+            float currentTime = 0f;
+            while (currentTime < _transitionTime)
+            {
+                currentTime += Time.deltaTime;
+                _screenTransitionMaterial.SetInt(_partAName, 1);
+                _screenTransitionMaterial.SetFloat(_progressName, Mathf.Clamp01(1 - currentTime / _transitionTime));
+                yield return null;
+            }
         }
 
         private IEnumerator FullTransitionCoroutine()
@@ -66,7 +62,10 @@ namespace Kulami.Graphics
 
         public void Play()
         {
-            StartCoroutine(FullTransitionCoroutine());
+            if (_currentTransition != null)
+                StopCoroutine(_currentTransition);
+
+            _currentTransition = StartCoroutine(FullTransitionCoroutine());
         }
     }
 }
