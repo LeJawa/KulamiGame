@@ -1,4 +1,5 @@
-﻿using kulami;
+﻿using DG.Tweening;
+using kulami;
 using Kulami.Data;
 using Kulami.Helpers;
 using System;
@@ -80,6 +81,8 @@ namespace Kulami.Game
         public void Start()
         {
             SubscribeToEvents();
+
+            DOTween.Init();
         }
 
         private void Update()

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -42,7 +43,7 @@ namespace Kulami.Graphics
         private void AnimateAppearance()
         {
             _circle.localScale = Vector3.zero;
-            LeanTween.scale(_circle.gameObject, _circleScale, 0.8f).setEaseOutElastic();
+            _circle.transform.DOScale(_circleScale, 0.8f).SetEase(Ease.OutElastic);
 
             // particle system is disabled at the moment
             _spawnEffect.Play();

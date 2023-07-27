@@ -1,3 +1,4 @@
+using DG.Tweening;
 using Kulami.Data;
 using Kulami.Game;
 using Kulami.Helpers;
@@ -253,7 +254,7 @@ namespace Kulami.Graphics
 
             foreach (var tile in _tileGOs)
             {
-                LeanTween.move(tile.gameObject, Vector3.zero, _tileMoveTime).setEaseOutBack();
+                tile.transform.DOMove(Vector3.zero, _tileMoveTime).SetEase(Ease.OutBack);
 
                 yield return new WaitForSeconds(delay);
                 delay *= _delayReductionPercentage;

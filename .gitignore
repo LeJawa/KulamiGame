@@ -76,3 +76,6 @@ crashlytics-build.properties
 
 # Photoshop files
 *.psd
+
+# Third party assets
+/Assets/ThirdParties/*

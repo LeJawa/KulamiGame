@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -77,8 +78,8 @@ namespace Kulami.Graphics
 
         public void MoveScoresToGameOverPosition()
         {
-            LeanTween.move(_playerOneScoreRectTransform, _playerOneScoreGameOverPosition, _scoreMoveDuration).setEaseInOutQuad();
-            LeanTween.move(_playerTwoScoreRectTransform, _playerTwoScoreGameOverPosition, _scoreMoveDuration).setEaseInOutQuad();
+            _playerOneScoreRectTransform.DOMove(_playerOneScoreGameOverPosition, _scoreMoveDuration).SetEase(Ease.InOutQuad);
+            _playerTwoScoreRectTransform.DOMove(_playerTwoScoreGameOverPosition, _scoreMoveDuration).SetEase(Ease.InOutQuad);
         }
 
         private void MoveScoresToInitialPosition()
