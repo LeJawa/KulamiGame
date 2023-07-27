@@ -1,4 +1,5 @@
-﻿using Kulami.Data;
+﻿using kulami;
+using Kulami.Data;
 using Kulami.Helpers;
 using System;
 using System.Collections.Generic;
@@ -37,7 +38,7 @@ namespace Kulami.Game
         public Player CurrentPlayer { get; private set; } = Player.One;
 
         private GameState _state = GameState.MainMenu;
-        private bool _stateChanged = false;
+        private bool _stateChanged = true;
 
         private readonly BoardGenerator _boardGenerator = new BoardGenerator();
 
@@ -112,10 +113,13 @@ namespace Kulami.Game
                 switch (State)
                 {
                     case GameState.MainMenu:
+                        HandleMainMenuStateChange();
                         break;
                     case GameState.GeneratingBoard:
+                        AudioManager.Instance.StopMusic();
                         break;
                     case GameState.PlacingMarbleP1:
+                        AudioManager.Instance.PlayGameMusic();
                         CurrentPlayer = Player.One;
                         break;
                     case GameState.BetweenTurns:
@@ -132,6 +136,11 @@ namespace Kulami.Game
                 }
                 GameEvents.Instance.TriggerStateChangedEvent(StateInfo);
             }
+        }
+
+        private void HandleMainMenuStateChange()
+        {
+            AudioManager.Instance.PlayMenuMusic();
         }
 
         private void SubscribeToEvents()
