@@ -18,6 +18,7 @@ namespace kulami
 
         [Header("Sound Effects")]
         [SerializeField] private AudioSource _soundEffectsSource;
+        [SerializeField] private AudioClip _marblePlacedClip;
 
         public void Awake()
         {
@@ -45,6 +46,12 @@ namespace kulami
         public void StopMusic()
         {
             _musicSource.Stop();
+        }
+
+        public void PlayMarblePlacedSound()
+        {
+            _soundEffectsSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
+            _soundEffectsSource.PlayOneShot(_marblePlacedClip);
         }
 
 

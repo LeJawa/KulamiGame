@@ -51,6 +51,57 @@ MonoBehaviour:
   _spawnEffect: {fileID: 2981865259561373484}
   _P1Sprite: {fileID: 21300000, guid: 4bc1a9035c51bfb478551786390134e9, type: 3}
   _P2Sprite: {fileID: 21300000, guid: a6898a1481fd86a42bc3676abff46b79, type: 3}
+  _spawnAnimationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.16900691
+      outSlope: 0.16900691
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.044286862
+      value: 1.2411194
+      inSlope: 3.025797
+      outSlope: 3.025797
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.05517671
+    - serializedVersion: 3
+      time: 0.0798015
+      value: 1.0002557
+      inSlope: -0.85604215
+      outSlope: -0.85604215
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.16967794
+    - serializedVersion: 3
+      time: 0.17805569
+      value: 0.9828928
+      inSlope: 0.13554709
+      outSlope: 0.13554709
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.99815613
+      outWeight: 0.27512014
+    - serializedVersion: 3
+      time: 0.4553833
+      value: 0.9895325
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1163278741997746409
 GameObject:
   m_ObjectHideFlags: 0
@@ -121,9 +172,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingLayerID: 1506081877
+  m_SortingLayer: 2
+  m_SortingOrder: -1
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 0.72300005, g: 0.5821559, b: 0.45383123, a: 1}
   m_FlipX: 0
@@ -205,8 +256,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 238661239
+  m_SortingLayer: 3
   m_SortingOrder: 30
   m_Sprite: {fileID: 21300000, guid: 4bc1a9035c51bfb478551786390134e9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
