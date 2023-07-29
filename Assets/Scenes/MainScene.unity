@@ -1825,7 +1825,7 @@ MonoBehaviour:
   _sceneTransition: {fileID: 1612708353}
   _offCameraDistance: 30
   _delayBetweenTiles: 0.5
-  _tileMoveTime: 0.5
+  _tileMoveTime: 0.25
   _delayReductionPercentage: 0.8
   _timeBeforeBoardDrawnEvent: 0.6
 --- !u!4 &1525530345

@@ -11,6 +11,7 @@ namespace kulami
     public class AudioManager : MonoBehaviour
     {
         public static AudioManager Instance { get; private set; }
+
         [Header("Music")]
         [SerializeField] private AudioSource _musicSource;
         [SerializeField] private AudioClip _menuMusicClip;
@@ -19,6 +20,7 @@ namespace kulami
         [Header("Sound Effects")]
         [SerializeField] private AudioSource _soundEffectsSource;
         [SerializeField] private AudioClip _marblePlacedClip;
+        [SerializeField] private AudioClip _tileMovedClip;
 
         public void Awake()
         {
@@ -52,6 +54,12 @@ namespace kulami
         {
             _soundEffectsSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
             _soundEffectsSource.PlayOneShot(_marblePlacedClip);
+        }
+
+        public void PlayTileMovedSound()
+        {
+            _soundEffectsSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
+            _soundEffectsSource.PlayOneShot(_tileMovedClip);
         }
 
 

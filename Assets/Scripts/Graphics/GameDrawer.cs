@@ -1,4 +1,5 @@
 using DG.Tweening;
+using kulami;
 using Kulami.Data;
 using Kulami.Game;
 using Kulami.Helpers;
@@ -71,6 +72,15 @@ namespace Kulami.Graphics
         public void Start()
         {
             SubscribeToEvents();
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.T))
+            {
+                // TODO: REMOVE
+                OnDrawBoard(_lastBoardGenerationInfo);
+            }   
         }
 
         public void Initialize()
@@ -186,9 +196,11 @@ namespace Kulami.Graphics
             _gameUI.PlayerOneScore = player1Score;
             _gameUI.PlayerTwoScore = player2Score;
         }
-
+        private BoardGenerationInfo _lastBoardGenerationInfo;
         private void OnDrawBoard(BoardGenerationInfo info)
         {
+
+            _lastBoardGenerationInfo = info;
             Initialize();
 
             _tileGOs = new();
@@ -225,7 +237,7 @@ namespace Kulami.Graphics
 
         [SerializeField] private float _offCameraDistance = 15f;
         [SerializeField] private float _delayBetweenTiles = 1f;
-        [SerializeField] private float _tileMoveTime = 0.5f;
+        [SerializeField] private float _tileMoveTime = 0.3f;
         [SerializeField] private float _delayReductionPercentage = 0.7f;
         [SerializeField] private float _timeBeforeBoardDrawnEvent = 1f;
 
@@ -255,6 +267,7 @@ namespace Kulami.Graphics
             foreach (var tile in _tileGOs)
             {
                 tile.transform.DOMove(Vector3.zero, _tileMoveTime).SetEase(Ease.OutBack);
+                AudioManager.Instance.PlayTileMovedSound();
 
                 yield return new WaitForSeconds(delay);
                 delay *= _delayReductionPercentage;
