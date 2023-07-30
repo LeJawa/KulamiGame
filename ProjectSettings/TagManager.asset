@@ -42,3 +42,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: TileOutline
+    uniqueID: 2774835689
+    locked: 0
+  - name: Smoke
+    uniqueID: 1506081877
+    locked: 0
+  - name: Marbles
+    uniqueID: 238661239
+    locked: 0

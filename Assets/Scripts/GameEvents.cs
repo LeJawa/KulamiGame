@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Kulami.Data;
+using Kulami.Graphics;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
+using Kulami.Game;
 
-namespace Assets.Scripts
+namespace Kulami
 {
     public class GameEvents
     {
@@ -44,12 +44,40 @@ namespace Assets.Scripts
         public void TriggerClearPossibleMovesEvent() => ClearPossibleMoves?.Invoke();
         #endregion
 
-        #region Action SetPlayerLastMove
-        public event Action<Player, Vector2Int> SetPlayerLastMove;
+        #region Action DrawLastPlacedMarble
+        public event Action<Player, Vector2Int> DrawLastPlacedMarble;
 
-        public void TriggerSetPlayerLastMoveEvent(Player player, Vector2Int position) => SetPlayerLastMove?.Invoke(player, position);
+        public void TriggerDrawLastPlacedMarbleEvent(Player player, Vector2Int position) => DrawLastPlacedMarble?.Invoke(player, position);
         #endregion
 
+        #region Action<BoardGenerationInfo> DrawBoard
+        public event Action<BoardGenerationInfo> DrawBoard;
 
+        public void TriggerDrawBoardEvent(BoardGenerationInfo boardGenerationInfo) => DrawBoard?.Invoke(boardGenerationInfo);
+        #endregion
+
+        #region Action BoardDrawn
+        public event Action BoardDrawn;
+
+        public void TriggerBoardDrawnEvent() => BoardDrawn?.Invoke();
+        #endregion
+
+        #region Action<GameStateInfo> StateChanged
+        public event Action<GameStateInfo> StateChanged;
+
+        public void TriggerStateChangedEvent(GameStateInfo gameStateInfo) => StateChanged?.Invoke(gameStateInfo);
+        #endregion
+
+        #region Action<Vector3> DrawMarbleShadow
+        public event Action<Vector3> DrawMarbleShadow;
+
+        public void TriggerDrawMarbleShadowEvent(Vector3 position) => DrawMarbleShadow?.Invoke(position);
+        #endregion
+
+        #region Action TileOwnershipUpdated
+        public event Action TileOwnershipUpdated;
+
+        public void TriggerTileOwnershipUpdatedEvent() => TileOwnershipUpdated?.Invoke();
+        #endregion
     }
 }
