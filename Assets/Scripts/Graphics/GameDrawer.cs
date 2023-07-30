@@ -158,7 +158,7 @@ namespace Kulami.Graphics
                     _gameUI.Hide();
                     break;
                 case GameState.GeneratingBoard:
-                    HideStartMenu();
+                    //HideStartMenu();
                     HideGameOverScreen();
                     _gameUI.Hide();
                     break;
@@ -260,7 +260,9 @@ namespace Kulami.Graphics
         {
             _sceneTransition.Play();
 
-            yield return new WaitForSeconds(_sceneTransition.Duration);
+            yield return new WaitForSeconds(_sceneTransition.Duration / 2);
+            HideStartMenu();
+            yield return new WaitForSeconds(_sceneTransition.Duration / 2);
 
             var delay = _delayBetweenTiles;
 
