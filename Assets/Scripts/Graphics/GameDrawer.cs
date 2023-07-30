@@ -57,9 +57,6 @@ namespace Kulami.Graphics
         [SerializeField]
         private GameOverScreen _gameOverScreen;
 
-        [SerializeField]
-        private GameUI _gameUI;
-
         private List<TileGO> _tileGOs;
 
         [SerializeField] SceneTransition _sceneTransition;
@@ -93,7 +90,7 @@ namespace Kulami.Graphics
 
             InitializeMarblePreview();
 
-            _gameUI.Initialize();
+            GameUI.Instance.Initialize();
         }
 
         private void InitializeMarblePrefabs()
@@ -155,19 +152,19 @@ namespace Kulami.Graphics
             switch (info.State)
             {
                 case GameState.MainMenu:
-                    ShowStartMenu();
+                    ShowStartMenu(info.PreviousState);
                     HideGameOverScreen();
-                    _gameUI.Hide();
+                    GameUI.Instance.Hide();
                     break;
                 case GameState.GeneratingBoard:
                     //HideStartMenu(); This will be hidden at the middle of the transition time
                     HideGameOverScreen();
-                    _gameUI.Hide();
+                    GameUI.Instance.Hide();
                     break;
                 case GameState.PlacingMarbleP1:
                     HideStartMenu();
                     HideGameOverScreen();
-                    _gameUI.CurrentPlayer = Player.One;
+                    GameUI.Instance.CurrentPlayer = Player.One;
                     break;
                 case GameState.BetweenTurns:
                     HideStartMenu();
@@ -176,17 +173,17 @@ namespace Kulami.Graphics
                 case GameState.PlacingMarbleP2:
                     HideStartMenu();
                     HideGameOverScreen();
-                    _gameUI.CurrentPlayer = Player.Two;
+                    GameUI.Instance.CurrentPlayer = Player.Two;
                     break;
                 case GameState.GameOverScreen:
                     HideStartMenu();
-                    ShowGameOverScreen(info.Winner);
-                    _gameUI.Show();
+                    ShowGameOverScreen(info.Winner, info.PreviousState);
+                    GameUI.Instance.Show();
                     break;
                 case GameState.GameOverShowingBoard:
                     HideStartMenu();
                     HideGameOverScreen();
-                    _gameUI.Hide();
+                    GameUI.Instance.Hide();
                     break;
                 default:
                     throw new Exception("Unknown game state");
@@ -195,8 +192,8 @@ namespace Kulami.Graphics
 
         private void UpdateScores(int player1Score, int player2Score)
         {
-            _gameUI.PlayerOneScore = player1Score;
-            _gameUI.PlayerTwoScore = player2Score;
+            GameUI.Instance.PlayerOneScore = player1Score;
+            GameUI.Instance.PlayerTwoScore = player2Score;
         }
         private BoardGenerationInfo _lastBoardGenerationInfo;
         private void OnDrawBoard(BoardGenerationInfo info)
@@ -258,6 +255,9 @@ namespace Kulami.Graphics
             StartCoroutine(AnimateBoardGenerationCoroutine());
         }
 
+        [SerializeField]
+        private bool _animateBoard = true;
+
         private IEnumerator AnimateBoardGenerationCoroutine()
         {
             _sceneTransition.Play();
@@ -270,11 +270,18 @@ namespace Kulami.Graphics
 
             foreach (var tile in _tileGOs)
             {
-                tile.transform.DOMove(Vector3.zero, _tileMoveTime).SetEase(Ease.OutBack);
-                AudioManager.Instance.PlayTileMovedSound();
+                if (_animateBoard)
+                {
+                    tile.transform.DOMove(Vector3.zero, _tileMoveTime).SetEase(Ease.OutBack);
+                    AudioManager.Instance.PlayTileMovedSound();
 
-                yield return new WaitForSeconds(delay);
-                delay *= _delayReductionPercentage;
+                    yield return new WaitForSeconds(delay);
+                    delay *= _delayReductionPercentage;
+                }
+                else
+                {
+                    tile.transform.position = Vector3.zero;
+                }
             }
 
             yield return new WaitForSeconds(_timeBeforeBoardDrawnEvent);
@@ -379,18 +386,27 @@ namespace Kulami.Graphics
             _camera.transform.position = new Vector3(meanX, meanY, _camera.transform.position.z);
         }
 
-        public void HideStartMenu()
+        private void HideStartMenu()
         {
             _startMenu.SetActive(false);
         }
 
-        public void ShowStartMenu()
+        private void ShowStartMenu(GameState previousState)
         {
+            StartCoroutine(TransitionToStartMenu());
+        }
+
+        private IEnumerator TransitionToStartMenu()
+        {
+
+            _sceneTransition.Play();
+
+            yield return new WaitForSeconds(_sceneTransition.Duration / 2);
             _gameOverScreen.Hide();
             _startMenu.SetActive(true);
         }
 
-        public void ClearAllGameComponents()
+        private void ClearAllGameComponents()
         {
             foreach (var gameObject in GameObject.FindGameObjectsWithTag("GameComponent"))
             {
@@ -398,7 +414,7 @@ namespace Kulami.Graphics
             }
         }
 
-        public void ShowGameOverScreen(Player? winner)
+        private void ShowGameOverScreen(Player? winner, GameState previousState)
         {
             var winnerText = "";
             var winnerTextColor = NeutralColor;
@@ -413,12 +429,18 @@ namespace Kulami.Graphics
                 winnerTextColor = winner == Player.One ? PlayerOneColor : PlayerTwoColor;
             }
 
-            _gameOverScreen.Show(winnerText, winnerTextColor);
-            _gameUI.MoveScoresToGameOverPosition();
+            if (previousState == GameState.GameOverShowingBoard)
+            {
+                _gameOverScreen.ShowWithoutAnimation();
+            }
+            else
+            {
+                _gameOverScreen.Show(winnerText, winnerTextColor);
+            }
 
         }
 
-        public void HideGameOverScreen()
+        private void HideGameOverScreen()
         {
             _gameOverScreen.gameObject.SetActive(false);
         }

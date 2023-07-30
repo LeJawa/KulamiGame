@@ -8,6 +8,13 @@ namespace Kulami.Graphics
 {
     public class GameUI : MonoBehaviour
     {
+        public static GameUI Instance;
+
+        private void Awake()
+        {
+            Instance = this;
+        }
+
         [SerializeField]
         private OuterRim _outerRim;
 
@@ -78,8 +85,10 @@ namespace Kulami.Graphics
 
         public void MoveScoresToGameOverPosition()
         {
-            _playerOneScoreRectTransform.DOAnchorPos3D(_playerOneScoreGameOverPosition, _scoreMoveDuration).SetEase(Ease.InOutQuad);
-            _playerTwoScoreRectTransform.DOAnchorPos3D(_playerTwoScoreGameOverPosition, _scoreMoveDuration).SetEase(Ease.InOutQuad);
+
+
+            _playerOneScoreRectTransform.anchoredPosition3D = _playerOneScoreGameOverPosition;
+            _playerTwoScoreRectTransform.anchoredPosition3D = _playerTwoScoreGameOverPosition;
         }
 
         private void MoveScoresToInitialPosition()

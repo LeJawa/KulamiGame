@@ -14,6 +14,7 @@
         BetweenTurns,
         PlacingMarbleP2,
         GameOverScreen,
-        GameOverShowingBoard
+        GameOverShowingBoard,
+        Null
     }
 }

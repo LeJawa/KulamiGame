@@ -39,6 +39,7 @@ namespace Kulami.Game
         public Player CurrentPlayer { get; private set; } = Player.One;
 
         private GameState _state = GameState.MainMenu;
+        private GameState _previousState = GameState.Null;
         private bool _stateChanged = true;
 
         private readonly BoardGenerator _boardGenerator = new BoardGenerator();
@@ -61,13 +62,14 @@ namespace Kulami.Game
             }
         }
 
-        public GameStateInfo StateInfo => new(State, _round, _playerOneScore, _playerTwoScore, Winner);
+        public GameStateInfo StateInfo => new(State, _previousState, _round, _playerOneScore, _playerTwoScore, Winner);
 
         public GameState State
         {
             get => _state;
             private set
             {
+                _previousState = _state;
                 _state = value;
                 _stateChanged = true;
             }
