@@ -79,3 +79,6 @@ crashlytics-build.properties
 
 # Third party assets
 /Assets/ThirdParties/*
+
+# Music
+/Assets/Audio/Music/*.mp3
