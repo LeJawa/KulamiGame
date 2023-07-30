@@ -81,8 +81,6 @@ namespace Kulami.Graphics
         [SerializeField] private Vector3 _playerOneScoreGameOverPosition = new(483, -606, 0);
         [SerializeField] private Vector3 _playerTwoScoreGameOverPosition = new(-483, -606, 0);
 
-        [SerializeField] private float _scoreMoveDuration = 0.5f;
-
         public void MoveScoresToGameOverPosition()
         {
 

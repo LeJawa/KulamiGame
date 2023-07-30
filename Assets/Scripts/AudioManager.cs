@@ -1,3 +1,4 @@
+using DG.Tweening;
 using Kulami;
 using Kulami.Data;
 using Kulami.Game;
@@ -17,6 +18,8 @@ namespace kulami
         [SerializeField] private AudioClip _menuMusicClip;
         [SerializeField] private AudioClip _gameMusicClip;
 
+        private float _musicVolume;
+
         [Header("Sound Effects")]
         [SerializeField] private AudioSource _soundEffectsSource;
         [SerializeField] private AudioClip _marblePlacedClip;
@@ -25,6 +28,8 @@ namespace kulami
         public void Awake()
         {
             Instance = this;
+
+            _musicVolume = _musicSource.volume;
         }
 
         public void PlayMenuMusic()
@@ -62,6 +67,14 @@ namespace kulami
             _soundEffectsSource.PlayOneShot(_tileMovedClip);
         }
 
+        public void FadeMusic(float duration)
+        {
+            DOTween.To(() => _musicSource.volume, x => _musicSource.volume = x, 0f, duration);
+        }
 
+        public void ResetMusicVolume()
+        {
+            _musicSource.volume = _musicVolume;
+        }
     }
 }

@@ -393,7 +393,10 @@ namespace Kulami.Graphics
 
         private void ShowStartMenu(GameState previousState)
         {
-            StartCoroutine(TransitionToStartMenu());
+            if (previousState != GameState.Null)
+            {
+                StartCoroutine(TransitionToStartMenu());
+            }
         }
 
         private IEnumerator TransitionToStartMenu()
@@ -402,6 +405,7 @@ namespace Kulami.Graphics
             _sceneTransition.Play();
 
             yield return new WaitForSeconds(_sceneTransition.Duration / 2);
+            AudioManager.Instance.PlayMenuMusic();
             _gameOverScreen.Hide();
             _startMenu.SetActive(true);
         }

@@ -85,6 +85,8 @@ namespace Kulami.Game
             SubscribeToEvents();
 
             DOTween.Init();
+
+            AudioManager.Instance.PlayMenuMusic();
         }
 
         private void Update()
@@ -121,7 +123,6 @@ namespace Kulami.Game
                         HandleMainMenuStateChange();
                         break;
                     case GameState.GeneratingBoard:
-                        AudioManager.Instance.StopMusic();
                         break;
                     case GameState.PlacingMarbleP1:
                         AudioManager.Instance.PlayGameMusic();
@@ -145,8 +146,6 @@ namespace Kulami.Game
 
         private void HandleMainMenuStateChange()
         {
-            AudioManager.Instance.PlayMenuMusic();
-
             ResetScores();
         }
 

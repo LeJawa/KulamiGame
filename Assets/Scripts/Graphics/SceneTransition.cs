@@ -1,3 +1,4 @@
+using kulami;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -44,6 +45,7 @@ namespace Kulami.Graphics
 
         private IEnumerator TransitionACoroutine()
         {
+            AudioManager.Instance.FadeMusic(_transitionTime);
             float currentTime = 0f;
             while (currentTime < _transitionTime)
             {
@@ -52,6 +54,8 @@ namespace Kulami.Graphics
                 _screenTransitionMaterial.SetFloat(_progressName, Mathf.Clamp01(1 - currentTime / _transitionTime));
                 yield return null;
             }
+            AudioManager.Instance.StopMusic();
+            AudioManager.Instance.ResetMusicVolume();
         }
 
         private IEnumerator FullTransitionCoroutine()
