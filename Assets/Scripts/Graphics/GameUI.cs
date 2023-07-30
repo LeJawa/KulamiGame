@@ -68,18 +68,18 @@ namespace Kulami.Graphics
             gameObject.SetActive(true);
         }
 
-        [SerializeField] private Vector3 _playerOneScorePosition = new Vector3(25, -25, 0);
-        [SerializeField] private Vector3 _playerTwoScorePosition = new Vector3(-25, -25, 0);
+        [SerializeField] private Vector3 _playerOneScorePosition = new(25, -25, 0);
+        [SerializeField] private Vector3 _playerTwoScorePosition = new(-25, -25, 0);
 
-        [SerializeField] private Vector3 _playerOneScoreGameOverPosition = new Vector3(483, -606, 0);
-        [SerializeField] private Vector3 _playerTwoScoreGameOverPosition = new Vector3(-483, -606, 0);
+        [SerializeField] private Vector3 _playerOneScoreGameOverPosition = new(483, -606, 0);
+        [SerializeField] private Vector3 _playerTwoScoreGameOverPosition = new(-483, -606, 0);
 
         [SerializeField] private float _scoreMoveDuration = 0.5f;
 
         public void MoveScoresToGameOverPosition()
         {
-            _playerOneScoreRectTransform.DOMove(_playerOneScoreGameOverPosition, _scoreMoveDuration).SetEase(Ease.InOutQuad);
-            _playerTwoScoreRectTransform.DOMove(_playerTwoScoreGameOverPosition, _scoreMoveDuration).SetEase(Ease.InOutQuad);
+            _playerOneScoreRectTransform.DOAnchorPos3D(_playerOneScoreGameOverPosition, _scoreMoveDuration).SetEase(Ease.InOutQuad);
+            _playerTwoScoreRectTransform.DOAnchorPos3D(_playerTwoScoreGameOverPosition, _scoreMoveDuration).SetEase(Ease.InOutQuad);
         }
 
         private void MoveScoresToInitialPosition()

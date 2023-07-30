@@ -144,6 +144,14 @@ namespace Kulami.Game
         private void HandleMainMenuStateChange()
         {
             AudioManager.Instance.PlayMenuMusic();
+
+            ResetScores();
+        }
+
+        private void ResetScores()
+        {
+            _playerOneScore = 0;
+            _playerTwoScore = 0;
         }
 
         private void SubscribeToEvents()

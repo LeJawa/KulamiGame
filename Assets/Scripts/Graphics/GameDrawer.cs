@@ -98,6 +98,8 @@ namespace Kulami.Graphics
 
         private void InitializeMarblePrefabs()
         {
+            _marblePrefab.SetActive(false);
+
             _playerOneMarblePrefab = Instantiate(_marblePrefab);
             _playerOneMarblePrefab.GetComponentInChildren<MarbleGO>().SetPlayer(Player.One);
             _playerOneMarblePrefab.transform.position = new Vector3(-100, -100, -100);
@@ -158,7 +160,7 @@ namespace Kulami.Graphics
                     _gameUI.Hide();
                     break;
                 case GameState.GeneratingBoard:
-                    //HideStartMenu();
+                    //HideStartMenu(); This will be hidden at the middle of the transition time
                     HideGameOverScreen();
                     _gameUI.Hide();
                     break;
@@ -284,12 +286,12 @@ namespace Kulami.Graphics
         {
             if (player == Player.One)
             {
-                Instantiate(_playerOneMarblePrefab, position.ToVector3(), Quaternion.identity);
+                Instantiate(_playerOneMarblePrefab, position.ToVector3(), Quaternion.identity).SetActive(true);
                 _playerOneLastMove.transform.position = position.ToVector3();
             }
             else
             {
-                Instantiate(_playerTwoMarblePrefab, position.ToVector3(), Quaternion.identity);
+                Instantiate(_playerTwoMarblePrefab, position.ToVector3(), Quaternion.identity).SetActive(true);
                 _playerTwoLastMove.transform.position = position.ToVector3();
             }
 

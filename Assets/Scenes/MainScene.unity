@@ -1180,8 +1180,8 @@ MonoBehaviour:
   _disableOuterRim: 1
   _playerOneScorePosition: {x: 25, y: -25, z: 0}
   _playerTwoScorePosition: {x: -25, y: -25, z: 0}
-  _playerOneScoreGameOverPosition: {x: 483, y: -606, z: 0}
-  _playerTwoScoreGameOverPosition: {x: -483, y: -606, z: 0}
+  _playerOneScoreGameOverPosition: {x: 350, y: -606, z: 0}
+  _playerTwoScoreGameOverPosition: {x: -350, y: -606, z: 0}
   _scoreMoveDuration: 0.5
 --- !u!1 &1010120622
 GameObject:
