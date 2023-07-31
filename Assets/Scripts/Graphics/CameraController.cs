@@ -1,3 +1,4 @@
+using Cinemachine;
 using Kulami.Game;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,11 +18,13 @@ namespace Kulami.Graphics
 
         private float _panBorderThickness;
 
-        private Camera _camera;
+        private CinemachineVirtualCamera _camera;
+        private Camera _realCamera;
 
         void Start()
         {
-            _camera = GetComponent<Camera>();
+            _camera = GetComponent<CinemachineVirtualCamera>();
+            _realCamera = Camera.main;
             _panBorderThickness = Mathf.Min(Screen.width, Screen.height) * panBorderPercentage;
         }
 
@@ -50,7 +53,7 @@ namespace Kulami.Graphics
                 panDirection += Vector3.up;
 
             panDirection.Normalize();
-            var normalizedPanSpeed = panSpeed / 10 * _camera.orthographicSize;
+            var normalizedPanSpeed = panSpeed / 10 * _camera.m_Lens.OrthographicSize;
 
             transform.Translate(panDirection * normalizedPanSpeed * Time.deltaTime, Space.World);
 
@@ -69,10 +72,10 @@ namespace Kulami.Graphics
             {
                 float zoomAmount = scroll * zoomSpeed * Time.deltaTime;
 
-                float initialZoom = _camera.orthographicSize;
+                float initialZoom = _camera.m_Lens.OrthographicSize;
                 float zoom = initialZoom + zoomAmount;
                 zoom = Mathf.Clamp(zoom, zoomMin, zoomMax);
-                _camera.orthographicSize = zoom;
+                _camera.m_Lens.OrthographicSize = zoom;
 
                 if (!(zoom == zoomMin || zoom == zoomMax))
                 {
@@ -91,7 +94,7 @@ namespace Kulami.Graphics
                     else
                     {
                         var mousePosition = Input.mousePosition;
-                        var worldPosition = _camera.ScreenToWorldPoint(mousePosition);
+                        var worldPosition = _realCamera.ScreenToWorldPoint(mousePosition);
                         targetPosition = new Vector3(worldPosition.x, worldPosition.y, _camera.transform.position.z);
                     }
 

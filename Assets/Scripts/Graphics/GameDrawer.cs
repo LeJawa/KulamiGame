@@ -6,8 +6,8 @@ using Kulami.Helpers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
+using Cinemachine;
 
 namespace Kulami.Graphics
 {
@@ -47,7 +47,7 @@ namespace Kulami.Graphics
         private GameObject _playerTwoLastMove;
 
         [SerializeField]
-        private Camera _camera;
+        private CinemachineVirtualCamera _camera;
 
         private List<GameObject> _possibleMoveGameObjects = new List<GameObject>();
 
