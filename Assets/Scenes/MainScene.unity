@@ -2045,8 +2045,12 @@ MonoBehaviour:
   _zoomMultiplier: 1
   _zoomMin: 2
   _zoomMax: 7
-  _zoomTime: 0.25
-  _zoomVelocity: 0
+  _moveTime: 0.25
+  _boundary: 5
+  _position: {x: 0, y: 0, z: 0}
+  _moveVelocity: {x: 0, y: 0, z: 0}
+  _dragSpeed: 0.1
+  _isDragging: 0
 --- !u!1 &2076126783
 GameObject:
   m_ObjectHideFlags: 0

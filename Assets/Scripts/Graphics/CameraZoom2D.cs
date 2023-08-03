@@ -17,13 +17,10 @@ namespace Kulami.Graphics
         [SerializeField] private float _zoomMultiplier = 50f;
         [SerializeField] private float _zoomMin = 5f;
         [SerializeField] private float _zoomMax = 100f;
-        [SerializeField] private float _zoomTime = 0.25f;
         private float _zoomVelocity = 0f;
 
         [SerializeField] private float _moveTime = 0.25f;
-        private Vector3 _startPosition = new Vector3(0, 0, -10);
-        [SerializeField] private Vector3 _boundariesMax = new Vector3(10, 10, 0);
-        [SerializeField] private Vector3 _boundariesMin = new Vector3(-10, -10, 0);
+        [SerializeField] private float _boundary = 10f;
         [SerializeField] private Vector3 _position;
         [SerializeField] private Vector3 _moveVelocity = Vector3.zero;
 
@@ -40,11 +37,13 @@ namespace Kulami.Graphics
         private bool _isDragging = false;
         private Vector3 _anchorPosition;
 
+        private bool _canZoom = true;
+
         void Start()
         {
             _camera = GetComponent<CinemachineVirtualCamera>();
             _zoom = _camera.m_Lens.OrthographicSize;
-            _position = _startPosition;
+            _targetPosition = transform.position;
             _mainCamera = Camera.main;
         }
 
@@ -53,12 +52,14 @@ namespace Kulami.Graphics
             if (!GameManager.Instance.IsPlaying)
                 return;
 
-            //HandleCameraZoom();
+            if (_canZoom)
+                HandleCameraZoom();
 
             if (Input.GetMouseButtonDown(0))
             {
                 _anchorPosition = Input.mousePosition;
                 _cameraPosition = transform.position;
+                _canZoom = false;
             }
 
             if (Input.GetMouseButton(0))
@@ -68,30 +69,47 @@ namespace Kulami.Graphics
                 _isDragging = true;
             }
 
-            if (_isDragging)
+            if (Input.GetMouseButtonUp(0))
             {
-                //transform.position = Vector3.MoveTowards(transform.position, _targetPosition, Time.deltaTime * _dragSpeed);
-                transform.position = Vector3.Lerp(transform.position, _targetPosition, _dragSpeed);
-                if (transform.position == _targetPosition)
-                    _isDragging = false;
+                _canZoom = true;
             }
 
+            if (_isDragging)
+            {
+                if ((transform.position - _targetPosition).magnitude < 0.1f)
+                {
+                    _isDragging = false;
+                    transform.position = _targetPosition;
+                }
+            }
+
+            _camera.m_Lens.OrthographicSize = Mathf.SmoothDamp(_camera.m_Lens.OrthographicSize, _zoom, ref _zoomVelocity, _moveTime);
 
 
+            if (Mathf.Abs(_zoomVelocity) < 5e-5)
+            {
+                _camera.m_Lens.OrthographicSize = _zoom;
+                transform.position = _targetPosition;
+                _zoomVelocity = 0;
+                _moveVelocity = Vector3.zero;
+            }
 
-            //_camera.m_Lens.OrthographicSize = Mathf.SmoothDamp(_camera.m_Lens.OrthographicSize, _zoom, ref _zoomVelocity, _zoomTime);
+            transform.position = Vector3.SmoothDamp(transform.position, _targetPosition, ref _moveVelocity, _moveTime);
 
-            //transform.position = Vector3.SmoothDamp(transform.position, _position, ref _moveVelocity, _moveTime);
+            //transform.position = Vector3.Lerp(transform.position, _targetPosition, _dragSpeed);
+
+            var clampedPosition = transform.position;
+            clampedPosition.x = Mathf.Clamp(clampedPosition.x, -_boundary, _boundary);
+            clampedPosition.y = Mathf.Clamp(clampedPosition.y, -_boundary, _boundary);
+
+            transform.position = clampedPosition;            
         }
 
         private void LeftMouseDrag()
         {
-            // Get direction of movement.  (Note: Don't normalize, the magnitude of change is going to be Vector3.Distance(current_position-hit_position)
-            // anyways.  
-            Vector3 direction = Camera.main.ScreenToWorldPoint(_currentPosition) - Camera.main.ScreenToWorldPoint(_anchorPosition);
+            Vector3 direction = _mainCamera.ScreenToWorldPoint(_currentPosition) - _mainCamera.ScreenToWorldPoint(_anchorPosition);
 
-            // Invert direction to that terrain appears to move with the mouse.
-            direction = direction * -1;
+            direction *= -1;
 
             _targetPosition = _cameraPosition + direction;
         }
@@ -108,19 +126,10 @@ namespace Kulami.Graphics
 
                 if (_zoom != _zoomMin && _zoom != _zoomMax)
                 {
-                    _position = _mainCamera.ScreenToWorldPoint(mousePosition);
-                    _position.z = -10;
+                    _targetPosition = _mainCamera.ScreenToWorldPoint(mousePosition);
+                    _targetPosition.z = -10;
                 }
             }
-            
-            if (Mathf.Abs(_zoomVelocity) < 5e-5)
-            {
-                _camera.m_Lens.OrthographicSize = _zoom;
-                transform.position = _position;
-                _zoomVelocity = 0;
-                _moveVelocity = Vector3.zero;
-            }
-            
 
         }
     }
