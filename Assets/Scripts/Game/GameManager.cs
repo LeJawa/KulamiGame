@@ -99,12 +99,12 @@ namespace Kulami.Game
         {
             if (State == GameState.GameOverScreen || State == GameState.GameOverShowingBoard)
             {
-                if (Input.GetKeyDown(KeyCode.Space))
+                if (InputManager.Instance.GetKeyDown(KeyCode.Space))
                 {
                     State = GameState.GameOverShowingBoard;
                 }
 
-                if (Input.GetKeyUp(KeyCode.Space))
+                if (InputManager.Instance.GetKeyUp(KeyCode.Space))
                 {
                     State = GameState.GameOverScreen;
                 }
@@ -245,6 +245,7 @@ namespace Kulami.Game
 
         public void OnSocketClicked(Socket clickedSocket)
         {
+
             //Debug.Log("Tile clicked: " + clickedSocket.Position);
 
             if (ClickedSocketIsNotAllowed(clickedSocket))

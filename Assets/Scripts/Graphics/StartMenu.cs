@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Kulami;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -49,7 +50,7 @@ namespace kulami
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.T))
+            if (InputManager.Instance.GetKeyDown(KeyCode.T))
             {
                 StopTweens();
                 StartCoroutine(AnimateTitleStart());

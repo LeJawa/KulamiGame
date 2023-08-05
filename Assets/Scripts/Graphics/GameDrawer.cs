@@ -73,7 +73,7 @@ namespace Kulami.Graphics
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.T))
+            if (InputManager.Instance.GetKeyDown(KeyCode.T))
             {
                 // TODO: REMOVE
                 OnDrawBoard(_lastBoardGenerationInfo);
