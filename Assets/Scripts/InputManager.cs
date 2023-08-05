@@ -1,4 +1,5 @@
 using Kulami.Game;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,9 +18,41 @@ namespace Kulami
             }
         }
 
-        public bool anyKeyDown => Input.anyKeyDown;
-        public Vector3 mousePosition => Input.mousePosition;
-        public Vector2 mouseScrollDelta => Input.mouseScrollDelta;
+        private bool _isDragging = false;
+        private Vector3 _clickPosition;
+
+
+        private void Update()
+        {
+            if (GetMouseButtonDown(0))
+            {
+                _clickPosition = MousePosition;
+            }
+
+            if (GetMouseButton(0))
+            {
+                if (!_isDragging && Vector3.Distance(_clickPosition, MousePosition) > 5f)
+                {
+                    _isDragging = true;
+                }
+            }
+
+            if (GetMouseButtonUp(0))
+            {
+                StartCoroutine(IsNoLongerDragging());
+            }
+        }
+
+        private IEnumerator IsNoLongerDragging() // Delay to ensure dragging clicks are not registered as normal clicks
+        {
+            yield return null;
+            _isDragging = false;
+        }
+
+
+        public bool AnyKeyDown => Input.anyKeyDown;
+        public Vector3 MousePosition => Input.mousePosition;
+        public Vector2 MouseScrollDelta => Input.mouseScrollDelta;
 
         public bool GetKeyDown(KeyCode key)
         {
@@ -46,6 +79,6 @@ namespace Kulami
             return Input.GetMouseButton(button);
         }
 
-
+        public bool IsCorrectClick => !_isDragging;
     }
 }

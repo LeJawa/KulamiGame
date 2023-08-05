@@ -11,7 +11,7 @@ using static TMPro.TMP_Compatibility;
 namespace Kulami.Graphics
 {
     [RequireComponent(typeof(CinemachineVirtualCamera))]
-    public class CameraZoom2D : MonoBehaviour
+    public class CameraController2D : MonoBehaviour
     {
         private float _zoom;
         [SerializeField] private float _zoomMultiplier = 50f;
@@ -30,8 +30,6 @@ namespace Kulami.Graphics
         private Vector3 _cameraPosition;
         private Vector3 _currentPosition;
         private Vector3 _targetPosition;
-
-        [SerializeField] private float _dragSpeed = 2f;
 
         [SerializeField]
         private bool _isDragging = false;
@@ -57,14 +55,14 @@ namespace Kulami.Graphics
 
             if (InputManager.Instance.GetMouseButtonDown(0))
             {
-                _anchorPosition = InputManager.Instance.mousePosition;
+                _anchorPosition = InputManager.Instance.MousePosition;
                 _cameraPosition = transform.position;
                 _canZoom = false;
             }
 
             if (InputManager.Instance.GetMouseButton(0))
             {
-                _currentPosition = InputManager.Instance.mousePosition;
+                _currentPosition = InputManager.Instance.MousePosition;
                 LeftMouseDrag();
                 _isDragging = true;
             }
@@ -96,8 +94,6 @@ namespace Kulami.Graphics
 
             transform.position = Vector3.SmoothDamp(transform.position, _targetPosition, ref _moveVelocity, _moveTime);
 
-            //transform.position = Vector3.Lerp(transform.position, _targetPosition, _dragSpeed);
-
             var clampedPosition = transform.position;
             clampedPosition.x = Mathf.Clamp(clampedPosition.x, -_boundary, _boundary);
             clampedPosition.y = Mathf.Clamp(clampedPosition.y, -_boundary, _boundary);
@@ -116,8 +112,8 @@ namespace Kulami.Graphics
 
         private void HandleCameraZoom()
         {
-            float scroll = -InputManager.Instance.mouseScrollDelta.y;
-            Vector3 mousePosition = InputManager.Instance.mousePosition;
+            float scroll = -InputManager.Instance.MouseScrollDelta.y;
+            Vector3 mousePosition = InputManager.Instance.MousePosition;
 
             if (scroll != 0)
             {
