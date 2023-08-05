@@ -11,7 +11,7 @@ using static TMPro.TMP_Compatibility;
 namespace Kulami.Graphics
 {
     [RequireComponent(typeof(CinemachineVirtualCamera))]
-    public class CameraController2D : MonoBehaviour
+    public class CameraZoom2D : MonoBehaviour
     {
         public float _zoom;
         [SerializeField] private float _zoomMultiplier = 50f;
@@ -31,6 +31,13 @@ namespace Kulami.Graphics
         private Vector3 _currentPosition;
         private Vector3 _targetPosition;
 
+<<<<<<< HEAD:Assets/Scripts/Graphics/CameraController2D.cs
+=======
+        [SerializeField] private float _dragSpeed = 2f;
+
+        [SerializeField]
+        private bool _isDragging = false;
+>>>>>>> parent of 6ad512b (Fix accidental clicks when dragging):Assets/Scripts/Graphics/CameraZoom2D.cs
         private Vector3 _anchorPosition;
 
         private bool _canZoom = true;
@@ -53,14 +60,20 @@ namespace Kulami.Graphics
 
             if (InputManager.Instance.GetMouseButtonDown(0))
             {
-                _anchorPosition = InputManager.Instance.MousePosition;
+                _anchorPosition = InputManager.Instance.mousePosition;
                 _cameraPosition = transform.position;
                 //_canZoom = false;
             }
 
             if (InputManager.Instance.GetMouseButton(0))
             {
+<<<<<<< HEAD:Assets/Scripts/Graphics/CameraController2D.cs
                 InputManager.Instance.IsDragging = true;
+=======
+                _currentPosition = InputManager.Instance.mousePosition;
+                LeftMouseDrag();
+                _isDragging = true;
+>>>>>>> parent of 6ad512b (Fix accidental clicks when dragging):Assets/Scripts/Graphics/CameraZoom2D.cs
             }
 
             if (InputManager.Instance.GetMouseButtonUp(0))
@@ -97,6 +110,8 @@ namespace Kulami.Graphics
 
             transform.position = Vector3.SmoothDamp(transform.position, _targetPosition, ref _moveVelocity, _moveTime);
 
+            //transform.position = Vector3.Lerp(transform.position, _targetPosition, _dragSpeed);
+
             var clampedPosition = transform.position;
             clampedPosition.x = Mathf.Clamp(clampedPosition.x, -_boundary, _boundary);
             clampedPosition.y = Mathf.Clamp(clampedPosition.y, -_boundary, _boundary);
@@ -118,8 +133,13 @@ namespace Kulami.Graphics
 #endif
         private void HandleCameraZoom()
         {
+<<<<<<< HEAD:Assets/Scripts/Graphics/CameraController2D.cs
             float scroll = -InputManager.Instance.ZoomAmount;
             Vector3 mousePosition = InputManager.Instance.MousePosition;
+=======
+            float scroll = -InputManager.Instance.mouseScrollDelta.y;
+            Vector3 mousePosition = InputManager.Instance.mousePosition;
+>>>>>>> parent of 6ad512b (Fix accidental clicks when dragging):Assets/Scripts/Graphics/CameraZoom2D.cs
 
             if (scroll != 0)
             {

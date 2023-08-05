@@ -1,5 +1,4 @@
 using Kulami.Game;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,6 +17,7 @@ namespace Kulami
             }
         }
 
+<<<<<<< HEAD
         private bool _isDragging = false;
         private Vector3 _clickPosition;
 
@@ -113,6 +113,11 @@ namespace Kulami
         public bool AnyKeyDown => Input.anyKeyDown;
         public Vector3 MousePosition => Input.mousePosition;
         public float ZoomAmount => _zoomAmount;
+=======
+        public bool anyKeyDown => Input.anyKeyDown;
+        public Vector3 mousePosition => Input.mousePosition;
+        public Vector2 mouseScrollDelta => Input.mouseScrollDelta;
+>>>>>>> parent of 6ad512b (Fix accidental clicks when dragging)
 
         public bool GetKeyDown(KeyCode key)
         {
@@ -138,5 +143,10 @@ namespace Kulami
         {
             return Input.GetMouseButton(button);
         }
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> parent of 6ad512b (Fix accidental clicks when dragging)
     }
 }

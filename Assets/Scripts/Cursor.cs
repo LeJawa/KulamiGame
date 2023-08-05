@@ -20,7 +20,7 @@ namespace kulami
         // Update is called once per frame
         void Update()
         {
-            var cursorPosition = _camera.ScreenToWorldPoint(InputManager.Instance.MousePosition);
+            var cursorPosition = _camera.ScreenToWorldPoint(InputManager.Instance.mousePosition);
             cursorPosition.z = 0;
             cursorPosition = Vector3.ClampMagnitude(cursorPosition, _boundary);
 

@@ -20,7 +20,7 @@ namespace Kulami.Helpers
 
         void Update()
         {
-            if (InputManager.Instance.AnyKeyDown)
+            if (InputManager.Instance.anyKeyDown)
             {
                 if (_marble == null)
                     SpawnMarble();

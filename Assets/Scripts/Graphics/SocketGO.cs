@@ -18,10 +18,7 @@ namespace Kulami.Graphics
 
         public void OnMouseUpAsButton()
         {
-            if (InputManager.Instance.IsCorrectClick)
-            {
-                GameEvents.Instance.TriggerSocketClickedEvent(_socketReference);
-            }
+            GameEvents.Instance.TriggerSocketClickedEvent(_socketReference);
         }
 
         public void OnMouseEnter()
