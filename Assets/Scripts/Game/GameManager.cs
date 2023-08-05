@@ -99,6 +99,7 @@ namespace Kulami.Game
         {
             if (State == GameState.GameOverScreen || State == GameState.GameOverShowingBoard)
             {
+                #if UNITY_STANDALONE || UNITY_EDITOR
                 if (InputManager.Instance.GetKeyDown(KeyCode.Space))
                 {
                     State = GameState.GameOverShowingBoard;
@@ -108,6 +109,11 @@ namespace Kulami.Game
                 {
                     State = GameState.GameOverScreen;
                 }
+                #endif
+
+                #if UNITY_ANDROID
+                // todo: add touch input
+                #endif
             }
         }
 

@@ -13,7 +13,7 @@ namespace Kulami.Graphics
     [RequireComponent(typeof(CinemachineVirtualCamera))]
     public class CameraController2D : MonoBehaviour
     {
-        private float _zoom;
+        public float _zoom;
         [SerializeField] private float _zoomMultiplier = 50f;
         [SerializeField] private float _zoomMin = 5f;
         [SerializeField] private float _zoomMax = 100f;
@@ -31,8 +31,6 @@ namespace Kulami.Graphics
         private Vector3 _currentPosition;
         private Vector3 _targetPosition;
 
-        [SerializeField]
-        private bool _isDragging = false;
         private Vector3 _anchorPosition;
 
         private bool _canZoom = true;
@@ -57,31 +55,36 @@ namespace Kulami.Graphics
             {
                 _anchorPosition = InputManager.Instance.MousePosition;
                 _cameraPosition = transform.position;
-                _canZoom = false;
+                //_canZoom = false;
             }
 
             if (InputManager.Instance.GetMouseButton(0))
             {
-                _currentPosition = InputManager.Instance.MousePosition;
-                LeftMouseDrag();
-                _isDragging = true;
+                InputManager.Instance.IsDragging = true;
             }
 
             if (InputManager.Instance.GetMouseButtonUp(0))
             {
                 _canZoom = true;
+                InputManager.Instance.IsDragging = false;
             }
 
-            if (_isDragging)
+            if (InputManager.Instance.IsDragging)
             {
+                _currentPosition = InputManager.Instance.MousePosition;
+                LeftMouseDrag();
                 if ((transform.position - _targetPosition).magnitude < 0.1f)
                 {
-                    _isDragging = false;
                     transform.position = _targetPosition;
                 }
             }
 
+#if UNITY_EDITOR || UNITY_STANDALONE
             _camera.m_Lens.OrthographicSize = Mathf.SmoothDamp(_camera.m_Lens.OrthographicSize, _zoom, ref _zoomVelocity, _moveTime);
+#endif
+#if UNITY_ANDROID || UNITY_IOS
+            _camera.m_Lens.OrthographicSize = _zoom;
+#endif
 
 
             if (Mathf.Abs(_zoomVelocity) < 5e-5)
@@ -109,14 +112,18 @@ namespace Kulami.Graphics
 
             _targetPosition = _cameraPosition + direction;
         }
-
+#if UNITY_ANDROID || UNITY_IOS
+        public bool IsZooming = false;
+        private float _initialOrthographicSize;
+#endif
         private void HandleCameraZoom()
         {
-            float scroll = -InputManager.Instance.MouseScrollDelta.y;
+            float scroll = -InputManager.Instance.ZoomAmount;
             Vector3 mousePosition = InputManager.Instance.MousePosition;
 
             if (scroll != 0)
             {
+#if UNITY_EDITOR || UNITY_STANDALONE
                 _zoom += scroll * _zoomMultiplier;
                 _zoom = Mathf.Clamp(_zoom, _zoomMin, _zoomMax);
 
@@ -125,6 +132,25 @@ namespace Kulami.Graphics
                     _targetPosition = _mainCamera.ScreenToWorldPoint(mousePosition);
                     _targetPosition.z = -10;
                 }
+#endif
+#if UNITY_ANDROID || UNITY_IOS
+                if (!IsZooming)
+                {
+                    IsZooming = true;
+                    _initialOrthographicSize = _camera.m_Lens.OrthographicSize;
+                }
+                else
+                {
+                    _zoom = _initialOrthographicSize * scroll;
+                    _zoom = Mathf.Clamp(_zoom, _zoomMin, _zoomMax);
+                }
+#endif
+            }
+            else
+            {
+                #if UNITY_ANDROID || UNITY_IOS
+                IsZooming = false;
+                #endif
             }
 
         }
