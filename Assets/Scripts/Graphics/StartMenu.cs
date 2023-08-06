@@ -1,5 +1,6 @@
 using DG.Tweening;
 using Kulami;
+using Kulami.Control;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

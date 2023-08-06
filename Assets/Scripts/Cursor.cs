@@ -1,4 +1,5 @@
 using Kulami;
+using Kulami.Control;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,7 +21,7 @@ namespace kulami
         // Update is called once per frame
         void Update()
         {
-            var cursorPosition = _camera.ScreenToWorldPoint(InputManager.Instance.mousePosition);
+            var cursorPosition = _camera.ScreenToWorldPoint(InputManager.Instance.MousePosition);
             cursorPosition.z = 0;
             cursorPosition = Vector3.ClampMagnitude(cursorPosition, _boundary);
 

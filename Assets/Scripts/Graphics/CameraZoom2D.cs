@@ -2,6 +2,7 @@ using Cinemachine;
 using Cinemachine.Utility;
 using DG.Tweening;
 using Kulami.Game;
+using Kulami.Control;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -57,14 +58,14 @@ namespace Kulami.Graphics
 
             if (InputManager.Instance.GetMouseButtonDown(0))
             {
-                _anchorPosition = InputManager.Instance.mousePosition;
+                _anchorPosition = InputManager.Instance.MousePosition;
                 _cameraPosition = transform.position;
                 _canZoom = false;
             }
 
             if (InputManager.Instance.GetMouseButton(0))
             {
-                _currentPosition = InputManager.Instance.mousePosition;
+                _currentPosition = InputManager.Instance.MousePosition;
                 LeftMouseDrag();
                 _isDragging = true;
             }
@@ -116,8 +117,8 @@ namespace Kulami.Graphics
 
         private void HandleCameraZoom()
         {
-            float scroll = -InputManager.Instance.mouseScrollDelta.y;
-            Vector3 mousePosition = InputManager.Instance.mousePosition;
+            float scroll = -InputManager.Instance.ZoomAmount;
+            Vector3 mousePosition = InputManager.Instance.MousePosition;
 
             if (scroll != 0)
             {
