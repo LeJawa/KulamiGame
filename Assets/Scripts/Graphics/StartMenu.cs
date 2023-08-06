@@ -51,7 +51,7 @@ namespace kulami
 
         private void Update()
         {
-            if (InputManager.Instance.GetKeyDown(KeyCode.T))
+            if (InputManager.Instance.GetTestDown())
             {
                 StopTweens();
                 StartCoroutine(AnimateTitleStart());

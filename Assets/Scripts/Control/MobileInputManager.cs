@@ -5,33 +5,38 @@ namespace Kulami.Control
 {
     public class MobileInputManager : InputManager
     {
-        public override bool AnyKeyDown => throw new NotImplementedException();
+        public override bool AnyInputDown => throw new NotImplementedException();
 
-        public override Vector3 MousePosition => throw new NotImplementedException();
+        public override Vector3 PrimaryCursorPosition => throw new NotImplementedException();
 
         public override float ZoomAmount => throw new NotImplementedException();
 
-        public override bool GetKeyDown(KeyCode key)
+        public override bool GetPrimaryCursor()
         {
             throw new NotImplementedException();
         }
 
-        public override bool GetKeyUp(KeyCode key)
+        public override bool GetPrimaryCursorDown()
         {
             throw new NotImplementedException();
         }
 
-        public override bool GetMouseButton(int button)
+        public override bool GetPrimaryCursorUp()
         {
             throw new NotImplementedException();
         }
 
-        public override bool GetMouseButtonDown(int button)
+        public override bool GetTestDown()
         {
             throw new NotImplementedException();
         }
 
-        public override bool GetMouseButtonUp(int button)
+        public override bool GetToggleGameOverScreenDown()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool GetToggleGameOverScreenUp()
         {
             throw new NotImplementedException();
         }

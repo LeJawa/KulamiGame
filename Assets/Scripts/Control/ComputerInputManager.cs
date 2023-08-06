@@ -4,35 +4,38 @@ namespace Kulami.Control
 {
     public class ComputerInputManager : InputManager
     {
-        public override bool AnyKeyDown => Input.anyKeyDown;
-        public override Vector3 MousePosition => Input.mousePosition;
+        public override bool AnyInputDown => Input.anyKeyDown;
+        public override Vector3 PrimaryCursorPosition => Input.mousePosition;
         public override float ZoomAmount => Input.mouseScrollDelta.y;
 
-        public override bool GetKeyDown(KeyCode key)
+        public override bool GetPrimaryCursorDown()
         {
-            return Input.GetKeyDown(key);
+            return Input.GetMouseButtonDown(0);
         }
 
-        public override bool GetKeyUp(KeyCode key)
+        public override bool GetPrimaryCursorUp()
         {
-            return Input.GetKeyUp(key);
+            return Input.GetMouseButtonUp(0);
         }
 
-        public override bool GetMouseButtonDown(int button)
+        public override bool GetPrimaryCursor()
         {
-            return Input.GetMouseButtonDown(button);
+            return Input.GetMouseButton(0);
         }
 
-        public override bool GetMouseButtonUp(int button)
+        public override bool GetTestDown()
         {
-            return Input.GetMouseButtonUp(button);
+            return Input.GetKeyDown(KeyCode.T);
         }
 
-        public override bool GetMouseButton(int button)
+        public override bool GetToggleGameOverScreenDown()
         {
-            return Input.GetMouseButton(button);
+            return Input.GetKeyDown(KeyCode.Space);
         }
 
-
+        public override bool GetToggleGameOverScreenUp()
+        {
+            return Input.GetKeyUp(KeyCode.Space);
+        }
     }
 }

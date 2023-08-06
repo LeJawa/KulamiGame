@@ -17,19 +17,20 @@ namespace Kulami.Control
             }
         }
 
-        public abstract bool AnyKeyDown { get; }
-        public abstract Vector3 MousePosition { get; }
+        public abstract bool AnyInputDown { get; }
+        public abstract Vector3 PrimaryCursorPosition { get; }
         public abstract float ZoomAmount { get; }
 
-        public abstract bool GetKeyDown(KeyCode key);
+        public abstract bool GetTestDown();
 
-        public abstract bool GetKeyUp(KeyCode key);
+        public abstract bool GetToggleGameOverScreenDown();
+        public abstract bool GetToggleGameOverScreenUp();
 
-        public abstract bool GetMouseButtonDown(int button);
+        public abstract bool GetPrimaryCursorDown();
 
-        public abstract bool GetMouseButtonUp(int button);
+        public abstract bool GetPrimaryCursorUp();
 
-        public abstract bool GetMouseButton(int button);
+        public abstract bool GetPrimaryCursor();
 
 
     }

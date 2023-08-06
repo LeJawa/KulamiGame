@@ -56,21 +56,21 @@ namespace Kulami.Graphics
             if (_canZoom)
                 HandleCameraZoom();
 
-            if (InputManager.Instance.GetMouseButtonDown(0))
+            if (InputManager.Instance.GetPrimaryCursorDown())
             {
-                _anchorPosition = InputManager.Instance.MousePosition;
+                _anchorPosition = InputManager.Instance.PrimaryCursorPosition;
                 _cameraPosition = transform.position;
                 _canZoom = false;
             }
 
-            if (InputManager.Instance.GetMouseButton(0))
+            if (InputManager.Instance.GetPrimaryCursor())
             {
-                _currentPosition = InputManager.Instance.MousePosition;
+                _currentPosition = InputManager.Instance.PrimaryCursorPosition;
                 LeftMouseDrag();
                 _isDragging = true;
             }
 
-            if (InputManager.Instance.GetMouseButtonUp(0))
+            if (InputManager.Instance.GetPrimaryCursorUp())
             {
                 _canZoom = true;
             }
@@ -118,7 +118,7 @@ namespace Kulami.Graphics
         private void HandleCameraZoom()
         {
             float scroll = -InputManager.Instance.ZoomAmount;
-            Vector3 mousePosition = InputManager.Instance.MousePosition;
+            Vector3 mousePosition = InputManager.Instance.PrimaryCursorPosition;
 
             if (scroll != 0)
             {

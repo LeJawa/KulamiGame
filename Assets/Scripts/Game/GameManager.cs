@@ -100,12 +100,12 @@ namespace Kulami.Game
         {
             if (State == GameState.GameOverScreen || State == GameState.GameOverShowingBoard)
             {
-                if (InputManager.Instance.GetKeyDown(KeyCode.Space))
+                if (InputManager.Instance.GetToggleGameOverScreenDown())
                 {
                     State = GameState.GameOverShowingBoard;
                 }
 
-                if (InputManager.Instance.GetKeyUp(KeyCode.Space))
+                if (InputManager.Instance.GetToggleGameOverScreenUp())
                 {
                     State = GameState.GameOverScreen;
                 }
