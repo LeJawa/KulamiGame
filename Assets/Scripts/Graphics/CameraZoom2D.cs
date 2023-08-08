@@ -1,13 +1,7 @@
 using Cinemachine;
-using Cinemachine.Utility;
-using DG.Tweening;
-using Kulami.Game;
 using Kulami.Control;
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using Kulami.Game;
 using UnityEngine;
-using static TMPro.TMP_Compatibility;
 
 namespace Kulami.Graphics
 {
@@ -31,8 +25,6 @@ namespace Kulami.Graphics
         private Vector3 _cameraPosition;
         private Vector3 _currentPosition;
         private Vector3 _targetPosition;
-
-        [SerializeField] private float _dragSpeed = 2f;
 
         [SerializeField]
         private bool _isDragging = false;
@@ -103,7 +95,7 @@ namespace Kulami.Graphics
             clampedPosition.x = Mathf.Clamp(clampedPosition.x, -_boundary, _boundary);
             clampedPosition.y = Mathf.Clamp(clampedPosition.y, -_boundary, _boundary);
 
-            transform.position = clampedPosition;            
+            transform.position = clampedPosition;
         }
 
         private void LeftMouseDrag()

@@ -51,11 +51,13 @@ namespace kulami
 
         private void Update()
         {
+#if UNITY_EDITOR
             if (InputManager.Instance.GetTestDown())
             {
                 StopTweens();
                 StartCoroutine(AnimateTitleStart());
             }
+#endif
         }
 
 

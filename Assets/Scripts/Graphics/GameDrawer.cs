@@ -74,11 +74,12 @@ namespace Kulami.Graphics
 
         private void Update()
         {
+#if UNITY_EDITOR
             if (InputManager.Instance.GetTestDown())
             {
-                // TODO: REMOVE
                 OnDrawBoard(_lastBoardGenerationInfo);
             }   
+#endif
         }
 
         public void Initialize()

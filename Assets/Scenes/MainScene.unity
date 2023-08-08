@@ -2011,7 +2011,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1913332251}
   - component: {fileID: 1913332250}
-  - component: {fileID: 1913332252}
+  - component: {fileID: 1913332253}
   m_Layer: 0
   m_Name: Virtual Camera
   m_TagString: Untagged
@@ -2074,7 +2074,7 @@ Transform:
   - {fileID: 37438620}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1913332252
+--- !u!114 &1913332253
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2083,18 +2083,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1913332249}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: efe3223c2cef46b4190c52be155d746f, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b6fdf0d35ab42348a7929e9e8459906, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _zoomMultiplier: 1
-  _zoomMin: 2
-  _zoomMax: 7
-  _moveTime: 0.25
-  _boundary: 5
-  _position: {x: 0, y: 0, z: 0}
-  _moveVelocity: {x: 0, y: 0, z: 0}
-  _dragSpeed: 0.1
-  _isDragging: 0
+  zoomOutMin: 2
+  zoomOutMax: 7
+  _zoomMobileMultiplier: 0.01
+  _zoomMouseMultiplier: 10
+  _zoomTime: 0.25
 --- !u!1 &2076126783
 GameObject:
   m_ObjectHideFlags: 0
