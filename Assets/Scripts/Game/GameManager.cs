@@ -6,6 +6,7 @@ using Kulami.Control;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Kulami.Graphics;
 
 namespace Kulami.Game
 {
@@ -36,6 +37,9 @@ namespace Kulami.Game
         private Tile _lastPlacedTile = null;
 
         private List<Vector2Int> _possibleMoves = new();
+
+        [SerializeField]
+        private CameraController _camera;
 
         public Player CurrentPlayer { get; private set; } = Player.One;
 
@@ -353,6 +357,11 @@ namespace Kulami.Game
             }
 
             if (!_possibleMoves.Contains(clickedSocket.Position))
+            {
+                return true;
+            }
+
+            if (!_camera.IsIdle)
             {
                 return true;
             }

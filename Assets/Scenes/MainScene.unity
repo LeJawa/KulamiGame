@@ -1571,6 +1571,7 @@ MonoBehaviour:
   _numberOfTile2: 4
   _maxStraightLine: 10
   _numberOfMarbles: 28
+  _camera: {fileID: 1913332254}
 --- !u!4 &1213576239
 Transform:
   m_ObjectHideFlags: 0
@@ -1876,7 +1877,7 @@ MonoBehaviour:
   PlayerOneColor: {r: 0.62, g: 0.043399997, b: 0.06261998, a: 1}
   PlayerTwoColor: {r: 0, g: 0.35833335, b: 0.5, a: 1}
   NeutralColor: {r: 0.43137255, g: 0.43137255, b: 0.43137255, a: 1}
-  _camera: {fileID: 1913332250}
+  _camera: {fileID: 1913332254}
   _startMenu: {fileID: 518840155}
   _gameOverScreen: {fileID: 5601261308320857794}
   _sceneTransition: {fileID: 1612708353}
@@ -2012,6 +2013,7 @@ GameObject:
   - component: {fileID: 1913332251}
   - component: {fileID: 1913332250}
   - component: {fileID: 1913332253}
+  - component: {fileID: 1913332254}
   m_Layer: 0
   m_Name: Virtual Camera
   m_TagString: Untagged
@@ -2091,6 +2093,19 @@ MonoBehaviour:
   _zoomMobileMultiplier: 0.01
   _zoomMouseMultiplier: 10
   _zoomTime: 0.25
+  minDetectionDistance: 0.2
+--- !u!114 &1913332254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1913332249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5b94ad041fabca4d9442c2f025c62c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2076126783
 GameObject:
   m_ObjectHideFlags: 0

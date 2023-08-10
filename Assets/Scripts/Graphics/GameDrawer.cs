@@ -48,7 +48,7 @@ namespace Kulami.Graphics
         private GameObject _playerTwoLastMove;
 
         [SerializeField]
-        private CinemachineVirtualCamera _camera;
+        private CameraController _camera;
 
         private List<GameObject> _possibleMoveGameObjects = new List<GameObject>();
 
@@ -385,7 +385,7 @@ namespace Kulami.Graphics
             float meanX = (maxX + 1 + minX) / 2f;
             float meanY = (maxY + 1 + minY) / 2f;
 
-            _camera.transform.position = new Vector3(meanX, meanY, _camera.transform.position.z);
+            _camera.SetPosition(new Vector2(meanX, meanY));
         }
 
         private void HideStartMenu()

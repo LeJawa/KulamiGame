@@ -12,20 +12,30 @@ namespace Kulami.Graphics
         private Vector3 touchStart;
         [SerializeField] private float zoomOutMin = 1;
         [SerializeField] private float zoomOutMax = 8;
-        private float _zoom;
+        private float _zoomTarget;
         [SerializeField] private float _zoomMobileMultiplier = 0.01f;
         [SerializeField] private float _zoomMouseMultiplier = 10f;
         private float _zoomVelocity = 0f;
 
         [SerializeField] private float _zoomTime = 0.25f;
 
-        private CinemachineVirtualCamera _camera;
+        private CameraController _camera;
         private Camera _mainCamera;
+
+        public bool IsIdle => !_isPanning && !_isZooming;
+
+        private bool _isZooming = false;
+        private bool _isPanning = false;
+        [SerializeField]
+        private float minDetectionDistance = 0.2f;
 
         private void Start()
         {
-            _camera = GetComponent<CinemachineVirtualCamera>();
+            _camera = GetComponent<CameraController>();
+
             _mainCamera = Camera.main;
+
+            _zoomTarget = _camera.Zoom;
         }
 
         // Update is called once per frame
@@ -38,7 +48,17 @@ namespace Kulami.Graphics
             else if (Input.GetMouseButton(0))
             {
                 Vector3 direction = touchStart - _mainCamera.ScreenToWorldPoint(Input.mousePosition);
-                _camera.transform.position += direction;
+
+                if (direction.magnitude > minDetectionDistance)
+                {
+                    _camera.Position += direction;
+                    _isPanning = true;
+                }
+                
+            }
+            else
+            {
+                _isPanning = false;
             }
 
 #if UNITY_ANDROID || UNITY_IOS
@@ -52,7 +72,7 @@ namespace Kulami.Graphics
 #if UNITY_ANDROID || UNITY_IOS
         private void ZoomMobile()
         {
-            if (Input.touchCount == 2)
+            if (Input.touchCount > 2)
             {
                 Touch touchZero = Input.GetTouch(0);
                 Touch touchOne = Input.GetTouch(1);
@@ -65,7 +85,14 @@ namespace Kulami.Graphics
 
                 float difference = currentMagnitude - prevMagnitude;
 
-                _camera.m_Lens.OrthographicSize = Mathf.Clamp(_camera.m_Lens.OrthographicSize - difference * _zoomMobileMultiplier, zoomOutMin, zoomOutMax);
+                _camera.Zoom = Mathf.Clamp(_camera.Zoom - difference * _zoomMobileMultiplier, zoomOutMin, zoomOutMax);
+
+                _isZooming = true;
+            }
+            else
+            {
+                
+                _isZooming = false;
             }
         }
 #endif
@@ -76,9 +103,19 @@ namespace Kulami.Graphics
             var increment = Input.GetAxis("Mouse ScrollWheel") * _zoomMouseMultiplier;
 
             if (increment != 0)
-                _zoom = Mathf.Clamp(_camera.m_Lens.OrthographicSize - increment, zoomOutMin, zoomOutMax);
+            {
+                _zoomTarget = Mathf.Clamp(_camera.Zoom - increment, zoomOutMin, zoomOutMax);
+                _isZooming = true;
+            }
 
-            _camera.m_Lens.OrthographicSize = Mathf.SmoothDamp(_camera.m_Lens.OrthographicSize, _zoom, ref _zoomVelocity, _zoomTime);
+            _camera.Zoom = Mathf.SmoothDamp(_camera.Zoom, _zoomTarget, ref _zoomVelocity, _zoomTime);
+
+            if (_camera.Zoom - _zoomTarget < 0.01f)
+            {
+                _camera.Zoom = _zoomTarget;
+                _zoomVelocity = 0f;
+                _isZooming = false;
+            }
 
         }
 #endif
