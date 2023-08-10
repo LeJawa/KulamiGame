@@ -1,10 +1,12 @@
 ﻿using DG.Tweening;
-using kulami;
+using Kulami;
 using Kulami.Data;
 using Kulami.Helpers;
+using Kulami.Control;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Kulami.Graphics;
 
 namespace Kulami.Game
 {
@@ -35,6 +37,9 @@ namespace Kulami.Game
         private Tile _lastPlacedTile = null;
 
         private List<Vector2Int> _possibleMoves = new();
+
+        [SerializeField]
+        private CameraController _camera;
 
         public Player CurrentPlayer { get; private set; } = Player.One;
 
@@ -99,12 +104,12 @@ namespace Kulami.Game
         {
             if (State == GameState.GameOverScreen || State == GameState.GameOverShowingBoard)
             {
-                if (Input.GetKeyDown(KeyCode.Space))
+                if (InputManager.Instance.GetToggleGameOverScreenDown())
                 {
                     State = GameState.GameOverShowingBoard;
                 }
 
-                if (Input.GetKeyUp(KeyCode.Space))
+                if (InputManager.Instance.GetToggleGameOverScreenUp())
                 {
                     State = GameState.GameOverScreen;
                 }
@@ -245,6 +250,7 @@ namespace Kulami.Game
 
         public void OnSocketClicked(Socket clickedSocket)
         {
+
             //Debug.Log("Tile clicked: " + clickedSocket.Position);
 
             if (ClickedSocketIsNotAllowed(clickedSocket))
@@ -351,6 +357,11 @@ namespace Kulami.Game
             }
 
             if (!_possibleMoves.Contains(clickedSocket.Position))
+            {
+                return true;
+            }
+
+            if (!_camera.IsIdle)
             {
                 return true;
             }

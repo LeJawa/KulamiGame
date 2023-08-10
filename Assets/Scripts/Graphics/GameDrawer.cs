@@ -1,12 +1,12 @@
 using DG.Tweening;
-using kulami;
 using Kulami.Data;
 using Kulami.Game;
 using Kulami.Helpers;
+using Kulami.Control;
+using Kulami.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace Kulami.Graphics
@@ -47,7 +47,7 @@ namespace Kulami.Graphics
         private GameObject _playerTwoLastMove;
 
         [SerializeField]
-        private Camera _camera;
+        private CameraController _camera;
 
         private List<GameObject> _possibleMoveGameObjects = new List<GameObject>();
 
@@ -73,11 +73,12 @@ namespace Kulami.Graphics
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.T))
+#if UNITY_EDITOR
+            if (InputManager.Instance.GetTestDown())
             {
-                // TODO: REMOVE
                 OnDrawBoard(_lastBoardGenerationInfo);
             }   
+#endif
         }
 
         public void Initialize()
@@ -303,7 +304,11 @@ namespace Kulami.Graphics
             }
 
             GameEvents.Instance.TriggerDrawMarbleShadowEvent(position.ToVector3());
-            GameEvents.Instance.TriggerTileOwnershipUpdatedEvent();
+
+            if (GameOptions.Instance.ShowTileOwnership)
+            {
+                GameEvents.Instance.TriggerTileOwnershipUpdatedEvent();
+            }
         }
 
         private void OnClearPossibleMoves()
@@ -316,6 +321,8 @@ namespace Kulami.Graphics
 
         private void OnPossibleMovesBroadcast(List<Vector2Int> positionList)
         {
+            if (GameOptions.Instance.ShowPossibleMoves == false) return;
+
             foreach (var position in positionList)
             {
                 var possibleMove = Instantiate(_possibleMovePrefab, position.ToVector3(), Quaternion.identity);
@@ -383,7 +390,7 @@ namespace Kulami.Graphics
             float meanX = (maxX + 1 + minX) / 2f;
             float meanY = (maxY + 1 + minY) / 2f;
 
-            _camera.transform.position = new Vector3(meanX, meanY, _camera.transform.position.z);
+            _camera.SetPosition(new Vector2(meanX, meanY));
         }
 
         private void HideStartMenu()

@@ -1,9 +1,10 @@
-using kulami;
+using Kulami;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Kulami.Graphics
+namespace Kulami.UI
 {
     public class SceneTransition : MonoBehaviour
     {

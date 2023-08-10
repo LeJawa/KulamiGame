@@ -4,8 +4,9 @@ using DG.Tweening;
 using System.Collections;
 using UnityEngine.UI;
 using System;
+using Kulami.Graphics;
 
-namespace Kulami.Graphics
+namespace Kulami.UI
 {
     public class GameOverScreen : MonoBehaviour
     {

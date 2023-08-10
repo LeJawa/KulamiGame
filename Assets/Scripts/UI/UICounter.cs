@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Kulami.Graphics
+namespace Kulami.UI
 {
     public class UICounter : MonoBehaviour
     {

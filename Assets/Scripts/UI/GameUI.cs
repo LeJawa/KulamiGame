@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Kulami.Graphics
+namespace Kulami.UI
 {
     public class GameUI : MonoBehaviour
     {
@@ -63,6 +63,14 @@ namespace Kulami.Graphics
             {
                 _outerRim.Disable();
             }
+
+            GameOptions.Instance.showScoresDuringGameChanged += ShowScoresDuringGameChanged;
+        }
+
+        private void ShowScoresDuringGameChanged(bool showScores)
+        {
+            _playerOneScoreRectTransform.gameObject.SetActive(showScores);
+            _playerTwoScoreRectTransform.gameObject.SetActive(showScores);
         }
 
         public void Hide()
@@ -83,16 +91,20 @@ namespace Kulami.Graphics
 
         public void MoveScoresToGameOverPosition()
         {
-
-
             _playerOneScoreRectTransform.anchoredPosition3D = _playerOneScoreGameOverPosition;
             _playerTwoScoreRectTransform.anchoredPosition3D = _playerTwoScoreGameOverPosition;
+
+            _playerOneScoreRectTransform.gameObject.SetActive(true);
+            _playerTwoScoreRectTransform.gameObject.SetActive(true);
         }
 
         private void MoveScoresToInitialPosition()
         {
             _playerOneScoreRectTransform.anchoredPosition3D = _playerOneScorePosition;
             _playerTwoScoreRectTransform.anchoredPosition3D = _playerTwoScorePosition;
+
+            _playerOneScoreRectTransform.gameObject.SetActive(GameOptions.Instance.ShowScoresDuringGame);
+            _playerTwoScoreRectTransform.gameObject.SetActive(GameOptions.Instance.ShowScoresDuringGame);
         }
 
         public void Initialize()

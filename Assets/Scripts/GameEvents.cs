@@ -1,9 +1,9 @@
 ﻿using Kulami.Data;
+using Kulami.Game;
 using Kulami.Graphics;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Kulami.Game;
 
 namespace Kulami
 {
