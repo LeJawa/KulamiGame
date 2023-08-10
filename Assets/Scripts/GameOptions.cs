@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,6 +24,8 @@ namespace Kulami
         public bool ShowScoresDuringGame => _showScoresDuringGame;
         public bool ShowTileOwnership => _showTileOwnership;
 
+        public event Action<bool> showScoresDuringGameChanged;
+
         private void Awake()
         {
             if (Instance == null)
@@ -44,6 +47,8 @@ namespace Kulami
         {
             _showPossibleMoves = showPossibleMoves.isOn;
             PlayerPrefs.SetInt(_showPossibleMovesKey, showPossibleMoves ? 1 : 0);
+
+            PlayerPrefs.Save();
         }
 
 
@@ -51,6 +56,10 @@ namespace Kulami
         {
             _showScoresDuringGame = showScoresDuringGame.isOn;
             PlayerPrefs.SetInt(_showScoresDuringGameKey, showScoresDuringGame ? 1 : 0);
+
+            showScoresDuringGameChanged?.Invoke(_showScoresDuringGame);
+
+            PlayerPrefs.Save();
         }
 
 
@@ -58,6 +67,8 @@ namespace Kulami
         {
             _showTileOwnership = showTileOwnership.isOn;
             PlayerPrefs.SetInt(_showTileOwnershipKey, showTileOwnership ? 1 : 0);
+
+            PlayerPrefs.Save();
         }
 
     }

@@ -304,7 +304,11 @@ namespace Kulami.Graphics
             }
 
             GameEvents.Instance.TriggerDrawMarbleShadowEvent(position.ToVector3());
-            GameEvents.Instance.TriggerTileOwnershipUpdatedEvent();
+
+            if (GameOptions.Instance.ShowTileOwnership)
+            {
+                GameEvents.Instance.TriggerTileOwnershipUpdatedEvent();
+            }
         }
 
         private void OnClearPossibleMoves()
