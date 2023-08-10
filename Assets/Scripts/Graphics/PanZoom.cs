@@ -111,7 +111,7 @@ namespace Kulami.Graphics
 
             _camera.Zoom = Mathf.SmoothDamp(_camera.Zoom, _zoomTarget, ref _zoomVelocity, _zoomTime);
 
-            if (_camera.Zoom - _zoomTarget < 0.01f)
+            if (Mathf.Abs(_camera.Zoom - _zoomTarget) < 0.01f)
             {
                 _camera.Zoom = _zoomTarget;
                 _zoomVelocity = 0f;
