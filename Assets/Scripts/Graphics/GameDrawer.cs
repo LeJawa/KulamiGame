@@ -317,6 +317,8 @@ namespace Kulami.Graphics
 
         private void OnPossibleMovesBroadcast(List<Vector2Int> positionList)
         {
+            if (GameOptions.Instance.ShowPossibleMoves == false) return;
+
             foreach (var position in positionList)
             {
                 var possibleMove = Instantiate(_possibleMovePrefab, position.ToVector3(), Quaternion.identity);

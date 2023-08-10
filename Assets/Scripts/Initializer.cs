@@ -8,7 +8,7 @@ namespace Kulami
         void Start()
         {
             InitializeInput();
-            Destroy(this);
+            Destroy(gameObject);
         }
 
         private void InitializeInput()

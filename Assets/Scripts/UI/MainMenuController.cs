@@ -10,8 +10,8 @@ namespace Kulami.UI
         private float _screenWidth = 1920f;
         private float _screenHeight = 1080f;
 
-        [SerializeField] private float _transitionTime = 1f;
-        [SerializeField] private Ease _transitionEase = Ease.Flash;
+        [SerializeField] private float _transitionTime = 0.5f;
+        [SerializeField] private Ease _transitionEase = Ease.OutQuint;
 
         private RectTransform _rectTransform;
 
