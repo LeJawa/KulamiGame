@@ -1,4 +1,5 @@
 using Cinemachine;
+using Kulami.Control;
 using UnityEngine;
 
 namespace Kulami.Graphics
@@ -41,13 +42,13 @@ namespace Kulami.Graphics
         // Update is called once per frame
         private void Update()
         {
-            if (Input.GetMouseButtonDown(0))
+            if (InputManager.Instance.GetPrimaryCursorDown())
             {
                 touchStart = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
             }
-            else if (Input.GetMouseButton(0))
+            else if (InputManager.Instance.GetPrimaryCursor())
             {
-                Vector3 direction = touchStart - _mainCamera.ScreenToWorldPoint(Input.mousePosition);
+                Vector3 direction = touchStart - _mainCamera.ScreenToWorldPoint(InputManager.Instance.PrimaryCursorPosition);
 
                 if (direction.magnitude > minDetectionDistance)
                 {
@@ -72,7 +73,7 @@ namespace Kulami.Graphics
 #if UNITY_ANDROID || UNITY_IOS
         private void ZoomMobile()
         {
-            if (Input.touchCount > 2)
+            if (Input.touchCount > 1)
             {
                 Touch touchZero = Input.GetTouch(0);
                 Touch touchOne = Input.GetTouch(1);

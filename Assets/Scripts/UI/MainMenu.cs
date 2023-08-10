@@ -1,18 +1,25 @@
 using DG.Tweening;
-using Kulami;
 using Kulami.Control;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-namespace kulami
+namespace Kulami.UI
 {
-    public class StartMenu : MonoBehaviour
+    public class MainMenu : MonoBehaviour
     {
+        private struct ButtonAnimationData
+        {
+            public RectTransform RectTransform;
+            public Vector3 StartScale;
+            public Tween Tween;
+        }
+
+
         [Header("Setup")]
         [SerializeField] private RectTransform _title;
-        [SerializeField] private RectTransform _newGameButton;
-        [SerializeField] private RectTransform _exitButton;
+        [SerializeField] private RectTransform _buttons;
 
         [Header("Start")]
         [SerializeField] private float _startDelay = 1f;
@@ -34,19 +41,31 @@ namespace kulami
         [SerializeField] private Ease _scaleEase = Ease.InOutCubic;
 
         private Vector3 _titleStartScale;
-        private Vector3 _buttonStartScale;
 
         private Sequence _titleRotationSequence;
         private Sequence _titleScalingSequence;
         private Tween _titleStartTween;
-        private Tween _newGameButtonStartTween;
-        private Tween _exitButtonStartTween;
+
+        private List<ButtonAnimationData> _buttonAnimationDataList = new();
 
 
         private void Awake()
         {
             _titleStartScale = _title.localScale;
-            _buttonStartScale = _newGameButton.localScale;
+
+            var buttonList = _buttons.GetComponentsInChildren<RectTransform>().ToList();
+
+            buttonList = buttonList.Where(element => element.CompareTag("UIButton")).ToList();
+
+            foreach (var button in buttonList)
+            {
+                _buttonAnimationDataList.Add(new ButtonAnimationData
+                {
+                    RectTransform = button,
+                    StartScale = button.localScale
+                });
+            }
+
         }
 
         private void Update()
@@ -71,13 +90,22 @@ namespace kulami
         private IEnumerator AnimateTitleStart()
         {
             _title.localScale = Vector3.zero;
-            _newGameButton.localScale = Vector3.zero;
-            _exitButton.localScale = Vector3.zero;
+
+            foreach (var buttonAnimationData in _buttonAnimationDataList)
+            {
+                buttonAnimationData.RectTransform.localScale = Vector3.zero;
+            }
+
             yield return new WaitForSeconds(_startDelay);
             _titleStartTween = _title.DOScale(_titleStartScale, _titleStartAnimationDuration).SetEase(_startEase).OnComplete(() => { DoTitleScaling(); });
+
             yield return new WaitForSeconds(_delayBetweenTitleStartAndButtons);
-            _newGameButtonStartTween = _newGameButton.DOScale(_buttonStartScale, _buttonStartAnimationDuration).SetEase(_startEase);
-            _exitButtonStartTween = _exitButton.DOScale(_buttonStartScale, _buttonStartAnimationDuration).SetEase(_startEase);
+
+            for (int i = 0; i < _buttonAnimationDataList.Count; i++)
+            {
+                var buttonAnimationData = _buttonAnimationDataList[i];
+                buttonAnimationData.Tween = buttonAnimationData.RectTransform.DOScale(buttonAnimationData.StartScale, _buttonStartAnimationDuration).SetEase(_startEase);
+            }
         }
 
         private void DoTitleRotation()
@@ -98,7 +126,7 @@ namespace kulami
         {
             _titleScalingSequence = DOTween.Sequence();
 
-            var scaling = Random.Range(1, 1+_scaleAmount);
+            var scaling = Random.Range(1, 1 + _scaleAmount);
             _titleScalingSequence.Append(_title.DOScale(_titleStartScale * scaling, _scaleTime).SetEase(_scaleEase));
 
             scaling = Random.Range(1 - _scaleAmount, 1);
@@ -109,12 +137,15 @@ namespace kulami
 
         private void StopTweens()
         {
-            _exitButtonStartTween.Kill();
-            _newGameButtonStartTween.Kill();
             _titleStartTween.Kill();
             _titleRotationSequence.Kill();
             _titleScalingSequence.Kill();
+
+            foreach (var buttonAnimationData in _buttonAnimationDataList)
+            {
+                buttonAnimationData.Tween.Kill();
+            }
         }
-        
+
     }
 }

@@ -1,13 +1,7 @@
 using DG.Tweening;
-using Kulami;
-using Kulami.Data;
-using Kulami.Game;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace kulami
+namespace Kulami
 {
     public class AudioManager : MonoBehaviour
     {

@@ -1,14 +1,13 @@
 using DG.Tweening;
-using kulami;
 using Kulami.Data;
 using Kulami.Game;
 using Kulami.Helpers;
+using Kulami.Control;
+using Kulami.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Cinemachine;
-using Kulami.Control;
 
 namespace Kulami.Graphics
 {

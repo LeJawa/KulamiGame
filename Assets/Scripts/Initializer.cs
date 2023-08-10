@@ -1,9 +1,7 @@
 using Kulami.Control;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace kulami
+namespace Kulami
 {
     public class Initializer : MonoBehaviour
     {
