@@ -150,7 +150,7 @@ GameObject:
   - component: {fileID: 5452951023768640642}
   m_Layer: 5
   m_Name: Button
-  m_TagString: UIButton
+  m_TagString: AnimatableUI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

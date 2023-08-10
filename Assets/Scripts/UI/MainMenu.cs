@@ -9,7 +9,7 @@ namespace Kulami.UI
 {
     public class MainMenu : MonoBehaviour
     {
-        private struct ButtonAnimationData
+        private struct UIElementAnimationData
         {
             public RectTransform RectTransform;
             public Vector3 StartScale;
@@ -46,20 +46,20 @@ namespace Kulami.UI
         private Sequence _titleScalingSequence;
         private Tween _titleStartTween;
 
-        private List<ButtonAnimationData> _buttonAnimationDataList = new();
+        private List<UIElementAnimationData> _uiElementAnimationDataList = new();
 
 
         private void Awake()
         {
             _titleStartScale = _title.localScale;
 
-            var buttonList = _buttons.GetComponentsInChildren<RectTransform>().ToList();
+            var animatableElements = _buttons.GetComponentsInChildren<RectTransform>().ToList();
 
-            buttonList = buttonList.Where(element => element.CompareTag("UIButton")).ToList();
+            animatableElements = animatableElements.Where(element => element.CompareTag("AnimatableUI")).ToList();
 
-            foreach (var button in buttonList)
+            foreach (var button in animatableElements)
             {
-                _buttonAnimationDataList.Add(new ButtonAnimationData
+                _uiElementAnimationDataList.Add(new UIElementAnimationData
                 {
                     RectTransform = button,
                     StartScale = button.localScale
@@ -73,27 +73,32 @@ namespace Kulami.UI
 #if UNITY_EDITOR
             if (InputManager.Instance.GetTestDown())
             {
-                StopTweens();
-                StartCoroutine(AnimateTitleStart());
+                StartAnimation();
             }
 #endif
         }
 
+        private void StartAnimation()
+        {
+            StopTweens();
+            StartCoroutine(AnimateTitleStart());
+        }
 
         private IEnumerator Start()
         {
-            DoTitleRotation();
             yield return AnimateTitleStart();
 
         }
+
+
 
         private IEnumerator AnimateTitleStart()
         {
             _title.localScale = Vector3.zero;
 
-            foreach (var buttonAnimationData in _buttonAnimationDataList)
+            foreach (var uiElementAnimationData in _uiElementAnimationDataList)
             {
-                buttonAnimationData.RectTransform.localScale = Vector3.zero;
+                uiElementAnimationData.RectTransform.localScale = Vector3.zero;
             }
 
             yield return new WaitForSeconds(_startDelay);
@@ -101,11 +106,13 @@ namespace Kulami.UI
 
             yield return new WaitForSeconds(_delayBetweenTitleStartAndButtons);
 
-            for (int i = 0; i < _buttonAnimationDataList.Count; i++)
+            for (int i = 0; i < _uiElementAnimationDataList.Count; i++)
             {
-                var buttonAnimationData = _buttonAnimationDataList[i];
-                buttonAnimationData.Tween = buttonAnimationData.RectTransform.DOScale(buttonAnimationData.StartScale, _buttonStartAnimationDuration).SetEase(_startEase);
+                var uiElementAnimationData = _uiElementAnimationDataList[i];
+                uiElementAnimationData.Tween = uiElementAnimationData.RectTransform.DOScale(uiElementAnimationData.StartScale, _buttonStartAnimationDuration).SetEase(_startEase);
             }
+
+            DoTitleRotation();
         }
 
         private void DoTitleRotation()
@@ -141,9 +148,9 @@ namespace Kulami.UI
             _titleRotationSequence.Kill();
             _titleScalingSequence.Kill();
 
-            foreach (var buttonAnimationData in _buttonAnimationDataList)
+            foreach (var uiElementAnimationData in _uiElementAnimationDataList)
             {
-                buttonAnimationData.Tween.Kill();
+                uiElementAnimationData.Tween.Kill();
             }
         }
 
