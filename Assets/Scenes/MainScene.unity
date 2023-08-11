@@ -3258,7 +3258,7 @@ MonoBehaviour:
   _numberOfTile3: 4
   _numberOfTile2: 4
   _maxStraightLine: 10
-  _numberOfMarbles: 2
+  _numberOfMarbles: 28
   _camera: {fileID: 1913332254}
 --- !u!4 &1213576239
 Transform:
