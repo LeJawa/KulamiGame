@@ -7,7 +7,7 @@ namespace Kulami.UI
 {
     public class MainMenuController : MonoBehaviour
     {
-        private float _screenWidth = 1920f;
+        private float _menuHorizontalDistance = 2500f;
         private float _screenHeight = 1080f;
 
         [SerializeField] private float _transitionTime = 0.5f;
@@ -27,12 +27,12 @@ namespace Kulami.UI
 
         public void GoToCredits()
         {
-            _rectTransform.DOAnchorPos3DX(_screenWidth, _transitionTime).SetEase(_transitionEase);
+            _rectTransform.DOAnchorPos3DX(_menuHorizontalDistance, _transitionTime).SetEase(_transitionEase);
         }
 
         public void GoToOptions()
         {
-            _rectTransform.DOAnchorPos3DX(-_screenWidth, _transitionTime).SetEase(_transitionEase);
+            _rectTransform.DOAnchorPos3DX(-_menuHorizontalDistance, _transitionTime).SetEase(_transitionEase);
         }
 
         public void Reset()
